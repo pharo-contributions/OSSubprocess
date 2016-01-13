@@ -3,9 +3,9 @@ defineActionsForReadStream: aReadStream dupTo: aFileDescriptor
 	aReadStream ifNotNil: [ 
 		aReadStream ossIsPipe 
 			ifTrue: [  
-				self posixSpawnFileActionsAddClose: (self systemAccessor primUnixFileNumber: aReadStream writer fileID).
-				self posixSpawnFileActionsAddDup2: (self systemAccessor primUnixFileNumber: aReadStream reader fileID) newFileDescritpion: aFileDescriptor.
-				self posixSpawnFileActionsAddClose: (self systemAccessor primUnixFileNumber: aReadStream reader fileID).	
+				self posixSpawnFileActionsAddClose: (self systemAccessor primUnixFileNumber: aReadStream writer basicFileID).
+				self posixSpawnFileActionsAddDup2: (self systemAccessor primUnixFileNumber: aReadStream reader basicFileID) newFileDescritpion: aFileDescriptor.
+				self posixSpawnFileActionsAddClose: (self systemAccessor primUnixFileNumber: aReadStream reader basicFileID).	
 			] 
 			ifFalse: [ 
 				| fileDesc |
