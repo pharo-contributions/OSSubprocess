@@ -1,3 +1,4 @@
-accessing
+pipes
 stdoutStream
-	^ stdoutStream
+	^ stdoutPipe openReadStreamWithName: 'pipeStdoutReader'.
+	

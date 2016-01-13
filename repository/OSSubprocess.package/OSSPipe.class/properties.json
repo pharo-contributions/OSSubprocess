@@ -6,14 +6,10 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"command",
-		"arguments",
-		"pointers",
-		"childPid",
-		"posixSpawnFileActionsT",
-		"stderrPipe",
-		"stdoutPipe" ],
-	"name" : "OSSSpawnProcess",
+		"fileDescriptors",
+		"readStream",
+		"writeStream" ],
+	"name" : "OSSPipe",
 	"pools" : [
 		 ],
 	"super" : "Object",

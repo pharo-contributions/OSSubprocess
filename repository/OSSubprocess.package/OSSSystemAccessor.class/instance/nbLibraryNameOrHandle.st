@@ -1,3 +1,3 @@
-private - primitives
+private - support primitives
 nbLibraryNameOrHandle 
 	^ NativeBoost CLibrary

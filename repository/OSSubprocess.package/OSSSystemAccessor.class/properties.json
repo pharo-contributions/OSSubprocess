@@ -3,17 +3,11 @@
 	"classinstvars" : [
 		 ],
 	"classvars" : [
-		 ],
+		"Current" ],
 	"commentStamp" : "",
 	"instvars" : [
-		"command",
-		"arguments",
-		"pointers",
-		"childPid",
-		"posixSpawnFileActionsT",
-		"stderrPipe",
-		"stdoutPipe" ],
-	"name" : "OSSSpawnProcess",
+		 ],
+	"name" : "OSSSystemAccessor",
 	"pools" : [
 		 ],
 	"super" : "Object",

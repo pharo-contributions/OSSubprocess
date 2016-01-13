@@ -5,8 +5,4 @@ atEndOfFile
 	stream status, and can be used as an alternative to #atEnd, which
 	does not properly report end of file status for an OSPipe."
 
-	^ fileID isNil or: [ 
-		| result |
-		result := self primitiveAtEndOfFile: self getFilePointerAsCFile.
-		result > 0
-		]
+	^ fileID isNil or: [ OSSSystemAccessor current atEndOfFile: self getFilePointerAsCFile ]

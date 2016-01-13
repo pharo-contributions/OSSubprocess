@@ -1,4 +1,4 @@
-private-primitives
+NOT MANAGED
 primitiveFgetsInto: bufferPointer size: size file: file 
 	"Not directly used for the moment but could be useful to test the reading without the
 	SCAttachableFileStream using a code like this:
