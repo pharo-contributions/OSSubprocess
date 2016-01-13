@@ -8,3 +8,4 @@ initialize
 	systemAccessor := OSSSystemAccessor new. 
 	pid := systemAccessor getPid.
 	childListTreshold := 20. "Once child list gets bigger than this number, we delete all exited processes"
+	self initializeSessionID.

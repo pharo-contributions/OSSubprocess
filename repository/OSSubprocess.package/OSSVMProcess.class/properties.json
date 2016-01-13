@@ -10,7 +10,8 @@
 		"childProcessList",
 		"systemAccessor",
 		"pid",
-		"childListTreshold" ],
+		"childListTreshold",
+		"currentSession" ],
 	"name" : "OSSVMProcess",
 	"pools" : [
 		 ],
