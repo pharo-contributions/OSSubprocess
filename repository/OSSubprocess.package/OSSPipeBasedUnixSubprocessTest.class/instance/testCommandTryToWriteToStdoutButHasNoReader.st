@@ -10,4 +10,4 @@ testCommandTryToWriteToStdoutButHasNoReader
 	command stdoutStream closeReader.				
 	command waitForChild.
 	"This should be a SIGPIPE because there is no reader opened for the pipe and someone is trying to write to it. " 
-	self assert:( command stderrStreamContents includesSubstring: 'Broken pipe')
+	self assert:( command stderrStream upToEnd includesSubstring: 'Broken pipe')

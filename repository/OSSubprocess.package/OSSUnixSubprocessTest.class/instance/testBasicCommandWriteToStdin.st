@@ -14,8 +14,8 @@ testBasicCommandWriteToStdin
 		nextPutAll: string;
 		close.
 	command waitForChild.
-	stdOutString := command stdoutStreamContents.
-	command closeStreams.
+	stdOutString := command stdoutStream upToEnd.
+	command closeAndDeleteStandardStreams.
 	self assert: stdOutString equals: string.
 	self assert: self numberOfOpenFiles equals: numberOfOpenFiles.
 	

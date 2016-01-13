@@ -1,0 +1,3 @@
+settings
+defaultReadStreamCreationBlock: aClosure
+	defaultReadStreamCreationBlock := aClosure

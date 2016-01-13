@@ -2,7 +2,7 @@ tests - streams
 testCustomStdoutStream
 	| customStream numberOfOpenFiles | 
 	numberOfOpenFiles := self numberOfOpenFiles.
-	customStream := self newCommand createADefaultStream.
+	customStream := self newCommand createADefaultWriteStream.
 	self newCommand
 		command: '/bin/ls';
 		arguments: (Array with: Smalltalk image imagePath);

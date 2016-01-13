@@ -1,0 +1,3 @@
+settings
+defaultWriteStreamCreationBlock: aClosure
+	defaultWriteStreamCreationBlock := aClosure

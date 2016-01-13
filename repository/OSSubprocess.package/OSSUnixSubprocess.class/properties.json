@@ -17,7 +17,9 @@
 		"stderrStream",
 		"stdinStream",
 		"stdoutStream",
-		"createMissingStandardStreams" ],
+		"createMissingStandardStreams",
+		"defaultWriteStreamCreationBlock",
+		"defaultReadStreamCreationBlock" ],
 	"name" : "OSSUnixSubprocess",
 	"pools" : [
 		 ],

@@ -1,3 +1,3 @@
 streams
 createAndSetStdinStream
-	stdinStream := self createADefaultStream 
+	stdinStream := self createADefaultReadStream 

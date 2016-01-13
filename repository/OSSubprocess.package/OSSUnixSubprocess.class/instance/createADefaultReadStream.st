@@ -1,0 +1,3 @@
+streams
+createADefaultReadStream
+	^ defaultReadStreamCreationBlock value

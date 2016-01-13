@@ -1,9 +1,9 @@
-private - hacks
+*OSSubprocess
 getFilePointerAsCFile
 
 	^ OSSCFile new 
 		setHandle: (ExternalData 
-							fromHandle: ((self basicFileID copyFrom: 5 to: 8) asExternalPointer  ) 
+							fromHandle: ((fileID copyFrom: 5 to: 8) asExternalPointer  ) 
 							type: ExternalType void asPointerType);
 		yourself
 	

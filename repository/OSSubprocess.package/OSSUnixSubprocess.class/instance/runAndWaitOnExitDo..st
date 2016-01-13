@@ -3,7 +3,18 @@ runAndWaitOnExitDo: aClosure
 	| stdoutString stderrString |
 	self run.
 	self waitForChild.
-	stdoutString := self stdoutStreamContents.
-	stderrString := self stderrStreamContents.
-	self closeStreams.
+	stdoutString := self stdoutStream 
+									ifNil: [ '' ] 
+									ifNotNil: [ :str | 
+										str ossIsPipe ifFalse: [ str reopen. ].
+										str upToEnd 
+									].
+	stderrString := self stderrStream 
+								ifNil: [ '' ] 
+								ifNotNil: [ :str | 
+									str ossIsPipe ifFalse: [ str reopen. ].
+									str upToEnd 
+								].
+	self closeAndDeleteStandardStreams.
 	aClosure cull: self cull: stdoutString cull: stderrString.
+	

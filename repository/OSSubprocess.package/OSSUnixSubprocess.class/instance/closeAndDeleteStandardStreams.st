@@ -1,0 +1,4 @@
+cleaning
+closeAndDeleteStandardStreams
+	self closeStreams.
+	self deleteTempFilesFromStandardStreams.

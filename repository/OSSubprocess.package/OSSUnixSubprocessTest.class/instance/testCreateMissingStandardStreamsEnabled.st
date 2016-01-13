@@ -12,6 +12,6 @@ testCreateMissingStandardStreamsEnabled
 	self assert: command stdinStream isNil not.
 	self assert: command stdoutStream isNil not.
 	self assert: command stderrStream isNil not.
-	command closeStreams.
+	command closeAndDeleteStandardStreams.
 	self assert: self numberOfOpenFiles equals: numberOfOpenFiles
 	

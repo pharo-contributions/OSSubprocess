@@ -2,5 +2,5 @@ cleaning
 cleanResources
 	
 	self destroyPosixSpawnFileActionsT.
-	self extraResourcesCleanup.
+	self cleanAndFixCopiedStreams.
 	self freePointers.

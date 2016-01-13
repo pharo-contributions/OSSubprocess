@@ -10,8 +10,8 @@ testReadingFromStdoutAfterCommandFinishesDoesNotBlocksVM
 					
 	"Even with a blocking stream, if the command has finished, we have
 	all data ready to read and hence it's not blocking"
-	self assert:[ command stdoutStreamContents ] timeToRun seconds <= 1. 
-	command closeStreams.
+	self assert:[ command stdoutStream upToEnd ] timeToRun seconds <= 1. 
+	command closeAndDeleteStandardStreams.
 	self assert: self numberOfOpenFiles equals: numberOfOpenFiles.
 	
 

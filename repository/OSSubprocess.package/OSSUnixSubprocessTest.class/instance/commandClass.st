@@ -1,3 +1,3 @@
 helpers
 commandClass
-	^ OSSPipeableUnixSubprocess 
+	^ OSSUnixSubprocess 

@@ -1,4 +1,5 @@
 close and dup2
 defineActionsForStdout
 	
-	self mustBeImplemented
+	self shouldCreateStreamFor: stdoutStream ifTrue: [ stdoutStream := self createADefaultWriteStream ].
+	self defineActionsForWriteStream: stdoutStream dupTo: 1

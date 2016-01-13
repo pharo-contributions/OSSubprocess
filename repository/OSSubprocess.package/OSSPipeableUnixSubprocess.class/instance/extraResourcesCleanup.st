@@ -1,4 +1,0 @@
-cleaning
-extraResourcesCleanup
-	super extraResourcesCleanup.
-	self closeNoneUsedEndsFromPipes 

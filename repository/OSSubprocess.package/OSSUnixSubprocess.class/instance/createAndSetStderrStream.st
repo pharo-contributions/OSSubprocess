@@ -1,3 +1,3 @@
 streams
 createAndSetStderrStream
-	stderrStream := self createADefaultStream 
+	stderrStream := self createADefaultWriteStream 
