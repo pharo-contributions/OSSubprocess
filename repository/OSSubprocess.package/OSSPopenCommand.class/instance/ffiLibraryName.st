@@ -1,3 +1,0 @@
-private-primitives
-ffiLibraryName 
-	^ LibC
