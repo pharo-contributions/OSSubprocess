@@ -1,4 +1,4 @@
 pipes
 createADefaultPipe
-	^ OSSSystemAccessor current makePipe.
+	^ OSSSystemAccessor current makeNoneBlockingReadPipe.
 	

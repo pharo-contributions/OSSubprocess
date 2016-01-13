@@ -8,7 +8,8 @@
 	"instvars" : [
 		"fileDescriptors",
 		"readStream",
-		"writeStream" ],
+		"writeStream",
+		"readBlocking" ],
 	"name" : "OSSPipe",
 	"pools" : [
 		 ],
