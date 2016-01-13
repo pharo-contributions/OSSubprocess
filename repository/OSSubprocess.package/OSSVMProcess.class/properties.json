@@ -12,7 +12,8 @@
 		"pid",
 		"childListTreshold",
 		"sessionID",
-		"mutexForCwd" ],
+		"mutexForCwd",
+		"sigChldSemaphore" ],
 	"name" : "OSSVMProcess",
 	"pools" : [
 		 ],

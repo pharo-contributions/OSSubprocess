@@ -6,3 +6,4 @@ registerChildProcess: anOSProcess
 	accessProtect critical: [ childProcessList addFirst: anOSProcess ].
 	self pruneExitedChildrenAfter: childListTreshold.
 	^ anOSProcess
+	
