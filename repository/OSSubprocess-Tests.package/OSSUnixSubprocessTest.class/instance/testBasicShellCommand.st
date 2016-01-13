@@ -1,9 +1,9 @@
-tests - bash
-testBasicBashCommand
+tests - shell
+testBasicShellCommand
 	| command | 
 	
 	command := self newCommand
-					bashCommand: 'ls'.
+					shellCommand: 'ls'.
 	
 	command runAndWait.
 	

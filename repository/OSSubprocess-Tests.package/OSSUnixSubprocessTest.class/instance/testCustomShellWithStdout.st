@@ -1,8 +1,8 @@
-tests - bash
-testCustomBashWithStdout
+tests - shell
+testCustomShellWithStdout
 
 	self newCommand
-		bash: '/bin/bash' command: 'ls ', Smalltalk image imagePath;
+		shell: '/bin/bash' command: 'ls ', Smalltalk image imagePath;
 		createAndSetStdoutStream;
 		runAndWaitOnExitDo: [ :command :outString |
 			self assert: (outString includesSubstring: Smalltalk image imagePath).					

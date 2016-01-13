@@ -1,7 +1,7 @@
 tests - env
 testSetAndReadCustomVariable
 	self newCommand 
-		bashCommand: 'echo ${WHATEVER}';
+		shellCommand: 'echo ${WHATEVER}';
 		environmentAt: 'WHATEVER' put: 'hello';
 		createAndSetStdoutStream;
 		runAndWaitOnExitDo: [ :command :outString |

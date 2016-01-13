@@ -2,7 +2,7 @@ tests - streams
 testCommandTryToWriteToStdoutButHasNoReader
 	| command errString  | 
 	command := self newCommand
-					bashCommand: 'sleep 2; echo 42';
+					shellCommand: 'sleep 2; echo 42';
 					createAndSetStdoutStream;
 					createAndSetStderrStream.
 	

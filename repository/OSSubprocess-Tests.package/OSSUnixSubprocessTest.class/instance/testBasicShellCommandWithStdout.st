@@ -1,8 +1,8 @@
-tests - bash
-testBasicBashCommandWithStdout
+tests - shell
+testBasicShellCommandWithStdout
 
 	self newCommand
-		bashCommand: 'ls ', Smalltalk image imagePath;
+		shellCommand: 'ls ', Smalltalk image imagePath;
 		createAndSetStdoutStream;
 		runAndWaitOnExitDo: [ :command :outString |
 			self assert: (outString includesSubstring: Smalltalk image imagePath).						

@@ -1,8 +1,8 @@
-tests - bash
-testBashCommandWithPipingStdout
+tests - shell
+testShellCommandWithPipingStdout
 
 	self newCommand
-		bashCommand: 'ps -fea | grep Pharo';
+		shellCommand: 'ps -fea | grep Pharo';
 		createAndSetStdoutStream;
 		runAndWaitOnExitDo: [ :command :outString |
 			self assert: (outString includesSubstring: 'Pharo').						

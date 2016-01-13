@@ -1,5 +1,5 @@
 tests - env
-testSetAndReadCustomVariableOutsideBash
+testSetAndReadCustomVariableOutsideShell
 	self newCommand 
 		command: 'printenv';
 		arguments: (Array with: 'WHATEVER');
