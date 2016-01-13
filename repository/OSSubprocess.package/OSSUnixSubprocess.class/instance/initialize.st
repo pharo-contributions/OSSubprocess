@@ -8,4 +8,8 @@ initialize
 	Also, For pipes, we can use a pipe for both reading or writing"
 	defaultReadStreamCreationBlock := [self systemAccessor makeNonBlockingPipe].
 	defaultWriteStreamCreationBlock := [self systemAccessor makeNonBlockingPipe].
+	retrievedStdout := String new writeStream. 
+	retrievedStderr := String new writeStream. 
+	mutexForSigchld := Semaphore new.
+	
 		

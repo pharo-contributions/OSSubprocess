@@ -1,5 +1,5 @@
 tests - wait
-testWaitForChild
+testWaitForExitPollingEvery
 	| command | 
 	
 	command := self newCommand 
@@ -8,5 +8,5 @@ testWaitForChild
 	
 	command run. 
 	self assert: command pid > 0.
-	self assert: [ command waitForExit ] timeToRun asSeconds >= 2.
+	self assert: [ command waitForExitPollingEvery: (Delay forSeconds: 1) ] timeToRun asSeconds >= 2.
 	self assert: command exitStatusInterpreter exitStatus equals: 0. 

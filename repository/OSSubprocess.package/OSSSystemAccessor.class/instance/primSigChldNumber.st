@@ -1,4 +1,4 @@
-signals - primitives
+USING FROM OSPROCESS
 primSigChldNumber
 	"Integer value corresponding to SIGCHLD"
 

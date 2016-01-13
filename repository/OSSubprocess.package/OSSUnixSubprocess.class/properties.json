@@ -19,7 +19,10 @@
 		"createMissingStandardStreams",
 		"defaultWriteStreamCreationBlock",
 		"defaultReadStreamCreationBlock",
-		"pid" ],
+		"pid",
+		"retrievedStdout",
+		"retrievedStderr",
+		"mutexForSigchld" ],
 	"name" : "OSSUnixSubprocess",
 	"pools" : [
 		 ],

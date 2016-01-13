@@ -1,4 +1,4 @@
-signals - primitives
+USING FROM OSPROCESS
 primForwardSignal: signalNumber toSemaphore: semaphoreIndex
 	"Set a signal handler in the VM which will signal a Smalltalk semaphore at
 	semaphoreIndex whenever an external signal sigNum is received. Answer the

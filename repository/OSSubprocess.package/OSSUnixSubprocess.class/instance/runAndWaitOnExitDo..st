@@ -1,20 +1,9 @@
 running
 runAndWaitOnExitDo: aClosure
-	| stdoutString stderrString |
 	self run.
 	self waitForExit.
-	stdoutString := self stdoutStream 
-									ifNil: [ '' ] 
-									ifNotNil: [ :str | 
-										str ossIsPipe ifFalse: [ str reopen. ].
-										str upToEnd 
-									].
-	stderrString := self stderrStream 
-								ifNil: [ '' ] 
-								ifNotNil: [ :str | 
-									str ossIsPipe ifFalse: [ str reopen. ].
-									str upToEnd 
-								].
+	self retrieveWhatIsAvailableOn: stdoutStream andAddItTo: retrievedStdout.
+	self retrieveWhatIsAvailableOn: stderrStream andAddItTo: retrievedStderr.
 	self closeAndCleanStreams.
-	aClosure cull: self cull: stdoutString cull: stderrString.
+	aClosure cull: self cull: retrievedStdout contents cull: retrievedStderr contents.
 	

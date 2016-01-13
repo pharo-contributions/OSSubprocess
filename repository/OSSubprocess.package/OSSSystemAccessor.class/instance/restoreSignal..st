@@ -1,4 +1,4 @@
-signals
+USING FROM OSPROCESS
 restoreSignal: signalNumber 
 	"Unset a signal handler and unregister the Smalltalk semaphore. Answer
 	the unregistered Semaphore, or nil if unable to restore the signal (possibly

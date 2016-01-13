@@ -8,7 +8,7 @@ initializeChildWatcher
 		childWatcher := [[
 							self sigChldSemaphore wait.
 							processSynchronizationDelay wait. "Avoids lost signals in heavy process switching"
-							self updateActiveChildren.
+							self updateActiveChildrenAndNotifyDead.
 							] repeat] newProcess.
 
 		childWatcher resume.

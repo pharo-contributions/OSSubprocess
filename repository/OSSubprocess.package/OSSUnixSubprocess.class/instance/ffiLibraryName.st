@@ -1,3 +1,3 @@
 private - support primitives
 ffiLibraryName 
-	^ 'libc'
+	^ LibC
