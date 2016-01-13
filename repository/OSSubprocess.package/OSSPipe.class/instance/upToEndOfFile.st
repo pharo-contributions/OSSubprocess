@@ -5,11 +5,11 @@ upToEndOfFile
 	file test on OS pipes. Compare #upToEnd, which uses the generic end
 	of file test in FilePlugin."
 
-	| strm d s |
-	strm := WriteStream on: String new.
-	d := Delay forMilliseconds: 200.
-	[(s := self next: 2000) isEmpty
+	| stream delay string |
+	stream := WriteStream on: String new.
+	delay := Delay forMilliseconds: 200.
+	[(string := self next: 2000) isEmpty
 		ifTrue: [self atEndOfFile
-			ifTrue: [^ strm contents]
-			ifFalse: [d wait]]
-		ifFalse: [strm nextPutAll: s]] repeat
+						ifTrue: [^ stream contents]
+						ifFalse: [delay wait]]
+		ifFalse: [stream nextPutAll: string]] repeat

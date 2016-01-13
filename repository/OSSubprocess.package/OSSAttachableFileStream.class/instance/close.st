@@ -2,9 +2,9 @@ open/close
 close
 	"Close this file."
 
-	| h |
-	(h := self basicFileID) ifNotNil: [
-		self primCloseNoError: h.
+	| handle |
+	(handle := self basicFileID) ifNotNil: [
+		self primCloseNoError: handle.
 		self unregister.
 		fileID := nil
 	]

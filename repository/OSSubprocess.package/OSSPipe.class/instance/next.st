@@ -2,13 +2,13 @@ accessing
 next
 	"Answer the next object accessible by the receiver."
 
-	| c |
+	| character |
 	nextChar isNil
 		ifTrue:
 			[^ [reader next]
 				on: Error
 				do: [nil]]
 		ifFalse:
-			[c := nextChar.
+			[character := nextChar.
 			nextChar := nil.
-			^ c]
+			^ character]

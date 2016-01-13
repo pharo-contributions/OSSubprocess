@@ -1,7 +1,6 @@
 accessing
 upToEnd
-	"Answer the remaining elements in the string. This method is retained for backward
-	compatibility with older versions of CommandShell."
+	"Answer the remaining elements in the string."
 
 	| strm s |
 	strm := WriteStream on: String new.

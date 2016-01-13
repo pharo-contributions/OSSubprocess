@@ -1,4 +1,6 @@
 closing
 close
-
-	self closeWriter; closeReader
+	"Closes both streams"
+	
+	self closeWriter.
+	self closeReader.

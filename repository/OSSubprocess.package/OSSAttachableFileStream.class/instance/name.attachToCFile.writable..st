@@ -14,7 +14,12 @@ typedef struct {
 } SQFile;
 	"
 	| fileIDByteArray |
-	"Hack...I calculated that the size of the SQFile struct in a 32 bits machine is 20 bytes. "
+	self flag: #fixIt.
+	"Hack...I calculated that the size of the SQFile struct in a 32 bits machine is 20 bytes only
+	if the fileSize was 64 bits. This is the case of Pharo OSX VM. However, Linux VM has not yet been build
+	with 64 buts but 32 bits for fileSize and so, instead of 20 it is 16.
+	For more details read thread with subject 'Why StandardFileStream fileID is 16 bytes in Linux while 20 bytes in OSX?'
+	"
 	fileIDByteArray := ByteArray new: 20. 
 	name := aSymbolOrString.
 	self setSessionIDTo: fileIDByteArray.
@@ -23,7 +28,10 @@ typedef struct {
 	self setOSFilePointerFromByteArray: externalFilePointer getHandle getHandle asByteArrayPointer to: fileIDByteArray offset: 4.
 	readWriteFlag 
 		ifTrue: [
-			"Again, in 32 bytes machines, the byte17 is the variable 'writable' from the SQFile.  "
+			self flag: #fixIt.
+			"Again, in 32 bytes machines, the byte17 is the variable 'writable' from the SQFile. 
+			In Linux, instead if 17 it should be 13.
+			 "
 			fileIDByteArray at: 17 put: 1.
 			self readWrite] 
 		ifFalse: [
