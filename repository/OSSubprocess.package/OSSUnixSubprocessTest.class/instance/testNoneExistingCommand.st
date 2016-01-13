@@ -12,6 +12,7 @@ testNoneExistingCommand
 	[ command runAndWait ] on: Error do: [  :ex | 
 		self assert: (ex printString includesSubstring: 'No such file or directory') .
 		self assert: command pid isNil.
+		command closeAndCleanStreams.
 		^ nil
 	].
 	
