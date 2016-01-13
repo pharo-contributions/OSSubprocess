@@ -1,3 +1,3 @@
-accessing
+settings
 stdoutPipe
 	^ stdoutPipe

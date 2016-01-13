@@ -4,12 +4,12 @@ internalRun
 	pidtPointer := ExternalAddress allocate: 4.
 	self registerPointer: pidtPointer.
 	self closeAndDup2FilesActions.
-	self pwd 
-		ifNil: [ returnValue := self primitivePosixSpawn: pidtPointer command: self command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ] 
+	pwd 
+		ifNil: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ] 
 		ifNotNil: [ 
 			OSSSystemAccessor current 
-				lockCwdWithValue: self pwd 
-				during: [ returnValue := self primitivePosixSpawn: pidtPointer command: self command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ]
+				lockCwdWithValue: pwd 
+				during: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ]
 		].
 	(returnValue > 0) 
 		ifTrue: [ OSSSystemAccessor current strerror: returnValue message: 'posix_spawn()'. ].

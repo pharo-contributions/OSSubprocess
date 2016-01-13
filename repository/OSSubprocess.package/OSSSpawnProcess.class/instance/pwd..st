@@ -1,3 +1,3 @@
-accessing
+settings
 pwd: anObject
 	pwd := anObject

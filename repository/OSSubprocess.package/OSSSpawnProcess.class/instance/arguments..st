@@ -1,3 +1,3 @@
-accessing
+settings
 arguments: anObject
 	arguments := anObject

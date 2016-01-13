@@ -1,3 +1,3 @@
-accessing
+settings
 stderrPipe: anObject
 	stderrPipe := anObject

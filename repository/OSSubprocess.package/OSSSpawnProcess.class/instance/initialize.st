@@ -3,3 +3,4 @@ initialize
 	super initialize.
 	envVariables := Dictionary new. 
 	createPipesForMissingStreams := false.
+	isBash := false
