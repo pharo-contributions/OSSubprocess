@@ -6,7 +6,7 @@ updateActiveChildrenAndNotifyDead
 
 	self activeChildren do:
 		[:child | child queryExitStatus ifNotNil: [ 
-				"#activeChildren answers those whose exitStatus is not not. 
+				"#activeChildren answers those whose exitStatus is not nil. 
 				Tehrefore if now queryExitStatus answers notNil, then this is the child that die!!!"
 				child processHasExitNotification.
 			 ]
