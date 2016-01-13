@@ -1,5 +1,7 @@
 close and dup2
 destroyPosixSpawnFileActionsT
+	"This is part of the needed API of posix_spawn() family of functions and dismply destroys
+	the struct initialized by #initPosixSpawnFileActionsT"
 	posixSpawnFileActionsT ifNotNil: [ 
 		| returnValue |
 		returnValue := self primitivePosixSpawnFileActionsDestroy: posixSpawnFileActionsT. 

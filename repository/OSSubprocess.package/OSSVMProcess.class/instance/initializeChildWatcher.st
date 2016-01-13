@@ -1,6 +1,6 @@
 child watching
 initializeChildWatcher
-	"This is a process which waits for the death of a child processes. Use SIGCHLD events rather than a Delay to poll"
+	"This is a process which waits for the death of a child processes. Use SIGCHLD events rather than a Delay to poll."
 
 	| processSynchronizationDelay |
 	processSynchronizationDelay := Delay forMilliseconds: 20.

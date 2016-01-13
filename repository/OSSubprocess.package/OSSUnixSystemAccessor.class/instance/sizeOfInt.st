@@ -1,0 +1,4 @@
+sizeof
+sizeOfInt
+	
+	^ self primSizeOfInt

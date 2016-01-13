@@ -1,0 +1,4 @@
+sizeof
+sizeOfPointer
+	
+	^ self primSizeOfPointer

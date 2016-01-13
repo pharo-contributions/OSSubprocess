@@ -1,3 +1,0 @@
-general
-getPid
-	^ self primitiveGetpid

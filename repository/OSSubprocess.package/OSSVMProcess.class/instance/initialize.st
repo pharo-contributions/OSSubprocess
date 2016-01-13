@@ -6,7 +6,7 @@ initialize
 	accessProtect := Semaphore forMutualExclusion.
 	mutexForCwd := Semaphore forMutualExclusion.
 	self initializeAllMyChildren.
-	systemAccessor := OSSSystemAccessor forVMProcess. 
+	systemAccessor := OSSUnixSystemAccessor forVMProcess. 
 	pid := systemAccessor getPid.
 	childListTreshold := 20. "Once child list gets bigger than this number, we delete all exited processes"
 	self initializeSessionID.

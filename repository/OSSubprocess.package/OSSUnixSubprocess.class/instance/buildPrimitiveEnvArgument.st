@@ -1,5 +1,7 @@
 env building
 buildPrimitiveEnvArgument
+	"Builds the whole env argument as expected by posix_spawn(), taking into account the variables
+	defined by the API #environmentAt:put:"
 	| envPointer |
 	"By default, if none variable was set, we add all the ones existing in parent"
 	envVariables isEmpty ifTrue: [ self addAllEnvVariablesFromParentWithoutOverride ].

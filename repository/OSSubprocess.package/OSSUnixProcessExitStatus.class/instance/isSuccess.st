@@ -1,3 +1,3 @@
 testing
 isSuccess
-	^self exitStatus = 0
+	^ self exitStatus = 0

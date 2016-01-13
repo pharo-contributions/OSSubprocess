@@ -1,4 +1,4 @@
-accessing
+read, write, position
 peek
 
 	^ nextChar isNil

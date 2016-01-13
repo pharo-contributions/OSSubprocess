@@ -1,4 +1,4 @@
-accessing
+read, write, position
 next
 	"Answer the next object accessible by the receiver."
 

@@ -1,4 +1,4 @@
-accessing
+read, write, position
 next: anInteger 
 	"Answer the next anInteger elements of my collection."
 

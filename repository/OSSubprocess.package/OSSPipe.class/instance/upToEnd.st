@@ -1,4 +1,4 @@
-accessing
+read, write, position
 upToEnd
 	"Answer the remaining elements in the string."
 

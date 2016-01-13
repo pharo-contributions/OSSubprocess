@@ -4,7 +4,7 @@
 		 ],
 	"classvars" : [
 		 ],
-	"commentStamp" : "",
+	"commentStamp" : "MarianoMartinezPeck 1/11/2016 11:50",
 	"instvars" : [
 		"intValue" ],
 	"name" : "OSSUnixProcessExitStatus",
