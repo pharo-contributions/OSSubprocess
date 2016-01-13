@@ -1,5 +1,5 @@
 instance creation
-name: aSymbolOrString attachTo: aFileID writable: readWriteFlag 
+name: aSymbolOrString attachToCFile: aCFile writable: readWriteFlag 
 	"Create a new instance attached to aCFile. For write streams, this represents two
 	Smalltalk streams which write to the same OS file or output stream,
 	presumably with interleaved output. The purpose of this method is to
@@ -8,5 +8,5 @@ name: aSymbolOrString attachTo: aFileID writable: readWriteFlag
 
 	^ (super basicNew
 		name: aSymbolOrString
-		attachTo: aFileID
+		attachToCFile: aCFile
 		writable: readWriteFlag) initialize

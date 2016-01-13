@@ -1,3 +1,0 @@
-accessing
-writeEndFileDescriptor
-	^ fileDescriptors second

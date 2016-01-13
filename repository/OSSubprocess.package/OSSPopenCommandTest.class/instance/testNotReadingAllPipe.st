@@ -1,5 +1,5 @@
 tests
-testBasicCommand
+testNotReadingAllPipe
 	| command | 
 	
 	command := OSSPopenCommand new 
@@ -7,6 +7,5 @@ testBasicCommand
 					command: 'ls'.
 	
 	self shouldnt: [ command run ] raise: Error. 
-	command pipeStream upToEndOfFile.
 	command closeStreams.
-	self assert: command terminationStatus equals: 0
+	self assert: command terminationStatus > 0
