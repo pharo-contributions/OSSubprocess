@@ -5,13 +5,13 @@ lockCwdWithValue: cwdNewValue during: aBlock
 	completed :=  Semaphore new. 
 	[ 
 		| oldCwd |
-		oldCwd := self getcwd.
+		oldCwd := self systemAccessor getcwd.
 		[
-			self chdir: cwdNewValue.
+			self systemAccessor chdir: cwdNewValue.
 			mutexForCwd critical: aBlock.
 		]
 		ensure: [ 
-			self chdir: oldCwd.
+			self systemAccessor chdir: oldCwd.
 			completed signal.	
 		]
 	] forkAt: Processor userInterruptPriority.

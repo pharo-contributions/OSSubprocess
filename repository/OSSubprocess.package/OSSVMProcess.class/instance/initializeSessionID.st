@@ -1,6 +1,9 @@
 initialize - release
 initializeSessionID
 	| oldFile | 
+	self flag: #fixMe. 
+	"grrr I need the sessionID (first 4 bytes of the SQFile). .. there is no primitive to get it. Since it is the same for all files
+	lets try to grab it from a file we know there will be always there: the image file."
 	oldFile := StandardFileStream oldFileNamed: Smalltalk image imagePath.
-	currentSession := oldFile basicFileID copy first: 4.
+	sessionID := oldFile basicFileID copy first: 4.
 	oldFile close.

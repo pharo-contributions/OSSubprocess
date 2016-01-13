@@ -7,7 +7,7 @@ internalRun
 	pwd 
 		ifNil: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ] 
 		ifNotNil: [ 
-			self systemAccessor
+			OSSVMProcess vmProcess
 				lockCwdWithValue: pwd 
 				during: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ]
 		].

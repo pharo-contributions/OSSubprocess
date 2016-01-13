@@ -11,7 +11,8 @@
 		"systemAccessor",
 		"pid",
 		"childListTreshold",
-		"currentSession" ],
+		"sessionID",
+		"mutexForCwd" ],
 	"name" : "OSSVMProcess",
 	"pools" : [
 		 ],

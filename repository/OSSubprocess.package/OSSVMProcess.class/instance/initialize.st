@@ -4,6 +4,7 @@ initialize
 	this Smalltalk virtual machine is. executing."
 
 	accessProtect := Semaphore forMutualExclusion.
+	mutexForCwd := Semaphore forMutualExclusion.
 	self initializeAllMyChildren.
 	systemAccessor := OSSSystemAccessor new. 
 	pid := systemAccessor getPid.
