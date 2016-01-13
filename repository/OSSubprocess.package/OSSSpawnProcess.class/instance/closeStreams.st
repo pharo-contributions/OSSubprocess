@@ -1,5 +1,7 @@
 cleaning
 closeStreams
-	stderrPipe closeWriteEnd.
+	stdinPipe closeReadEnd.
 	stdoutPipe closeWriteEnd.
+	stderrPipe closeWriteEnd.
+	
 	

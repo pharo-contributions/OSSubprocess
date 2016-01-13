@@ -11,8 +11,9 @@
 		"pointers",
 		"childPid",
 		"posixSpawnFileActionsT",
-		"stderrPipe",
-		"stdoutPipe" ],
+		"stdinPipe",
+		"stdoutPipe",
+		"stderrPipe" ],
 	"name" : "OSSSpawnProcess",
 	"pools" : [
 		 ],

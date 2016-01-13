@@ -3,7 +3,7 @@ close
 	"Close this file."
 
 	| h |
-	(h := self ioHandle) ifNotNil: [
+	(h := self basicFileID) ifNotNil: [
 		self primCloseNoError: h.
 		self unregister.
 		fileID := nil

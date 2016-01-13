@@ -1,0 +1,3 @@
+closing
+closeReadEnd
+	OSSSystemAccessor current closeFileDescriptor: self readEndFileDescriptor

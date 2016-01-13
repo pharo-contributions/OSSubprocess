@@ -1,3 +1,3 @@
 closing
 closeWriteEnd
-	OSSSystemAccessor current closeFileDescriptor: fileDescriptors second 
+	OSSSystemAccessor current closeFileDescriptor: self writeEndFileDescriptor
