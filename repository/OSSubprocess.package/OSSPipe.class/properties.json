@@ -6,7 +6,6 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"fileDescriptors",
 		"readBlocking",
 		"writer",
 		"reader",

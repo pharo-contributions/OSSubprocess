@@ -1,4 +1,4 @@
-private - hacks
+TO USE LATER WITHOUT OSPROCESS
 setSessionIDTo: fileIDByteArray
 	| currentSession |
 	currentSession := OSSVMProcess vmProcess sessionID.

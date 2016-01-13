@@ -1,6 +1,6 @@
 instance creation
-newWith: fileDescriptors readBlocking: aBoolean
+newWith: fileIDsArray readBlocking: aBoolean
 	^ self basicNew 
-			initializeWith: fileDescriptors readBlocking: aBoolean
+			initializeWith: fileIDsArray readBlocking: aBoolean
 			yourself
 

@@ -1,3 +1,0 @@
-accessing
-readEndFileDescriptor
-	^ fileDescriptors first

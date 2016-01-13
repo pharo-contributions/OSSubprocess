@@ -1,6 +1,6 @@
 pipes
 makePipeWithReadBlocking: aBoolean
-	| pipePointer returnValue fileDescriptors |
+"	| pipePointer returnValue fileDescriptors |
 	pipePointer := ExternalAddress allocate: 8.
 	[
 		returnValue := self primitivePipe: pipePointer.	
@@ -12,3 +12,7 @@ makePipeWithReadBlocking: aBoolean
 	] ensure:[
 		pipePointer free.
 	]
+"
+	| fileIDsArray |
+	fileIDsArray := self primCreatePipe.
+	^ OSSPipe newWith: fileIDsArray readBlocking: aBoolean. 

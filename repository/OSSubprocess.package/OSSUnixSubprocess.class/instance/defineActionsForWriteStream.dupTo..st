@@ -3,9 +3,9 @@ defineActionsForWriteStream: aWriteStream dupTo: aFileDescriptor
 	aWriteStream ifNotNil: [ 
 		aWriteStream ossIsPipe 
 			ifTrue: [  
-				self posixSpawnFileActionsAddClose: aWriteStream readEndFileDescriptor.
-				self posixSpawnFileActionsAddDup2: aWriteStream writeEndFileDescriptor newFileDescritpion: aFileDescriptor.
-				self posixSpawnFileActionsAddClose: aWriteStream writeEndFileDescriptor.	
+				self posixSpawnFileActionsAddClose: (self systemAccessor primUnixFileNumber: aWriteStream reader fileID).
+				self posixSpawnFileActionsAddDup2: (self systemAccessor primUnixFileNumber: aWriteStream writer fileID) newFileDescritpion: aFileDescriptor.
+				self posixSpawnFileActionsAddClose: (self systemAccessor primUnixFileNumber: aWriteStream writer fileID).	
 			] 
 			ifFalse: [ 
 				| fileDesc |
