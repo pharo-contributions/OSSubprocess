@@ -206,9 +206,36 @@ If what you need is the second possibility then you will have to write your cust
 ### Facilities for synchronous calls and streams processing at the end
 For synchronous calls in which streams processing could be done once the process has exited, we provide some facilities methods that should ease the usage. Synchronous calls mean that we must wait for the child to exit. We provide two ways of doing this. 
 
+#### Semaphore-based SIGCHLD waiting 
 The first way is with the method `#waitForExit`. This method is used by the high level API methods `#runAndWait` and `#runAndWaitOnExitDo:`. The wait in this scenario does **not** use an image-based delay polling. Instead, it uses a semaphore. Just after the process starts, it waits on a semaphore of the instVar `mutexForSigchld`. When the `OSSVMProcess` child watcher receives a `SIGCHLD` singal, it will notify the child that die with the message `#processHasExitNotification`. That method, will do the `#signal` in the semaphore and hence the execution of `#waitForExit` will continue.
 
 > **IMPORTANT** In this kind of waiting there is no polling and hence we do not read from the streams periodically. Instead, we read the whole contents of each stream at the end. Basically, there is a problem in general (deadlock!) with waiting for an external process to exit before reading its output. If the external process creates a large amount of output, and if the output is a pipe, it will block on writing to the pipe until someone (our VM process) reads some data from the pipe to make room for the writing. That leads to cases where we never read the output (because the external process did not exit) and the external process never exits (because we have not read the data from the pipe to make room for the writing).
+
+> Another point to take into account is that this kind of wait also depends on the child watcher and `SIGCHLD` capture. While we do our best to make this as reliable as possible, it might be cases where we miss some `SIGCHLD` signals. There is a workaround for that (see method `#initializeChildWatcher`), but there may still be issues. If such problem happens, the child process (at our language level) never exits from the `#waitForExit` method. And at the OS level, the child would look like a zombie becasue the parent did not collect the exit status. 
+
+#### Delay-based polling waiting
+The other way we have for waiting a child process is by doing a delay-based in-image polling. That basically means a loop in which we wait some miliseconds, and then check the exit status of the process. For this, we provide the method `#waitForExitPollingEvery:retrievingStreams:`, and it's high level API method `#runAndWaitPollingEvery:retrievingStreams:onExitDo:`.
+
+It is important to note that as part of the loop we send `#queryExitStatus`, which is the one that sends the `waitpid()` in Unix. That means that we are fully independent of the child watcher and the `SIGCHLD` and hence much more reliable than the previous approach.
+
+In addition, we provide a `retrievingStreams:` boolean which if true, it reads from streams as part of the loop. This solves the problem mentioned before where there could be a deadlock if there is no room in the pipe for the writing. 
+
+Of course, the main disadvantage of the polling is the cost of it at the language level. The waiting on a semaphore (as with the `SIGCHLD`) has no cost.  
+
+#### Which waiting to use?
+If you are using pipes and you are not sure about how much the child process could write in the streams, then we recommend the polling approach (with `retrievingStreams:` with `true`). 
+
+If you are using pipes and you know the process will not write much, then you can use both approaches. If you want to be sure 100% to never ever get a zombie or related problem, then we think the polling approach is a bit more reliable. If you can live with such a possibility, then maybe the `SIGCHLD` approach could work too. 
+
+If you are using files instead of pipes, then it would depend on how long does the process take. If it is normally short, then the polling approach would be fine. If it is a long process then you may want to do the `SIGCHLD` approach to avoid the polling costs. But you can also use the polling approach and specify a larger timeout. 
+
+*As you can see, there is no silver bullet. It's up to the user to know which model would fit better for his use-case. If you are uncertain or you are not an expert, then go with the polling approach with `retrievingStreams:` on `true`.*
+
+
+## Environment variables
+
+## Shell commands
+
 
 
 
