@@ -4,7 +4,7 @@ Forking OS processes from Pharo language
 
 ##Table of Contents
 
-  * [OSSubprocess Documentation](#ossubprocess-documentation)
+  * [OSSubprocess](#ossubprocess)
     * [Table of Contents](#table-of-contents)
     * [Summary](#summary)
         * [Funding](#funding)
@@ -15,10 +15,23 @@ Forking OS processes from Pharo language
     * [Child exit status](#child-exit-status)
       * [OSSVMProcess and it's child watcher](#ossvmprocess-and-its-child-watcher)
       * [Accessing child status and interpreting it](#accessing-child-status-and-interpreting-it)
+    * [Streams management](#streams-management)
+      * [Handling pipes within Pharo](#handling-pipes-within-pharo)
+      * [Regular files vs pipes](#regular-files-vs-pipes)
+      * [Customizing streams creation](#customizing-streams-creation)
     * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
       * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
       * [When to process streams](#when-to-process-streams)
       * [Facilities for synchronous calls and streams processing at the end](#facilities-for-synchronous-calls-and-streams-processing-at-the-end)
+        * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
+        * [Delay-based polling waiting](#delay-based-polling-waiting)
+        * [Which waiting to use?](#which-waiting-to-use)
+    * [Environment variables](#environment-variables)
+      * [Setting environment variables](#setting-environment-variables)
+      * [Variables are not expanded](#variables-are-not-expanded)
+      * [Accessing environment variables](#accessing-environment-variables)
+      * [Inherit variables from parent](#inherit-variables-from-parent)
+    * [Shell commands](#shell-commands)
 
 
 ## Summary
@@ -220,6 +233,20 @@ It is important to note that as part of the loop we send `#queryExitStatus`, whi
 
 In addition, we provide a `retrievingStreams:` boolean which if true, it reads from streams as part of the loop. This solves the problem mentioned before where there could be a deadlock if there is no room in the pipe for the writing. 
 
+Below is an example of delay polling:
+
+```Smalltalk
+OSSUnixSubprocess new	
+	command: '/bin/ls';
+	arguments: (Array with: '-la' with: '/Users');
+	createAndSetStdoutStream;
+	runAndWaitPollingEvery: (Delay forMilliseconds: 50) retrievingStreams: true onExitDo: [ 
+		:process :outString  |	
+		outString inspect 
+	]
+```
+
+
 Of course, the main disadvantage of the polling is the cost of it at the language level. The waiting on a semaphore (as with the `SIGCHLD`) has no cost.  
 
 #### Which waiting to use?
@@ -234,9 +261,83 @@ If you are using files instead of pipes, then it would depend on how long does t
 
 ## Environment variables
 
+### Setting environment variables
+
+One common requirement for child processes is to define environment variables for them, that may not even exist in the parent process. Let's see an example:
+
+```Smalltalk
+OSSUnixSubprocess new	
+	command: '/usr/bin/git';
+	arguments: (Array with: '-C' with: '/Users/mariano/git/OSSubprocess' with: 'commit');
+	environmentAt: 'GIT_EDITOR' put: '/Users/mariano/bin/mate';
+	createAndSetStdoutStream;
+	runAndWaitOnExitDo: [ :process :outString  |]
+```
+
+In this example we are executing `/usr/bin/git` and we are telling it to commit from the directory `/Users/mariano/git/OSSubprocess`. Without any particular environment variable setting, `git` will use the default editor. In my machine, it will use `nano` editor. However, in above example, we are setting a environment variable called `GIT_EDITOR` (which is *not* set in parent process) with the value `/Users/mariano/bin/mate` (TextMate editor for OSX). When we run this example, `git` will then use TextMate for entering the commit message instead of `nano`. 
+
+### Variables are not expanded
+You should not confuse the above example with variables expansions. Consider now this example:
+
+```Smalltalk
+OSSUnixSubprocess new	
+	command: '/bin/echo';
+	arguments: (Array with: '${HOME}');
+	environmentAt: 'HOME' put: 'hello';
+	createAndSetStdoutStream;
+	runAndWaitOnExitDo: [ :command :outString |
+		outString inspect
+	].
+```
+
+What do you expect to be the `outString`? Well, the answer is the literal string `${HOME}`. This is because OSSubprocess does *not* expands variables. It does *set* variables, but that's not the same as expanding them. 
+
+Variable expansion is a responsibility of the shell, not of the command. Specific commands will of course consult their environment, but only for variables that they are designed to use (e.g. `git` will use $GIT_EDITOR or fall back to $EDITOR when you have to type a commit message). 
+
+To conclude this topic, see this example:
+
+```Smalltalk
+OSSUnixSubprocess new	
+	command: '/bin/sh';
+	arguments: (Array with: '-c' with: 'echo ${HOME}');
+	environmentAt: 'HOME' put: 'hello';
+	createAndSetStdoutStream;
+	runAndWaitOnExitDo: [ :command :outString |
+		outString inspect. 	
+	].
+```
+
+In this case, the `outString` is indeed `hello` and this is simply because `/bin/sh` did the variable expansion before executing the `echo`.
+
+
+### Accessing environment variables
+It seems some people use OSProcess (or maybe even OSSubprocess) to access environment variables. **This is not needed and it's not the best approach**. Pharo provides an out of the box way for accessing environment variables. For example, `Smalltalk platform environment at: 'PWD'` answers `/Users/mariano/Pharo/imagenes`. So, use that API for retrieving environment variables.
+
+Finally, not that you can "expand" yourself the value of a variable prior to spawing a process and hence avoid the need of the shell. example:
+
+```Smalltalk
+OSSUnixSubprocess new	
+	command: '/bin/echo';
+	arguments: (Array with: (Smalltalk platform environment at: 'HOME'));
+	createAndSetStdoutStream;
+	runAndWaitOnExitDo: [ :command :outString |
+		outString inspect
+	].
+```
+
+In this example, `outString` will be `/Users/mariano`.  
+ 
+
+### Inherit variables from parent
+If you don't define any variable via `#environmentAt:put:`, then by default, we will make the child process inherit all the variables from the parent process. If you did define at least one variable, then by default the child inherits no variable. However, you have the method `#addAllEnvVariablesFromParentWithoutOverride` which basically adds all the variables inherit from the parent but those that you have explicitly set (if any). 
+
+
+
 ## Shell commands
 
 
+
+## pwd:
 
 
 
