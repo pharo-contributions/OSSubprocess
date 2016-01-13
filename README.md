@@ -4,6 +4,7 @@ Forking OS processes from Pharo language
 
 ##Table of Contents
 
+
   * [OSSubprocess](#ossubprocess)
     * [Table of Contents](#table-of-contents)
     * [Summary](#summary)
@@ -32,6 +33,8 @@ Forking OS processes from Pharo language
       * [Accessing environment variables](#accessing-environment-variables)
       * [Inherit variables from parent](#inherit-variables-from-parent)
     * [Shell commands](#shell-commands)
+    * [Setting working directory](#setting-working-directory)
+
 
 
 ## Summary
