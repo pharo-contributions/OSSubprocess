@@ -334,10 +334,54 @@ If you don't define any variable via `#environmentAt:put:`, then by default, we 
 
 
 ## Shell commands
+Sometimes, the process you want to execute is a shell. There are a couple of reasons for doing so:
+
+* Variables expansion.
+* Pipelines.
+* When there is already logic in `.bash_profile`, `.profile` or such kind of file.
+* Command path resolution.
+* Streams redirection.
+* Available shell scripts that you want to execute.
+* Convinience when you don't need to have full control.
+
+Quite some of that list can easily be done without the need of a shell, as already explained. But some of them, still need the shell. To avoid having to invoke a shell as seen in XXX, we provide the methods `#shellCommand:` and `#shell:command:`. Example:
+
+```Smalltalk
+OSSUnixSubprocess new	
+	shellCommand: 'ps -fea | grep Pharo > /tmp/testShellCommandWithStreamRedirects.deleteme';
+	createAndSetStdoutStream;
+	runAndWaitOnExitDo: [ :command :outString |
+		outString inspect. 					
+	].
+```
+
+Of course, `outString` is empty now becasue the shell has redirected it to a particular file. 
+
+`#shell:command:` is similar to `#shellCommand:` but allows the user to specify the full path of the shell to use. 
+
+> Note that when using the shell you must type the command exactly as the shell expects it, that is, with all the scaping and everything needed.
 
 
+## Setting working directory 
+Another common need when spawing processes is to set a working directory (`PWD`) for them. If none is set, by default, they inherit the working directory of the parent. Imagine the Pharo image was launched from a terminal while `PWD` was `/Users/mariano`. Now imagine I want to spawn a process for a git commit for the directory `/Users/mariano/git/OSSubprocess`. For this to work, I must specify the working directory for the child. Otherwise, the `commit` will be triggered in `/Users/mariano`. 
 
-## pwd:
+To support this, we provide the method `#pwd:` as this example shows:
+
+```Smalltalk
+OSSUnixSubprocess new	
+	command: '/usr/bin/git';
+	arguments: (Array with: 'commit' with: '-m' with: 'testing');
+	pwd: '/Users/mariano/git/OSSubprocess';
+	createAndSetStdoutStream;
+	createAndSetStderrStream;
+	runAndWaitOnExitDo: [ :process :outString :errString |
+		errString inspect.
+		outString inspect. 
+		]
+```
+
+> The implementation of `#pwd:` is quite rudementary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in XXX.
+
 
 
 
