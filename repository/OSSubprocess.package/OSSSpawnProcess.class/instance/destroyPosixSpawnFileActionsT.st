@@ -1,4 +1,4 @@
-close and dup
+close and dup2
 destroyPosixSpawnFileActionsT
 	posixSpawnFileActionsT ifNotNil: [ 
 		| returnValue |

@@ -1,4 +1,4 @@
 pipes
 stdinStream
-	^ stdinPipe openWriteStreamWithName: 'pipeStdinWriter'.
+	^ stdinPipe ifNotNil: [ stdinPipe openWriteStreamWithName: 'pipeStdinWriter' ].
 	

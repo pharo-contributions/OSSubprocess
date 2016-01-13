@@ -5,7 +5,8 @@ testSetAndReadCustomVariableOutsideBash
  	command := OSSSpawnProcess new 
 					command: 'printenv';
 					arguments: (Array with: 'WHATEVER');
-					environmentAt: 'WHATEVER' put: 'hello'.
+					environmentAt: 'WHATEVER' put: 'hello';
+					createAndSetStdoutPipe.
 
 	self shouldnt: [ command run ] raise: Error. 
 	outputString := command stdoutStream upToEndOfFile.

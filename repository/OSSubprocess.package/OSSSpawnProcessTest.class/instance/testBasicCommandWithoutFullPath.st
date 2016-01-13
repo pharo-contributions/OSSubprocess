@@ -4,7 +4,8 @@ testBasicCommandWithoutFullPath
 	
 	command := OSSSpawnProcess new 
 					command: 'ls';
-					arguments: (Array with: Smalltalk image imagePath).
+					arguments: (Array with: Smalltalk image imagePath);
+					createAndSetStdoutPipe.
 	
 	self shouldnt: [ command run ] raise: Error. 
 	stdOutString := command stdoutStream upToEndOfFile.

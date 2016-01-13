@@ -2,9 +2,10 @@ tests - streams
 testBasicCommandReadFromStdout
 	| command stdOutString | 
 	
-	command := OSSSpawnProcess new 
+	command := OSSSpawnProcess new
 					command: '/bin/ls';
-					arguments: (Array with: Smalltalk image imagePath).
+					arguments: (Array with: Smalltalk image imagePath);
+					createAndSetStdoutPipe.
 	
 	self shouldnt: [ command run ] raise: Error. 
 	stdOutString := command stdoutStream upToEndOfFile.

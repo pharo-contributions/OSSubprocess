@@ -1,4 +1,4 @@
 pipes
 stderrStream
-	^ stderrPipe openReadStreamWithName: 'pipeStderrReader'.
+	^ stderrPipe ifNotNil: [ stderrPipe openReadStreamWithName: 'pipeStderrReader'].
 	

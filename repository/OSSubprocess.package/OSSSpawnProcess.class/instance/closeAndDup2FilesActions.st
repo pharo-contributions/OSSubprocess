@@ -1,6 +1,6 @@
-close and dup
+close and dup2
 closeAndDup2FilesActions
 	self initPosixSpawnFileActionsT.
 	self closeAllButStandardFileStreams.
-	self dup2StandardFileStreams.
+	self defineActionsForStandardFileStreams.
 	

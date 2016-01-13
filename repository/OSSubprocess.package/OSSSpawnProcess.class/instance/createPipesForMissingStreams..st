@@ -1,0 +1,3 @@
+settings
+createPipesForMissingStreams: aBoolean
+	createPipesForMissingStreams := aBoolean

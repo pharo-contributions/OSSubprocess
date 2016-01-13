@@ -1,4 +1,4 @@
 pipes
 stdoutStream
-	^ stdoutPipe openReadStreamWithName: 'pipeStdoutReader'.
+	^ stdoutPipe ifNotNil: [ stdoutPipe openReadStreamWithName: 'pipeStdoutReader' ].
 	

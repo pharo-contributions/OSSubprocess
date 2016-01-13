@@ -15,7 +15,8 @@
 		"stdoutPipe",
 		"stderrPipe",
 		"exitStatus",
-		"envVariables" ],
+		"envVariables",
+		"createPipesForMissingStreams" ],
 	"name" : "OSSSpawnProcess",
 	"pools" : [
 		 ],

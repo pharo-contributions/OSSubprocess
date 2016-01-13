@@ -2,5 +2,5 @@ cleaning
 cleanResources
 	
 	self destroyPosixSpawnFileActionsT.
-	self closeStreams.
+	self closeNoneUsedEndsFromPipes.
 	self freePointers.

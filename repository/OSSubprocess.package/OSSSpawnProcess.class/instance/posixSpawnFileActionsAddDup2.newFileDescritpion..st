@@ -1,4 +1,4 @@
-close and dup
+close and dup2
 posixSpawnFileActionsAddDup2: oldFileDescription newFileDescritpion: newFileDescription
 	| returnValue |
 	returnValue := self primitivePosixSpawnFileActionsAddDup2: posixSpawnFileActionsT oldFileDescription: oldFileDescription newFileDescritpion: newFileDescription.

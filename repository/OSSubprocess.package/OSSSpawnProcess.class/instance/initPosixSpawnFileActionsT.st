@@ -1,4 +1,4 @@
-close and dup
+close and dup2
 initPosixSpawnFileActionsT
 	| returnValue |
 	posixSpawnFileActionsT := OSSPosixSpawnFileActionsT new 
