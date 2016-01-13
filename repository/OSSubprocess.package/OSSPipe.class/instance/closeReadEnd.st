@@ -1,3 +1,4 @@
 closing
 closeReadEnd
-	OSSSystemAccessor current closeFileDescriptor: self readEndFileDescriptor
+	OSSSystemAccessor current closeFileDescriptor: self readEndFileDescriptor.
+	readStream ifNotNil: [ readStream close ]

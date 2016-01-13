@@ -6,7 +6,11 @@ upToEndOfFile
 	OS pipes."
 
 	| newStream buffer |
-	buffer := buffer1 species new: 1000.
-	newStream := WriteStream on: (buffer1 species new: 100).
-	[self atEndOfFile] whileFalse: [newStream nextPutAll: (self nextInto: buffer)].
-	^ newStream contents
+	self closed 
+		ifTrue: [ self error: 'File already closed' ]
+		ifFalse: [  
+			buffer := buffer1 species new: 1000.
+			newStream := WriteStream on: (buffer1 species new: 100).
+			[self atEndOfFile] whileFalse: [newStream nextPutAll: (self nextInto: buffer)].
+			^ newStream contents
+		]
