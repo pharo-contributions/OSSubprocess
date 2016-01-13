@@ -1,0 +1,3 @@
+child status
+exitStatus
+	^ exitStatus

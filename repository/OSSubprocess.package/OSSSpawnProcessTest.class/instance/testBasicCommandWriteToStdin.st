@@ -1,4 +1,4 @@
-tests
+tests - streams
 testBasicCommandWriteToStdin
 	| command stdOutString string | 
 	string := 'this is a test shat should have been printed in the stdout'.

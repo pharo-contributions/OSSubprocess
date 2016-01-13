@@ -1,4 +1,4 @@
-tests
+tests - streams
 testBasicCommandReadFromStderr
 	| command stderrString stdoutString | 
 	

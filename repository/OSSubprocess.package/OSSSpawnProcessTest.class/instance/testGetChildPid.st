@@ -1,4 +1,4 @@
-tests
+tests - child status
 testGetChildPid
 	| command | 
 	

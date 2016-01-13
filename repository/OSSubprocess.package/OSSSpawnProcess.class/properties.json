@@ -13,7 +13,9 @@
 		"posixSpawnFileActionsT",
 		"stdinPipe",
 		"stdoutPipe",
-		"stderrPipe" ],
+		"stderrPipe",
+		"exitStatus",
+		"envVariables" ],
 	"name" : "OSSSpawnProcess",
 	"pools" : [
 		 ],

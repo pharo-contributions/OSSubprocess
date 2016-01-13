@@ -1,4 +1,4 @@
-tests
+tests - basic
 testBasicCommandWithArgument
 	| command | 
 	

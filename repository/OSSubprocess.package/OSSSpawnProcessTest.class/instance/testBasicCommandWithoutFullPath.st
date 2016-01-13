@@ -1,9 +1,9 @@
-tests - streams
-testBasicCommandReadFromStdout
+tests - basic
+testBasicCommandWithoutFullPath
 	| command stdOutString | 
 	
 	command := OSSSpawnProcess new 
-					command: '/bin/ls';
+					command: 'ls';
 					arguments: (Array with: Smalltalk image imagePath).
 	
 	self shouldnt: [ command run ] raise: Error. 

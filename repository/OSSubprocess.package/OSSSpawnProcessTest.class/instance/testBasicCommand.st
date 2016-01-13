@@ -1,4 +1,4 @@
-tests
+tests - basic
 testBasicCommand
 	| command | 
 	

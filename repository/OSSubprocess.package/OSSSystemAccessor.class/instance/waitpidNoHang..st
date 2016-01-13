@@ -12,7 +12,7 @@ waitpidNoHang: childPidInteger
 	That means...status is not available for childPidInteger..probably hasn't finished yet."
 	(returnValue = childPidInteger) ifTrue: [ 
 		"If wait() or waitpid() returns because the status of a child process is available, these functions shall return a value equal to the process ID of the child process for which status is reported.
-		This means...status is available"
+		This means...status is available. It has finished. "
 		answer := statusPointer signedLongAt: 1.
 		statusPointer free.
 		^ answer.
