@@ -2,7 +2,9 @@ close and dup
 initPosixSpawnFileActionsT
 	| returnValue |
 	posixSpawnFileActionsT := OSSPosixSpawnFileActionsT new 
-													handle: ((NativeBoost allocate: 4) value);
-													yourself.
+										setHandle: (ExternalData 
+													fromHandle: ((ExternalAddress allocate: 4) asExternalPointer  ) 
+													type: ExternalType void asPointerType);
+										yourself.
 	returnValue := self primitivePosixSpawnFileActionsInit: posixSpawnFileActionsT. 
 	returnValue = 0 ifFalse: [ self strerror: returnValue message: 'posix_spawn_file_actions_init()' ].

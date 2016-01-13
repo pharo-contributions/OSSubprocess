@@ -1,6 +1,11 @@
 private - hacks
 getFilePointerAsCFile
+
 	^ OSSCFile new 
-		handle: ((self fileID copyFrom: 5 to: 8) reversed asInteger);
+		setHandle: (ExternalData 
+							fromHandle: ((self basicFileID copyFrom: 5 to: 8) asExternalPointer  ) 
+							type: ExternalType void asPointerType);
 		yourself
 	
+
+

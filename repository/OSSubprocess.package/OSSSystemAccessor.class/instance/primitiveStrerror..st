@@ -1,4 +1,4 @@
 errors - primitives
 primitiveStrerror: errorNumber
-	<primitive: #primitiveNativeCall module: #NativeBoostPlugin error: errorCode>
-	^ self nbCall: #( String strerror( int errorNumber) )
+	
+	^ self ffiCall: #( String strerror( int errorNumber) )

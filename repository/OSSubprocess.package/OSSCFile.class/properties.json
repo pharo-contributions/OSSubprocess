@@ -10,5 +10,5 @@
 	"name" : "OSSCFile",
 	"pools" : [
 		 ],
-	"super" : "NBExternalObject",
+	"super" : "FFIExternalObject",
 	"type" : "normal" }

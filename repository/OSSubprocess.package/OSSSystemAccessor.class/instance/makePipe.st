@@ -1,7 +1,7 @@
 pipes
 makePipe
 	| pipePointer returnValue fileDescriptors |
-	pipePointer := NativeBoost allocate: 8.
+	pipePointer := ExternalAddress allocate: 8.
 	[
 		returnValue := self primitivePipe: pipePointer.	
 		(returnValue = -1) ifTrue: [ self perror: 'pipe()' ]. 

@@ -1,9 +1,9 @@
 child testing
 getChildStatus
-	| statusPointer |
-	statusPointer := OSSSystemAccessor current waitpidNoHang: self childPid.
-	^ statusPointer
+	| status |
+	status := OSSSystemAccessor current waitpidNoHang: self childPid.
+	^ status
 		ifNil: [ nil ] 
-		ifNotNil: [ (OSSUnixProcessExitStatus for: (statusPointer nbInt32AtOffset: 0)) ]
+		ifNotNil: [ OSSUnixProcessExitStatus for: status ]
 	
 	  

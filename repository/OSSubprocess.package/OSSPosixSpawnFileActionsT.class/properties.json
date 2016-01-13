@@ -10,5 +10,5 @@
 	"name" : "OSSPosixSpawnFileActionsT",
 	"pools" : [
 		 ],
-	"super" : "NBExternalObject",
+	"super" : "FFIExternalObject",
 	"type" : "normal" }

@@ -1,6 +1,7 @@
 private - primitives
 primitivePosixSpawn: pidPointer command: commandString fileActions: fileActions attributes: attributes argPointer: argPointer envPointer: envPointer
-	<primitive: #primitiveNativeCall module: #NativeBoostPlugin error: errorCode >
-	 ^ self nbCall: #( int posix_spawn (NBExternalAddress pidPointer, String commandString, OSSPosixSpawnFileActionsT fileActions, void * attributes, NBExternalAddress argPointer, NBExternalAddress envPointer) ) 
-				module: NativeBoost CLibrary 
-			 options: #(+ optCoerceNilToNull)
+	 ^ self ffiCall: #( int posix_spawn (void* pidPointer, String commandString, OSSPosixSpawnFileActionsT fileActions, void * attributes, void* argPointer, void* envPointer) ) 
+				module: 'libc'
+				options: #(+ optCoerceNilToNull)
+			
+		

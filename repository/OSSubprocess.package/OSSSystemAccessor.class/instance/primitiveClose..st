@@ -1,5 +1,5 @@
 files - primitives
 primitiveClose: aFileDescription 
-	<primitive: #primitiveNativeCall module: #NativeBoostPlugin>
-	^ self nbCall: #( int close(int aFileDescription) )
+	
+	^ self ffiCall: #( int close(int aFileDescription) )
 	

@@ -20,7 +20,7 @@ typedef struct {
 	self setSessionIDTo: fileIDByteArray.
 	"Hack. I calculated that the File* of the SQFile is the second element of the struct and starts at the byte 5.
 	The first 4 byets is the session ID. "
-	self setOSFilePointerFromByteArray: externalFilePointer handle asByteArray reversed to: fileIDByteArray offset: 4.
+	self setOSFilePointerFromByteArray: externalFilePointer getHandle getHandle asByteArrayPointer to: fileIDByteArray offset: 4.
 	readWriteFlag 
 		ifTrue: [
 			"Again, in 32 bytes machines, the byte17 is the variable 'writable' from the SQFile.  "

@@ -1,0 +1,3 @@
+private-primitives
+ffiLibraryName 
+	^ 'libc'

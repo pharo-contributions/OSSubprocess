@@ -12,5 +12,5 @@ primitiveFgetsInto: bufferPointer size: size file: file
 	string inspect. 
 	
 	"
-	<primitive: #primitiveNativeCall module: #NativeBoostPlugin error: errorCode>
-	^ self nbCall: #( String fgets(NBExternalAddress bufferPointer, int size, OSSCFile file) )
+
+	^ self ffiCall: #( String fgets(void* bufferPointer, int size, OSSCFile file) )
