@@ -12,9 +12,9 @@ waitForExitPollingEvery: aDelay retrievingStreams: aBoolean
 	whileTrue: [ 
 		aDelay wait.
 		self retrieveWhatIsAvailableOn: stdoutStream andAddItTo: retrievedStdout.
-		self retrieveWhatIsAvailableOn: stderrStream andAddItTo: stderrStream.
+		self retrieveWhatIsAvailableOn: stderrStream andAddItTo: retrievedStderr.
 	].
 	"Once more, just in case"
 	self retrieveWhatIsAvailableOn: stdoutStream andAddItTo: retrievedStdout.
-	self retrieveWhatIsAvailableOn: stderrStream andAddItTo: stderrStream.
+	self retrieveWhatIsAvailableOn: stderrStream andAddItTo: retrievedStderr.
 	^ exitStatus  
