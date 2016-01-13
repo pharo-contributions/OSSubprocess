@@ -1,0 +1,3 @@
+status
+isComplete
+	^ exitStatus notNil

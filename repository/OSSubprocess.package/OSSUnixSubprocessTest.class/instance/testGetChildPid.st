@@ -6,5 +6,5 @@ testGetChildPid
 					command: '/bin/ls'.
 	
 	command run.
-	self assert: command childPid > 0.
-	command waitForChild. 
+	self assert: command pid > 0.
+	command waitForExit. 

@@ -6,11 +6,11 @@ testGetChildStatusAfterFinishesSuccess
 					command: '/bin/ls'.
 	
 	command run. 
-	self assert: command childPid > 0.
-	command waitForChild.
+	self assert: command pid > 0.
+	command waitForExit.
 	command queryExitStatus.
 	self assert: command exitStatusInterpreter exitStatus equals: 0. 
-	self assert: command succeeded.
-	self assert: command completed.
+	self assert: command isSuccess.
+	self assert: command isComplete.
 	self deny: command isRunning.
 	self assert: self numberOfZombiesProcesses equals: oldZombies.

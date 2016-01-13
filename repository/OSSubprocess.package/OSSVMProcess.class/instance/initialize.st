@@ -4,6 +4,7 @@ initialize
 	this Smalltalk virtual machine is. executing."
 
 	accessProtect := Semaphore forMutualExclusion.
-	childProcessList := OrderedCollection new.
+	self initializeAllMyChildren.
 	systemAccessor := OSSSystemAccessor new. 
-	pid := systemAccessor getVMPid.
+	pid := systemAccessor getPid.
+	childListTreshold := 20. "Once child list gets bigger than this number, we delete all exited processes"

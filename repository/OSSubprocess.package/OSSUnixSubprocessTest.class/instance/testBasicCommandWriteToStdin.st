@@ -12,7 +12,7 @@ testBasicCommandWriteToStdin
 	command stdinStream 
 		nextPutAll: string;
 		close.
-	command waitForChild.
+	command waitForExit.
 	stdOutString := command stdoutStream upToEnd.
 	command closeAndCleanStreams.
 	self assert: stdOutString equals: string.

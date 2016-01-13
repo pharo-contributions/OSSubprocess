@@ -7,14 +7,14 @@ testGetChildStatusBeforeAndAfterFinishing
 				arguments: {'3'}.
 	
 	command run. 
-	self assert: command childPid > 0.
+	self assert: command pid > 0.
 	(Duration seconds: 1) wait.
 	self assert: command queryExitStatus isNil.
-	self deny: command completed.
+	self deny: command isComplete.
 	self assert: command isRunning.
-	command waitForChild.
+	command waitForExit.
 	self assert: command queryExitStatus isNil not.
 	self assert: command exitStatusInterpreter exitStatus equals: 0.
-	self assert: command completed.
+	self assert: command isComplete.
 	self assert: self numberOfZombiesProcesses equals: oldZombies.
 	

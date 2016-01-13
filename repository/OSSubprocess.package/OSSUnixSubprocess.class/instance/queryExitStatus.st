@@ -1,8 +1,8 @@
-child status
+status
 queryExitStatus
 	
 	^ exitStatus ifNil: [ 
-			exitStatus := OSSSystemAccessor current waitpidNoHang: childPid.
+			exitStatus := OSSSystemAccessor current waitpidNoHang: pid.
 			exitStatus
 		]
 		

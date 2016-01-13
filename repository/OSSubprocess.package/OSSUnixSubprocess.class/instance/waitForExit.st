@@ -1,5 +1,5 @@
-child status
-waitForChild
+status
+waitForExit
 	"Does an image-based polling which uses pidwait with WNOHANG to check status of child process.
 	Calling #waitForChild is needed so that the child process does not become a zombie after it has finished.
 	Answers the exit status of the child."

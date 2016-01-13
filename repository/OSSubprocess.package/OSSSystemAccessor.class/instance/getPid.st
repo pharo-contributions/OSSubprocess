@@ -1,3 +1,3 @@
-RANDOM
-getVMPid
+general
+getPid
 	^ self primitiveGetpid

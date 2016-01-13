@@ -9,4 +9,5 @@ testReadingFromStdoutDoesNotBlocksVM
 	
 	command run. 
 	self assert:[ command stdoutStream upToEnd ] timeToRun seconds <= 2. 
-	
+	command waitForExit. 
+	command closeAndCleanStreams.

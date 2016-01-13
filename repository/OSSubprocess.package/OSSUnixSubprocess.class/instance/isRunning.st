@@ -1,3 +1,3 @@
-child status
+status
 isRunning
-	^ childPid notNil and: [ self completed not ]
+	^ pid notNil and: [ self isComplete not ]

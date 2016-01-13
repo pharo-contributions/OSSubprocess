@@ -2,7 +2,7 @@ running
 runAndWaitOnExitDo: aClosure
 	| stdoutString stderrString |
 	self run.
-	self waitForChild.
+	self waitForExit.
 	stdoutString := self stdoutStream 
 									ifNil: [ '' ] 
 									ifNotNil: [ :str | 

@@ -13,5 +13,5 @@ internalRun
 		].
 	(returnValue > 0) 
 		ifTrue: [ OSSSystemAccessor current strerror: returnValue message: 'posix_spawn()'. ].
-	childPid := pidtPointer nbInt32AtOffset: 0.
+	pid := pidtPointer nbInt32AtOffset: 0.
 	

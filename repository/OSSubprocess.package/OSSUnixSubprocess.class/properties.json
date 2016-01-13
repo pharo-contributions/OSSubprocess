@@ -9,7 +9,6 @@
 		"command",
 		"arguments",
 		"pointers",
-		"childPid",
 		"posixSpawnFileActionsT",
 		"exitStatus",
 		"envVariables",
@@ -19,7 +18,8 @@
 		"stdoutStream",
 		"createMissingStandardStreams",
 		"defaultWriteStreamCreationBlock",
-		"defaultReadStreamCreationBlock" ],
+		"defaultReadStreamCreationBlock",
+		"pid" ],
 	"name" : "OSSUnixSubprocess",
 	"pools" : [
 		 ],

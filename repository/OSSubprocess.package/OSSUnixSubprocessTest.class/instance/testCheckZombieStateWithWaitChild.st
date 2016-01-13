@@ -7,7 +7,7 @@ testCheckZombieStateWithWaitChild
 				arguments: {'1'}.
 	
 	command run.
-	command waitForChild. 
+	command waitForExit. 
 	self assert: self numberOfZombiesProcesses equals: oldZombies.
 	
 	

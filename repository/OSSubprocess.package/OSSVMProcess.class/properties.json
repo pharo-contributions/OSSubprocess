@@ -9,7 +9,8 @@
 		"accessProtect",
 		"childProcessList",
 		"systemAccessor",
-		"pid" ],
+		"pid",
+		"childListTreshold" ],
 	"name" : "OSSVMProcess",
 	"pools" : [
 		 ],
