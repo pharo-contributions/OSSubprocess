@@ -1,0 +1,3 @@
+streams
+createADefaultStream
+	^ self mustBeImplemented

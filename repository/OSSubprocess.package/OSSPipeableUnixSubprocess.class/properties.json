@@ -1,0 +1,14 @@
+{
+	"category" : "OSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "OSSPipeableUnixSubprocess",
+	"pools" : [
+		 ],
+	"super" : "OSSUnixSubprocess",
+	"type" : "normal" }

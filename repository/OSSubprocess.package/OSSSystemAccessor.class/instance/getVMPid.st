@@ -1,0 +1,3 @@
+RANDOM
+getVMPid
+	^ self primitiveGetpid

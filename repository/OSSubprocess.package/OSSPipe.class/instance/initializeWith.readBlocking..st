@@ -2,4 +2,7 @@ initialize - release
 initializeWith: fileDescriptorsArray readBlocking: aBoolean
 	super initialize.
 	fileDescriptors := fileDescriptorsArray.
-	readBlocking := aBoolean
+	readBlocking := aBoolean.
+	self openReadStreamWithName: 'pipeReader'.
+	self openWriteStreamWithName: 'pipeWriter'.
+	

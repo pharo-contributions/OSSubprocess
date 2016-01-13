@@ -1,0 +1,4 @@
+testing
+isPipe
+
+	^ true

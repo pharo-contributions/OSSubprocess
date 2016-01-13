@@ -2,7 +2,7 @@ testing
 testBasicWriteAndRead
 	| pipe writeStream readStream string readString |
 	string := 'this is a testing string'. 
-	pipe := OSSSystemAccessor current makePipe.
+	pipe := self blockingPipe.
 	writeStream := pipe openWriteStreamWithName: 'pipeWriter'.
 	readStream := pipe openReadStreamWithName: 'pipeReader'.
 	writeStream nextPutAll: string; flush.

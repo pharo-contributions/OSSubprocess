@@ -1,0 +1,25 @@
+{
+	"category" : "OSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"command",
+		"arguments",
+		"pointers",
+		"childPid",
+		"posixSpawnFileActionsT",
+		"exitStatus",
+		"envVariables",
+		"pwd",
+		"stderrStream",
+		"stdinStream",
+		"stdoutStream",
+		"createMissingStandardStreams" ],
+	"name" : "OSSUnixSubprocess",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

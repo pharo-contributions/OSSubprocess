@@ -7,11 +7,12 @@
 	"commentStamp" : "",
 	"instvars" : [
 		"fileDescriptors",
-		"readStream",
-		"writeStream",
-		"readBlocking" ],
+		"readBlocking",
+		"writer",
+		"reader",
+		"nextChar" ],
 	"name" : "OSSPipe",
 	"pools" : [
 		 ],
-	"super" : "Object",
+	"super" : "Stream",
 	"type" : "normal" }

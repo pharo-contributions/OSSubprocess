@@ -1,9 +1,9 @@
 testing
 testWriteAfterClosedWriteEnd
-	| pipe writeStream readStream string readString |
+	| pipe writeStream string |
 	string := 'this is a testing string'. 
-	pipe := OSSSystemAccessor current makePipe.
+	pipe := self blockingPipe.
 	writeStream := pipe openWriteStreamWithName: 'pipeWriter'.
-	pipe closeWriteEnd.
+	pipe closeWriter.
 	self should: [ writeStream nextPutAll: string; flush ] raise: Error.
 	
