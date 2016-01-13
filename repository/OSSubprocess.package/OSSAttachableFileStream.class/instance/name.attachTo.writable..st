@@ -15,7 +15,7 @@ typedef struct {
 	"
 	| fileIDByteArray |
 	"Hack...I calculated that the size of the SQFile struct in a 32 bits machine is 20 bytes. "
-	fileIDByteArray := ByteArray new: 20. 
+	fileIDByteArray := ByteArray new: 16. 
 	name := aSymbolOrString.
 	self setSessionIDTo: fileIDByteArray.
 	"Hack. I calculated that the File* of the SQFile is the second element of the struct and starts at the byte 5.
@@ -24,7 +24,7 @@ typedef struct {
 	readWriteFlag 
 		ifTrue: [
 			"Again, in 32 bytes machines, the byte17 is the variable 'writable' from the SQFile.  "
-			fileIDByteArray at: 17 put: 1.
+			fileIDByteArray at: 13 put: 1.
 			self readWrite] 
 		ifFalse: [
 			self readOnly].
