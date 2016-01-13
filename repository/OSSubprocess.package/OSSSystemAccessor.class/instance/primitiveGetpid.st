@@ -1,5 +1,5 @@
 general
 primitiveGetpid
 
-	^ self ffiCall: #( int getpid() )
+	^ self ffiCall: #( int getpid(void) )
 	
