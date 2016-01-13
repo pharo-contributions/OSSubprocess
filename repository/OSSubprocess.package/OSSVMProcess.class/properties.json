@@ -1,0 +1,17 @@
+{
+	"category" : "OSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		"VMProcess" ],
+	"commentStamp" : "",
+	"instvars" : [
+		"accessProtect",
+		"childProcessList",
+		"systemAccessor",
+		"pid" ],
+	"name" : "OSSVMProcess",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

@@ -1,3 +1,4 @@
 streams
 createADefaultWriteStream
+
 	^ defaultWriteStreamCreationBlock value

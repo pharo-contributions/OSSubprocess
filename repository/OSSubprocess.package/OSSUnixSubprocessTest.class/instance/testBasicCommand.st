@@ -3,5 +3,5 @@ testBasicCommand
 	| command |
 	command := self newCommand 
 					command: '/bin/ls'.
-	command run.
+	command runAndWait.
 	

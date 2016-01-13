@@ -1,0 +1,16 @@
+helpers
+numberOfZombiesProcesses
+	"This is estimation number. Not to be used for real code. IT's basically 
+	to check the number of zombies at the beginning of a  test and at the end, to validate we are not leaving behind new zombies. 
+	This should work in most Unix-like and Linux
+	"
+	| tmpFileName zombiesCount |
+	tmpFileName := '/tmp/openFilesByPharoVM-' , UUID new printString.
+	tmpFileName asFileReference ensureDelete.
+	OSSSystemAccessor current system: ('ps axo ppid=,pid=,stat= | grep ', OSSSystemAccessor current getVMPid printString, ' | awk ''$3~/^Z/ { print $2 }'' | wc -l  > ', tmpFileName, ' 2>&1').
+	zombiesCount := tmpFileName asFileReference readStreamDo: [ :str |
+		str contents trimmed asNumber
+	].
+	tmpFileName asFileReference ensureDelete.
+	^ zombiesCount
+	

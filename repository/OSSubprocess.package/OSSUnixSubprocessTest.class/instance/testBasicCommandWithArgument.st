@@ -6,4 +6,4 @@ testBasicCommandWithArgument
 					command: '/bin/ls';
 					arguments: { Smalltalk image imagePath. }.
 	
-	command run
+	command runAndWait

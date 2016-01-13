@@ -1,10 +1,10 @@
 tests - child status
 testGetChildStatusBeforeAndAfterFinishing
-	| command | 
-	
+	| command oldZombies | 
+	oldZombies := self numberOfZombiesProcesses.
 	command := self newCommand 
 				command: '/bin/sleep';
-				arguments: {'2'}.
+				arguments: {'3'}.
 	
 	command run. 
 	self assert: command childPid > 0.
@@ -16,4 +16,5 @@ testGetChildStatusBeforeAndAfterFinishing
 	self assert: command queryExitStatus isNil not.
 	self assert: command exitStatusInterpreter exitStatus equals: 0.
 	self assert: command completed.
+	self assert: self numberOfZombiesProcesses equals: oldZombies.
 	

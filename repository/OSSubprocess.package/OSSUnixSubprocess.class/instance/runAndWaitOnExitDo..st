@@ -15,6 +15,6 @@ runAndWaitOnExitDo: aClosure
 									str ossIsPipe ifFalse: [ str reopen. ].
 									str upToEnd 
 								].
-	self closeAndDeleteStandardStreams.
+	self closeAndCleanStreams.
 	aClosure cull: self cull: stdoutString cull: stderrString.
 	

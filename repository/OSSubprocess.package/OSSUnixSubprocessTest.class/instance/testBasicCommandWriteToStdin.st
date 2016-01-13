@@ -1,8 +1,7 @@
 tests - streams
 testBasicCommandWriteToStdin
-	| command stdOutString string numberOfOpenFiles | 
-	
-	numberOfOpenFiles := self numberOfOpenFiles.
+	| command stdOutString string streamsInfo | 
+	streamsInfo := self getStreamsInfoForRunningTest.
 	string := 'this is a test shat should have been printed in the stdout'.
 	command := self newCommand
 					command: '/bin/cat';
@@ -15,8 +14,8 @@ testBasicCommandWriteToStdin
 		close.
 	command waitForChild.
 	stdOutString := command stdoutStream upToEnd.
-	command closeAndDeleteStandardStreams.
+	command closeAndCleanStreams.
 	self assert: stdOutString equals: string.
-	self assert: self numberOfOpenFiles equals: numberOfOpenFiles.
+	self assertStreamsInfoWithPrevious: streamsInfo.
 	
 	

@@ -1,7 +1,7 @@
 tests - child status
 testGetChildStatusAfterFailingCommand
-	| command | 
-	
+	| command oldZombies | 
+	oldZombies := self numberOfZombiesProcesses.
 	command := self newCommand
 					command: '/bin/ls';
 					arguments: {'whatever'}.
@@ -13,3 +13,4 @@ testGetChildStatusAfterFailingCommand
 	self deny: command succeeded.
 	self assert: command completed.
 	self deny: command isRunning.
+	self assert: self numberOfZombiesProcesses equals: oldZombies.

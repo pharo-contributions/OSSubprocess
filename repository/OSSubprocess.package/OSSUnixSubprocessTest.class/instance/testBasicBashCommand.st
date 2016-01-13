@@ -5,4 +5,5 @@ testBasicBashCommand
 	command := self newCommand
 					bashCommand: 'ls'.
 	
-	command run
+	command runAndWait.
+	

@@ -1,4 +1,4 @@
-system
+system - primitives
 primitiveSystem: commandString
-	 ^ self nbCall: #(int system(char* commandString) ) 
+	 ^ self ffiCall: #(int system(char* commandString) ) 
 		

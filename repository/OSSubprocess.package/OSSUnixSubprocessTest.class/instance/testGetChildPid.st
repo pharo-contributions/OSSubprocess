@@ -7,3 +7,4 @@ testGetChildPid
 	
 	command run.
 	self assert: command childPid > 0.
+	command waitForChild. 

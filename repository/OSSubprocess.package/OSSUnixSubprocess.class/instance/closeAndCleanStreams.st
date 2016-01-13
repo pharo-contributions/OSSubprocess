@@ -1,4 +1,4 @@
 cleaning
-closeAndDeleteStandardStreams
+closeAndCleanStreams
 	self closeStreams.
 	self deleteTempFilesFromStandardStreams.
