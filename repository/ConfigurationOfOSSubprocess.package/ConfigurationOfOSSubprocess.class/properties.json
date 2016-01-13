@@ -1,0 +1,14 @@
+{
+	"category" : "ConfigurationOfOSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "MarianoMartinezPeck 1/13/2016 11:20",
+	"instvars" : [
+		 ],
+	"name" : "ConfigurationOfOSSubprocess",
+	"pools" : [
+		 ],
+	"super" : "ConfigurationOf",
+	"type" : "normal" }
