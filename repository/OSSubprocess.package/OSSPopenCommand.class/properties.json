@@ -1,0 +1,18 @@
+{
+	"category" : "OSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"command",
+		"mode",
+		"pipeStream",
+		"redirectSdErrToStdOut",
+		"terminationStatus" ],
+	"name" : "OSSPopenCommand",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

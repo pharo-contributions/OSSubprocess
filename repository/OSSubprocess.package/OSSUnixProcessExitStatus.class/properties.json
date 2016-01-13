@@ -1,0 +1,14 @@
+{
+	"category" : "OSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"intValue" ],
+	"name" : "OSSUnixProcessExitStatus",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

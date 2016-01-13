@@ -1,0 +1,2 @@
+close and dup
+dup2StandardFileStreams

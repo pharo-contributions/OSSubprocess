@@ -1,0 +1,14 @@
+{
+	"category" : "OSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "OSSPosixSpawnFileActionsT",
+	"pools" : [
+		 ],
+	"super" : "NBExternalObject",
+	"type" : "normal" }

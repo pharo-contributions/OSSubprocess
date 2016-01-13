@@ -1,0 +1,14 @@
+{
+	"category" : "OSSubprocess",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "OSSSpawnProcessTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }
