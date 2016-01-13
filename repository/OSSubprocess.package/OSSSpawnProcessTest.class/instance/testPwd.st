@@ -1,6 +1,6 @@
-tests - streams
+tests - pwd
 testPwd
-	| command oldLs newLs | 
+	| command oldLs newLs recoveredLs | 
 	
 	command := OSSSpawnProcess new
 					command: '/bin/ls';
@@ -18,5 +18,11 @@ testPwd
 	
 	self deny: oldLs = newLs.	
 	self assert: (newLs includesSubstring: 'delete.me').
-		
 	
+	"Parent should have back it's original cwd"
+	command := OSSSpawnProcess new
+				command: '/bin/ls';
+				createAndSetStdoutPipe.
+	self shouldnt: [ command run ] raise: Error. 
+	recoveredLs := command stdoutStream upToEndOfFile.
+	self assert: oldLs equals: recoveredLs
