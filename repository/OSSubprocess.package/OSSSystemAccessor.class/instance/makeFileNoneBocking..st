@@ -1,4 +1,4 @@
 USING FROM OSPROCESS
 makeFileNoneBocking: aFileId
 
-	ThisOSProcess thisOSProcess processAccessor primSQFileSetNonBlocking: aFileId
+	self primSQFileSetNonBlocking: aFileId
