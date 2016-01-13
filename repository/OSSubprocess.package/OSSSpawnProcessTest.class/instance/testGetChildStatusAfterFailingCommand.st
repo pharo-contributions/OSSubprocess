@@ -10,3 +10,6 @@ testGetChildStatusAfterFailingCommand
 	(Duration seconds: 1) wait.
 	command queryExitStatus.
 	self assert: command exitStatusInterpreter exitStatus equals: 1. 
+	self deny: command succeeded.
+	self assert: command completed.
+	self deny: command isRunning.

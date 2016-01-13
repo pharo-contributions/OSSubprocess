@@ -1,6 +1,6 @@
 tests - streams
 testCreatePipesForMissingStreamsDisabled
-	| command stderrString | 
+	| command | 
 	
 	command := OSSSpawnProcess new 
 					command: '/bin/ls'.
