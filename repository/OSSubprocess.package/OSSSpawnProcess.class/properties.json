@@ -10,7 +10,9 @@
 		"arguments",
 		"pointers",
 		"childPid",
-		"posixSpawnFileActionsT" ],
+		"posixSpawnFileActionsT",
+		"stdoutStream",
+		"fileDescriptionsToClose" ],
 	"name" : "OSSSpawnProcess",
 	"pools" : [
 		 ],

@@ -1,5 +1,5 @@
 argv building
-primitiveShellArguments
+argVArguments
 	^ OrderedCollection new
 		add: self command;
 		addAll: self arguments;
