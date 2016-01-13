@@ -7,7 +7,7 @@ numberOfZombiesProcesses
 	| tmpFileName zombiesCount |
 	tmpFileName := '/tmp/openFilesByPharoVM-' , UUID new printString.
 	tmpFileName asFileReference ensureDelete.
-	OSSSystemAccessor current system: ('ps axo ppid=,pid=,stat= | grep ', OSSVMProcess vmProcess pid printString, ' | awk ''$3~/^Z/ { print $2 }'' | wc -l  > ', tmpFileName, ' 2>&1').
+	self systemAccessor system: ('ps axo ppid=,pid=,stat= | grep ', OSSVMProcess vmProcess pid printString, ' | awk ''$3~/^Z/ { print $2 }'' | wc -l  > ', tmpFileName, ' 2>&1').
 	zombiesCount := tmpFileName asFileReference readStreamDo: [ :str |
 		str contents trimmed asNumber
 	].

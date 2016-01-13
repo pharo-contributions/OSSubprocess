@@ -7,4 +7,4 @@ initPosixSpawnFileActionsT
 													type: ExternalType void asPointerType);
 										yourself.
 	returnValue := self primitivePosixSpawnFileActionsInit: posixSpawnFileActionsT. 
-	returnValue = 0 ifFalse: [ OSSSystemAccessor current strerror: returnValue message: 'posix_spawn_file_actions_init()' ].
+	returnValue = 0 ifFalse: [ self systemAccessor strerror: returnValue message: 'posix_spawn_file_actions_init()' ].

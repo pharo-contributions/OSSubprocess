@@ -1,7 +1,7 @@
 tests - streams
 testReadingFromStdoutBlocksVM
 	| command customStream | 
-	customStream := OSSSystemAccessor current makeBlockingPipe.
+	customStream := self systemAccessor makeBlockingPipe.
 	command := self newCommand
 					command: '/bin/sleep';
 					arguments: (Array with: '4');

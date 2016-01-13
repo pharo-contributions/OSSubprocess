@@ -1,4 +1,4 @@
 private
 nonBlockingPipe
-	^ OSSSystemAccessor current makeNonBlockingPipe
+	^ self systemAccessor makeNonBlockingPipe
 	

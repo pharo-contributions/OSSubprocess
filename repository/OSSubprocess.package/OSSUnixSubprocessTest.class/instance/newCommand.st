@@ -1,8 +1,10 @@
 helpers
 newCommand
-	| command |
-	command := self commandClass new.
-	command defaultReadStreamCreationBlock: [ command createTempFileToBeUsedAsReadStreamOn: '/tmp' ].
-	command defaultWriteStreamCreationBlock: [ command createTempFileToBeUsedAsWriteStreamOn: '/tmp' ].
-	^ command 
+	
+	^ self commandClass new
+			"For pipes, we can use a pipe for both reading or writing"
+			defaultReadStreamCreationBlock: [self systemAccessor makeNonBlockingPipe];
+			defaultWriteStreamCreationBlock: [self systemAccessor makeNonBlockingPipe];
+			yourself 
+	
 	

@@ -6,9 +6,9 @@
 		 ],
 	"commentStamp" : "",
 	"instvars" : [
-		"mutexForCwd" ],
-	"name" : "OSSSystemAccessor",
+		 ],
+	"name" : "OSSVMProcessTest",
 	"pools" : [
 		 ],
-	"super" : "Object",
+	"super" : "TestCase",
 	"type" : "normal" }

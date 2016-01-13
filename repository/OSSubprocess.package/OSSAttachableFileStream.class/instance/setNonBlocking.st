@@ -1,4 +1,4 @@
 non blocking
 setNonBlocking
  
-	OSSSystemAccessor current makeFileNoneBocking: fileID
+	self systemAccessor makeFileNoneBocking: fileID

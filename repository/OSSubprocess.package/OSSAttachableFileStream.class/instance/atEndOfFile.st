@@ -14,4 +14,4 @@ atEndOfFile
 	
 	"
 
-	^ fileID isNil or: [ OSSSystemAccessor current atEndOfFile: self getFilePointerAsCFile ]
+	^ fileID isNil or: [ self systemAccessor atEndOfFile: self getFilePointerAsCFile ]

@@ -2,7 +2,7 @@ status
 queryExitStatus
 	
 	^ exitStatus ifNil: [ 
-			exitStatus := OSSSystemAccessor current waitpidNoHang: pid.
+			exitStatus := self systemAccessor waitpidNoHang: pid.
 			exitStatus
 		]
 		
