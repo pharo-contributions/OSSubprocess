@@ -83,7 +83,7 @@ OSSubprocess is quite easy to use but depending on the user needs, there are dif
 OSSUnixSubprocess new	
 	command: '/bin/ls';
 	arguments: #('-la' '/Users');
-	createAndSetStdoutStream;
+	redirectStdout;
 	runAndWaitOnExitDo: [ :process :outString  |	
 		outString inspect 
 	]
@@ -97,7 +97,7 @@ The `#command:` could be either the program name (.e.g `ls`) or the full path to
 
 For the `#arguments:` array, each argument must be a different element. In other words, passing `#('-la /Users')` is not correct since those are 2 arguments and hence should be 2 elements of the array. It is also incorrect to not specify `#arguments:` and specify the command like this: `command: '/bin/ls -la /Users'`. OSSubprocess does *not* do any parsing to the command or arguments. If you want to execute a command with a full string like `/bin/ls -la /Users`, you may want to take a look to `#bashCommand:` which relies on shell to do that job.
 
-With `#createAndSetStdoutStream` we are saying that we want to create a stream and that we want to map it to `stdout` of the child process. Since they are not specified, `stderr` and `stdin` will then be inherit from the parent process (Pharo VM process). If you comment the line of `#createAndSetStdoutStream` and run the example again, you can see how the output of `/bin/ls -la /Users` is printed in the terminal (where you launched your Pharo image).
+With `#redirectStdout` we are saying that we want to create a stream and that we want to map it to `stdout` of the child process. Since they are not specified, `stderr` and `stdin` will then be inherit from the parent process (Pharo VM process). If you comment the line of `#redirectStdout` and run the example again, you can see how the output of `/bin/ls -la /Users` is printed in the terminal (where you launched your Pharo image).
 
 Finally, we use the `#runAndWaitOnExitDo:` which is a high level API method that runs the process, waits for it until it finishes, reads and the closes `stdout` stream, and finally invokes the passed closure. In the closure we get as arguments the original `OSSUnixSubprocess` instance we created, and the contents of the read `stdout`. If you inspect `outString` you should see the output of `/bin/ls -la /Users` which should be exactly the same as if run from the command line.
 
@@ -125,8 +125,8 @@ Let's see a possible usage of the exit status:
 OSSUnixSubprocess new	
 	command: '/bin/ls';
 	arguments: #('-la' '/noneexisting');
-	createAndSetStdoutStream;
-	createAndSetStderrStream;
+	redirectStdout;
+	redirectStderr;
 	runAndWaitOnExitDo: [ :process :outString :errString |	
 		process isSuccess 
 			ifTrue: [ Transcript show: 'Command exited correctly with output: ', outString. ]
@@ -140,7 +140,7 @@ OSSUnixSubprocess new
 
 In this example we are executing `/bin/ls` passing a none existing directory as argument. 
 
-First, note that we added also a stream for `stderr` via `#createAndSetStderrStream`. Second, note how now in the `#runAndWaitOnExitDo:` we can also have access to `errString`. If you run this example with a `Transcript` opened, you should see something like:
+First, note that we added also a stream for `stderr` via `#redirectStderr`. Second, note how now in the `#runAndWaitOnExitDo:` we can also have access to `errString`. If you run this example with a `Transcript` opened, you should see something like:
 
 ```
 Command exit with error status: normal termination with status 1
@@ -178,8 +178,8 @@ process := OSSUnixSubprocess new
 			command: '/bin/ls';
 			arguments: #('-la' '/noneexisting');
 			defaultWriteStreamCreationBlock: [OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe];
-			createAndSetStdoutStream;
-			stderrStream: '/tmp/customStderr.txt' asFileReference writeStream;
+			redirectStdout;
+			redirectStderrTo: '/tmp/customStderr.txt' asFileReference writeStream;
 			defaultReadStreamCreationBlock: [ process createTempFileToBeUsedAsReadStreamOn: '/tmp' ];
 			createMissingStandardStreams: true.	
 Halt halt.			
@@ -196,13 +196,13 @@ process closeAndCleanStreams.
 
 There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEnd` or like closing and cleaning streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. The reason we are not using `#runAndWaitOnExitDo:` and instead the low level API, is to have a `Halt halt` while running the process so that you can confirm yourself the existance of the files used for the streans, as explained next. 
 
-With the methods `#stdinStream:`, `#stdoutStream:` and `#stdoutStream:` the user is able to set a custom stream for each standard stream. The received stream could be either a `StandardFileStream` subclass (as is the result of `'/tmp/customStderr.txt' asFileReference writeStream`) or a `OSSPipe` (as is the result of `OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe`).
+With the methods `#redirectStdinTo:`, `#redirectStdoutTo:` and `#redirectStdoutTo:` the user is able to set a custom stream for each standard stream. The received stream could be either a `StandardFileStream` subclass (as is the result of `'/tmp/customStderr.txt' asFileReference writeStream`) or a `OSSPipe` (as is the result of `OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe`).
 
-If you do not want to create a custom stream (like above example of `#stderrStream:`) but you still want to create a default stream that would be mapped to a standard stream, then you can use the methods `#createAndSetStdinStream:`, `#createAndSetStdoutStream` and `#createAndSetStderrStream`. Those methods will create *default* streams. The *default* streams are defined by the instVars `defaultWriteStreamCreationBlock` and `defaultReadStreamCreationBlock`. And these can be customized too as shown in above example. In this example, all write streams (to be used for `stdout` and `stderr`) will be pipes (forget for the moment about the none blocking part). And all read streams (only used by `stdin`) will be temp files automatically created in `/tmp`. This feature is useful if you want to change the way streams are created without having to specially create each stream. You can see how `OSSPipeBasedUnixSubprocessTest` and `OSSFileBasedUnixSubprocessTest` use these in the method `#newCommand`. 
+If you do not want to create a custom stream (like above example of `#redirectStderrTo:`) but you still want to create a default stream that would be mapped to a standard stream, then you can use the methods `#redirectStdin:`, `#redirectStdout` and `#redirectStderr`. Those methods will create *default* streams. The *default* streams are defined by the instVars `defaultWriteStreamCreationBlock` and `defaultReadStreamCreationBlock`. And these can be customized too as shown in above example. In this example, all write streams (to be used for `stdout` and `stderr`) will be pipes (forget for the moment about the none blocking part). And all read streams (only used by `stdin`) will be temp files automatically created in `/tmp`. This feature is useful if you want to change the way streams are created without having to specially create each stream. You can see how `OSSPipeBasedUnixSubprocessTest` and `OSSFileBasedUnixSubprocessTest` use these in the method `#newCommand`. 
 
 *If you see `OSSUnixSubprocess>>#initialize` you will see that by default we create pipes for all type of streams.* 
 
-Previously, we said that if the user does not specify a stream to be mapped to one of the standard streams (by any of the means explained above), the child will inherit the one of the parent process (VM Process). With the method `#createMissingStandardStreams:` one can change that behavior, and instead, create default streams for all none already defined streams. In above example, the user defined `stdout` via `#createAndSetStdoutStream` and `stderr` via `#stderrStream:`. So, by doing `#createMissingStandardStreams: true`, a default stream (pipe) will be created and mapped to the missing streams (only `stdin` in this example). Of course, if you are happy with default streams creation, you can avoid having to declare each stream and simple enable all. But keep in mind the costs of managing streams that you may not use at all. For this reason, the default value of `createMissingStandardStreams` is `false`.
+Previously, we said that if the user does not specify a stream to be mapped to one of the standard streams (by any of the means explained above), the child will inherit the one of the parent process (VM Process). With the method `#createMissingStandardStreams:` one can change that behavior, and instead, create default streams for all none already defined streams. In above example, the user defined `stdout` via `#redirectStdout` and `stderr` via `#redirectStderrTo:`. So, by doing `#createMissingStandardStreams: true`, a default stream (pipe) will be created and mapped to the missing streams (only `stdin` in this example). Of course, if you are happy with default streams creation, you can avoid having to declare each stream and simple enable all. But keep in mind the costs of managing streams that you may not use at all. For this reason, the default value of `createMissingStandardStreams` is `false`.
 
 Finally, note that since we are not using the API `#runAndWaitOnExitDo:` in this case, we must explicitly close streams via the message `#closeAndCleanStreams`. This method will also take care of deleting all those streams which were regular files (not pipes). 
 
@@ -247,7 +247,7 @@ Below is an example of delay polling:
 OSSUnixSubprocess new	
 	command: '/bin/ls';
 	arguments: #('-la' '/Users');
-	createAndSetStdoutStream;
+	redirectStdout;
 	runAndWaitPollingEvery: (Delay forMilliseconds: 50) retrievingStreams: true onExitDo: [ 
 		:process :outString  |	
 		outString inspect 
@@ -278,7 +278,7 @@ OSSUnixSubprocess new
 	command: '/usr/bin/git';
 	arguments: #('-C' '/Users/mariano/git/OSSubprocess' 'commit');
 	environmentAt: 'GIT_EDITOR' put: '/Users/mariano/bin/mate';
-	createAndSetStdoutStream;
+	redirectStdout;
 	runAndWaitOnExitDo: [ :process :outString  |]
 ```
 
@@ -292,7 +292,7 @@ OSSUnixSubprocess new
 	command: '/bin/echo';
 	arguments: #('${HOME}');
 	environmentAt: 'HOME' put: 'hello';
-	createAndSetStdoutStream;
+	redirectStdout;
 	runAndWaitOnExitDo: [ :command :outString |
 		outString inspect
 	].
@@ -309,7 +309,7 @@ OSSUnixSubprocess new
 	command: '/bin/sh';
 	arguments: #('-c' 'echo ${HOME}');
 	environmentAt: 'HOME' put: 'hello';
-	createAndSetStdoutStream;
+	redirectStdout;
 	runAndWaitOnExitDo: [ :command :outString |
 		outString inspect. 	
 	].
@@ -327,7 +327,7 @@ Finally, not that you can "expand" yourself the value of a variable prior to spa
 OSSUnixSubprocess new	
 	command: '/bin/echo';
 	arguments: (Array with: (Smalltalk platform environment at: 'HOME'));
-	createAndSetStdoutStream;
+	redirectStdout;
 	runAndWaitOnExitDo: [ :command :outString |
 		outString inspect
 	].
@@ -357,7 +357,7 @@ Quite some of that list can easily be done without the need of a shell, as alrea
 ```Smalltalk
 OSSUnixSubprocess new	
 	shellCommand: 'ps -fea | grep Pharo > /tmp/testShellCommandWithStreamRedirects.deleteme';
-	createAndSetStdoutStream;
+	redirectStdout;
 	runAndWaitOnExitDo: [ :command :outString |
 		outString inspect. 					
 	].
@@ -380,8 +380,8 @@ OSSUnixSubprocess new
 	command: '/usr/bin/git';
 	arguments: #('commit' '-m' 'testing');
 	pwd: '/Users/mariano/git/OSSubprocess';
-	createAndSetStdoutStream;
-	createAndSetStderrStream;
+	redirectStdout;
+	redirectStderr;
 	runAndWaitOnExitDo: [ :process :outString :errString |
 		errString inspect.
 		outString inspect. 
