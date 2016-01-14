@@ -376,7 +376,7 @@ Sometimes, the process you want to execute is a shell. There are a couple of rea
 * Available shell scripts that you want to execute.
 * Convinience when you don't need to have full control.
 
-Quite some of that list can easily be done without the need of a shell, as already explained. But some of them, still need the shell. To avoid having to invoke a shell as seen in XXX, we provide the methods `#shellCommand:` and `#shell:command:`. Example:
+Quite some of that list can easily be done without the need of a shell, as already explained. But some of them, still need the shell. To avoid having to invoke a shell as seen in [Variables are not expanded](#variables-are-not-expanded), we provide the methods `#shellCommand:` and `#shell:command:`. Example:
 
 ```Smalltalk
 OSSUnixSubprocess new	
@@ -412,7 +412,7 @@ OSSUnixSubprocess new
 		]
 ```
 
-> The implementation of `#pwd:` is quite rudementary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in XXX.
+> The implementation of `#pwd:` is quite rudementary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in [Setting environment variables](#setting-environment-variables).
 
 
 
