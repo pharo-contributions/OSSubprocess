@@ -1,3 +1,3 @@
 streams
-stdinStream: aStream
+redirectStdinTo: aStream
 	stdinStream := aStream

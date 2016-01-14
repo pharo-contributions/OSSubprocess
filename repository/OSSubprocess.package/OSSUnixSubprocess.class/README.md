@@ -18,8 +18,8 @@ OSSUnixSubprocess new
 	command: 'ls';
 	arguments: (Array with: Smalltalk image imagePath);
 	defaultWriteStreamCreationBlock: [ OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe ];
-	createAndSetStdoutStream; "automatic default stream creation...above closure."
-	stderrStream: '/tmp/stderrFile.txt' asFileReference writeStream; "custom stream creation"
+	redirectStdout; "automatic default stream creation...above closure."
+	redirectStderrTo: '/tmp/stderrFile.txt' asFileReference writeStream; "custom stream creation"
 	createMissingStandardStreams: false; "therefore won't create stdin stream"
 	pwd: '/home'; "set working directory for child"
 	environmentAt: 'HOME' put: '/tmp/home';

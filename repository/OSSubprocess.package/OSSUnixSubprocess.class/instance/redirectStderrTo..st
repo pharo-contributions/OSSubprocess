@@ -1,3 +1,3 @@
 streams
-stderrStream: aStream
+redirectStderrTo: aStream
 	stderrStream := aStream

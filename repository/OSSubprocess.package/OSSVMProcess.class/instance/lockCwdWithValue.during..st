@@ -20,6 +20,7 @@ lockCwdWithValue: cwdNewValue during: aBlock
 	"
 
 	| completed |
+	cwdNewValue asFileReference exists ifFalse: [ ^ self error: 'The directory: ', cwdNewValue, ' does not exist' ]. 
 	completed :=  Semaphore new. 
 	[ 
 		| oldCwd |

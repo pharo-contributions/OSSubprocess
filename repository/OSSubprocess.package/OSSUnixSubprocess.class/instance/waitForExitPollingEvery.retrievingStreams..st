@@ -1,6 +1,6 @@
 waiting
 waitForExitPollingEvery: aDelay retrievingStreams: retrieveStreams
-	" IMPORTANT: read first the commend of #waitForExit. 
+	" IMPORTANT: read first the comment of #waitForExit. 
 	
 	This method does NOT use #runAndWait nor #waitForExit. Instead, it does an image-based polling to check status of child process. 
 	Note that the loop does send #queryExitStatus which is the method that indeeds does the waitpid() to check it.

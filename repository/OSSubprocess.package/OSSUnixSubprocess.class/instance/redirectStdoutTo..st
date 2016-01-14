@@ -1,3 +1,3 @@
 streams
-stdoutStream: aStream
+redirectStdoutTo: aStream
 	stdoutStream := aStream
