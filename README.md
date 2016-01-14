@@ -20,6 +20,7 @@ Forking OS processes from Pharo language
       * [Handling pipes within Pharo](#handling-pipes-within-pharo)
       * [Regular files vs pipes](#regular-files-vs-pipes)
       * [Customizing streams creation](#customizing-streams-creation)
+      * [Stdin example](#stdin-example)
     * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
       * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
       * [When to process streams](#when-to-process-streams)
@@ -34,6 +35,7 @@ Forking OS processes from Pharo language
       * [Inherit variables from parent](#inherit-variables-from-parent)
     * [Shell commands](#shell-commands)
     * [Setting working directory](#setting-working-directory)
+
 
 
 
