@@ -15,6 +15,7 @@ testBasicCommandWriteToStdin
 	command waitForExit.
 	stdOutString := command stdoutStream upToEnd.
 	command closeAndCleanStreams.
+	self assert: command isSuccess.
 	self assert: stdOutString equals: string.
 	self assertStreamsInfoWithPrevious: streamsInfo.
 	
