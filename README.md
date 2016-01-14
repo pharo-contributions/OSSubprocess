@@ -65,18 +65,14 @@ wget -O- get.pharo.org/alpha+vm | bash
 Then, from within Pharo, execute the following to install OSSubprocess:
 
 ```Smalltalk
-Gofer it 	
-	package: 'SLICE-Issue-17125-Metadata-less-compatibility-with-FileTree';
-	smalltalkhubUser: 'Pharo' project: 'Pharo50Inbox';
-load.
-
 Metacello new
-	baseline: 'OSSubprocess';
+ 	configuration: 'OSSubprocess';
  	repository: 'github://marianopeck/OSSubprocess:master/repository';
-load.
+	version: #stable;
+	load.
 ```
 
-Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work. 
+> Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work. 
 
 ## Introduction to the API
 OSSubprocess is quite easy to use but depending on the user needs, there are different parts of the API that could be used. We start with a basic example and later we show more complicated scanarios.
