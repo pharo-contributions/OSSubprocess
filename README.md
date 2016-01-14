@@ -63,10 +63,14 @@ wget -O- get.pharo.org/alpha+vm | bash
 Then, from within Pharo, execute the following to install OSSubprocess:
 
 ```Smalltalk
-Gofer it
-	package: 'OSSubprocess';
-	package: 'OSSubprocessTests';
-	url: 'http://smalltalkhub.com/mc/marianopeck/OSSubprocess/main';
+Gofer it 	
+	package: 'SLICE-Issue-17125-Metadata-less-compatibility-with-FileTree';
+	smalltalkhubUser: 'Pharo' project: 'Pharo50Inbox';
+load.
+
+Metacello new
+	baseline: 'OSSubprocess';
+ 	repository: 'github://marianopeck/OSSubprocess:master/repository';
 load.
 ```
 
@@ -78,7 +82,7 @@ OSSubprocess is quite easy to use but depending on the user needs, there are dif
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/bin/ls';
-	arguments: (Array with: '-la' with: '/Users');
+	arguments: #('-la' '/Users');
 	createAndSetStdoutStream;
 	runAndWaitOnExitDo: [ :process :outString  |	
 		outString inspect 
@@ -91,7 +95,7 @@ A subprocess consist of at least a command/binary/program to be executed (in thi
 
 The `#command:` could be either the program name (.e.g `ls`) or the full path to the executable (.e.g `/bin/ls`). If the former, then the binary will be searched using `$PATH` variable and may not be found.  
 
-For the `#arguments:` array, each argument must be a different element. In other words, passing `Array with: '-la /Users'` is not correct since those are 2 arguments and hence should be 2 elements of the array. It is also incorrect to not specify `#arguments:` and specify the command like this: `command: '/bin/ls -la /Users'`. OSSubprocess does *not* do any parsing to the command or arguments. If you want to execute a command with a full string like `/bin/ls -la /Users`, you may want to take a look to `#bashCommand:` which relies on shell to do that job.
+For the `#arguments:` array, each argument must be a different element. In other words, passing `#('-la /Users')` is not correct since those are 2 arguments and hence should be 2 elements of the array. It is also incorrect to not specify `#arguments:` and specify the command like this: `command: '/bin/ls -la /Users'`. OSSubprocess does *not* do any parsing to the command or arguments. If you want to execute a command with a full string like `/bin/ls -la /Users`, you may want to take a look to `#bashCommand:` which relies on shell to do that job.
 
 With `#createAndSetStdoutStream` we are saying that we want to create a stream and that we want to map it to `stdout` of the child process. Since they are not specified, `stderr` and `stdin` will then be inherit from the parent process (Pharo VM process). If you comment the line of `#createAndSetStdoutStream` and run the example again, you can see how the output of `/bin/ls -la /Users` is printed in the terminal (where you launched your Pharo image).
 
@@ -120,7 +124,7 @@ Let's see a possible usage of the exit status:
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/bin/ls';
-	arguments: (Array with: '-la' with: '/noneexisting');
+	arguments: #('-la' '/noneexisting');
 	createAndSetStdoutStream;
 	createAndSetStderrStream;
 	runAndWaitOnExitDo: [ :process :outString :errString |	
@@ -172,12 +176,13 @@ Let's consider this example:
 | process |
 process := OSSUnixSubprocess new	
 			command: '/bin/ls';
-			arguments: (Array with: '-la' with: '/noneexisting');
+			arguments: #('-la' '/noneexisting');
 			defaultWriteStreamCreationBlock: [OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe];
 			createAndSetStdoutStream;
 			stderrStream: '/tmp/customStderr.txt' asFileReference writeStream;
 			defaultReadStreamCreationBlock: [ process createTempFileToBeUsedAsReadStreamOn: '/tmp' ];
 			createMissingStandardStreams: true.	
+Halt halt.			
 process runAndWait.  
 process isSuccess 
 	ifTrue: [ Transcript show: 'Command exited correctly with output: ', process stdoutStream upToEnd. ]
@@ -189,7 +194,7 @@ process isSuccess
 process closeAndCleanStreams.
 ```
 
-There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEnd` or like closing streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. 
+There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEnd` or like closing and cleaning streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. The reason we are not using `#runAndWaitOnExitDo:` and instead the low level API, is to have a `Halt halt` while running the process so that you can confirm yourself the existance of the files used for the streans, as explained next. 
 
 With the methods `#stdinStream:`, `#stdoutStream:` and `#stdoutStream:` the user is able to set a custom stream for each standard stream. The received stream could be either a `StandardFileStream` subclass (as is the result of `'/tmp/customStderr.txt' asFileReference writeStream`) or a `OSSPipe` (as is the result of `OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe`).
 
@@ -241,7 +246,7 @@ Below is an example of delay polling:
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/bin/ls';
-	arguments: (Array with: '-la' with: '/Users');
+	arguments: #('-la' '/Users');
 	createAndSetStdoutStream;
 	runAndWaitPollingEvery: (Delay forMilliseconds: 50) retrievingStreams: true onExitDo: [ 
 		:process :outString  |	
@@ -271,7 +276,7 @@ One common requirement for child processes is to define environment variables fo
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/usr/bin/git';
-	arguments: (Array with: '-C' with: '/Users/mariano/git/OSSubprocess' with: 'commit');
+	arguments: #('-C' '/Users/mariano/git/OSSubprocess' 'commit');
 	environmentAt: 'GIT_EDITOR' put: '/Users/mariano/bin/mate';
 	createAndSetStdoutStream;
 	runAndWaitOnExitDo: [ :process :outString  |]
@@ -285,7 +290,7 @@ You should not confuse the above example with variables expansions. Consider now
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/bin/echo';
-	arguments: (Array with: '${HOME}');
+	arguments: #('${HOME}');
 	environmentAt: 'HOME' put: 'hello';
 	createAndSetStdoutStream;
 	runAndWaitOnExitDo: [ :command :outString |
@@ -302,7 +307,7 @@ To conclude this topic, see this example:
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/bin/sh';
-	arguments: (Array with: '-c' with: 'echo ${HOME}');
+	arguments: #('-c' 'echo ${HOME}');
 	environmentAt: 'HOME' put: 'hello';
 	createAndSetStdoutStream;
 	runAndWaitOnExitDo: [ :command :outString |
@@ -373,7 +378,7 @@ To support this, we provide the method `#pwd:` as this example shows:
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/usr/bin/git';
-	arguments: (Array with: 'commit' with: '-m' with: 'testing');
+	arguments: #('commit' '-m' 'testing');
 	pwd: '/Users/mariano/git/OSSubprocess';
 	createAndSetStdoutStream;
 	createAndSetStderrStream;
