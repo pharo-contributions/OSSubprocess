@@ -165,7 +165,7 @@ To conclude, we use a system call to create an OS pipe. At Pharo level we repres
 ### Regular files vs pipes
 As we said before, both regular files or pipes can be used for mapping standard streams (`stdin`, `stdout` and `stderr`) and OSSubprocess supports both and manages them quite polymorphically thanks to `OSSPipe` and `OSSAttachableFileStream`. But the user can decide use one or another. Pipes are normally faster since they run in memory. On the contrary, files may do I/0 operations even with caches (at least creating and deleting the file). With pipes you do not have to handle the deletion of the files as you do with regular files. You can read more about "regular files vs pipes" in the internet and come yourself to a conclusion. 
 
-There is only one problem with pipes that you should be aware of and it's the fact that you may get a deadlock in certain cirtcunstances. See XXX for more details. 
+There is only one problem with pipes that you should be aware of and it's the fact that you may get a deadlock in certain cirtcunstances. See [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting) for more details. 
 
 ### Customizing streams creation
 Let's consider this example:
