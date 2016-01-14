@@ -75,7 +75,7 @@ Metacello new
 > Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work. 
 
 ## Introduction to the API
-OSSubprocess is quite easy to use but depending on the user needs, there are different parts of the API that could be used. We start with a basic example and later we show more complicated scanarios.
+OSSubprocess is quite easy to use but depending on the user needs, there are different parts of the API that could be used. We start with a basic example and later we show more complicated scenarios.
 
 ```Smalltalk
 OSSUnixSubprocess new	
@@ -100,7 +100,7 @@ With `#redirectStdout` we are saying that we want to create a stream and that we
 Finally, we use the `#runAndWaitOnExitDo:` which is a high level API method that runs the process, waits for it until it finishes, reads and then closes the `stdout` stream, and finally invokes the passed closure. In the closure we get as arguments the original `OSSUnixSubprocess` instance we created, and the contents of the read `stdout`. If you inspect `outString` you should see the output of `/bin/ls -la /Users` which should be exactly the same as if run from the command line.
 
 ## Child exit status
-When you spawn a process in Unix, the new process becomes a "child" of the "parent" process that launched it. In our case, the parent process is the Pharo VM process and the child process would be the one executing the command (in above example, `/bin/ls`). It is a responsability of the parent process to collect the exit status of the child once it finishes. If the parent does not do this, the child becomes a "zombie" process. The exit status is an integer that represents how the child finished (if sucessful, if error, which error, if received a signal, etc etc.). Besides avoiding zombies, the exit status is also important for the user to take actions depending on its result. 
+When you spawn a process in Unix, the new process becomes a "child" of the "parent" process that launched it. In our case, the parent process is the Pharo VM process and the child process would be the one executing the command (in above example, `/bin/ls`). It is a responsibility of the parent process to collect the exit status of the child once it finishes. If the parent does not do this, the child becomes a "zombie" process. The exit status is an integer that represents how the child finished (if successful, if error, which error, if received a signal, etc etc.). Besides avoiding zombies, the exit status is also important for the user to take actions depending on its result. 
 
 ### OSSVMProcess and it's child watcher
 
@@ -122,7 +122,7 @@ Let's see a possible usage of the exit status:
 ```Smalltalk
 OSSUnixSubprocess new	
 	command: '/bin/ls';
-	arguments: #('-la' '/noneexisting');
+	arguments: #('-la' '/nonexistent');
 	redirectStdout;
 	redirectStderr;
 	runAndWaitOnExitDo: [ :process :outString :errString |	
@@ -142,7 +142,7 @@ First, note that we add also a stream for `stderr` via `#redirectStderr`. Second
 
 ```
 Command exit with error status: normal termination with status 1
-Stderr contents: ls: /noneexisting: No such file or directory
+Stderr contents: ls: /nonexistent: No such file or directory
 ```
 
 The `normal termination with status 1` is the information that `OSSUnixProcessExitStatus` (accessed via `#exitStatusInterpreter`) decoded for us. "Normal termination" means it was not signaled or terminated, but rather a normal exit. The exit status bigger than zero (in this case, 1), means error. What each error means depends on the program you run. 
@@ -174,7 +174,7 @@ Let's consider this example:
 | process |
 process := OSSUnixSubprocess new	
 			command: '/bin/ls';
-			arguments: #('-la' '/noneexisting');
+			arguments: #('-la' '/nonexistent');
 			defaultWriteStreamCreationBlock: [OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe];
 			redirectStdout;
 			redirectStderrTo: '/tmp/customStderr.txt' asFileReference writeStream;
@@ -192,7 +192,7 @@ process isSuccess
 process closeAndCleanStreams.
 ```
 
-There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEnd` and closing and cleaning streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. The reason we are not using `#runAndWaitOnExitDo:` and instead the low level API, is to have a `Halt halt` while running the process so that you can confirm yourself the existance of the files used for the streans, as explained next. 
+There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEnd` and closing and cleaning streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. The reason we are not using `#runAndWaitOnExitDo:` and instead the low level API, is to have a `Halt halt` while running the process so that you can confirm yourself the existence of the files used for the streams, as explained next. 
 
 With the methods `#redirectStdinTo:`, `#redirectStdoutTo:` and `#redirectStdoutTo:` the user is able to set a custom stream for each standard stream. The received stream could be either a `StandardFileStream` subclass (as is the result of `'/tmp/customStderr.txt' asFileReference writeStream`) or a `OSSPipe` (as is the result of `OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe`).
 
@@ -237,7 +237,7 @@ Note that the `#close` we send to the `stdinStream` is very important. This is b
 ###  Synchronism vs asynchronous runs 
 We call synchronous runs when you create a child process and you wait for it to finish before going to the next task of your code. This is by far the most common approach since many times you need to know which was the exit status (wether it was success or not) and depending on that, do something. 
 
-Asynchronous runs are when you run a process and you do not care it's results for the next task of your code. In other words, your code can continue its execution no matter what happened with the spawned process. For this scenario, we currently do not support any special facility, althought it is planned. If you would be interested in this functionallity, please contact me.  
+Asynchronous runs are when you run a process and you do not care it's results for the next task of your code. In other words, your code can continue its execution no matter what happened with the spawned process. For this scenario, we currently do not support any special facility, although it is planned. If you would be interested in this functionality, please contact me.  
 
 ### When to process streams
 If we have defined that we wanted to map a standard stream, it means that at some point we would like to read/write it and **do something with it**. 
@@ -252,14 +252,14 @@ If what you need is the second possibility then you will have to write your cust
 For synchronous calls in which streams processing could be done once the process has exited, we provide some facilities methods that should ease the usage. Synchronous calls mean that we must wait for the child to exit. We provide two ways of doing this. 
 
 #### Semaphore-based SIGCHLD waiting 
-The first way is with the method `#waitForExit`. This method is used by the high level API methods `#runAndWait` and `#runAndWaitOnExitDo:`. The wait in this scenario does **not** use an image-based delay polling. Instead, it uses a semaphore. Just after the process starts, it waits on a semaphore of the instVar `mutexForSigchld`. When the `OSSVMProcess` child watcher receives a `SIGCHLD` singal, it will notify the child that die with the message `#processHasExitNotification`. That method, will do the `#signal` in the semaphore and hence the execution of `#waitForExit` will continue.
+The first way is with the method `#waitForExit`. This method is used by the high level API methods `#runAndWait` and `#runAndWaitOnExitDo:`. The wait in this scenario does **not** use an image-based delay polling. Instead, it uses a semaphore. Just after the process starts, it waits on a semaphore of the instVar `mutexForSigchld`. When the `OSSVMProcess` child watcher receives a `SIGCHLD` signal, it will notify the child that die with the message `#processHasExitNotification`. That method, will do the `#signal` in the semaphore and hence the execution of `#waitForExit` will continue.
 
 > **IMPORTANT** In this kind of waiting there is no polling and hence we do not read from the streams periodically. Instead, we read the whole contents of each stream at the end. Basically, there is a problem in general (deadlock!) with waiting for an external process to exit before reading its output. If the external process creates a large amount of output, and if the output is a pipe, it will block on writing to the pipe until someone (our VM process) reads some data from the pipe to make room for the writing. That leads to cases where we never read the output (because the external process did not exit) and the external process never exits (because we have not read the data from the pipe to make room for the writing).
 
-> Another point to take into account is that this kind of wait also depends on the child watcher and `SIGCHLD` capture. While we do our best to make this as reliable as possible, it might be cases where we miss some `SIGCHLD` signals. There is a workaround for that (see method `#initializeChildWatcher`), but there may still be issues. If such problem happens, the child process (at our language level) never exits from the `#waitForExit` method. And at the OS level, the child would look like a zombie becasue the parent did not collect the exit status. 
+> Another point to take into account is that this kind of wait also depends on the child watcher and `SIGCHLD` capture. While we do our best to make this as reliable as possible, it might be cases where we miss some `SIGCHLD` signals. There is a workaround for that (see method `#initializeChildWatcher`), but there may still be issues. If such problem happens, the child process (at our language level) never exits from the `#waitForExit` method. And at the OS level, the child would look like a zombie because the parent did not collect the exit status. 
 
 #### Delay-based polling waiting
-The other way we have for waiting a child process is by doing a delay-based in-image polling. That basically means a loop in which we wait some miliseconds, and then check the exit status of the process. For this, we provide the method `#waitForExitPollingEvery:retrievingStreams:`, and it's high level API method `#runAndWaitPollingEvery:retrievingStreams:onExitDo:`.
+The other way we have for waiting a child process is by doing a delay-based in-image polling. That basically means a loop in which we wait some milliseconds, and then check the exit status of the process. For this, we provide the method `#waitForExitPollingEvery:retrievingStreams:`, and it's high level API method `#runAndWaitPollingEvery:retrievingStreams:onExitDo:`.
 
 It is important to note that as part of the loop we send `#queryExitStatus`, which is the one that sends the `waitpid()` in Unix. That means that we are fully independent of the child watcher and the `SIGCHLD` and hence much more reliable than the previous approach.
 
@@ -345,7 +345,7 @@ In this case, the `outString` is indeed `hello` and this is simply because `/bin
 ### Accessing environment variables
 It seems some people use OSProcess (or maybe even OSSubprocess) to access environment variables. **This is not needed and it's not the best approach**. Pharo provides an out of the box way for accessing environment variables. For example, `Smalltalk platform environment at: 'PWD'` answers `/Users/mariano/Pharo/imagenes`. So, use that API for retrieving environment variables.
 
-Finally, not that you can "expand" yourself the value of a variable prior to spawing a process and hence avoid the need of the shell. example:
+Finally, not that you can "expand" yourself the value of a variable prior to spawning a process and hence avoid the need of the shell. example:
 
 ```Smalltalk
 OSSUnixSubprocess new	
@@ -374,7 +374,7 @@ Sometimes, the process you want to execute is a shell. There are a couple of rea
 * Command path resolution.
 * Streams redirection.
 * Available shell scripts that you want to execute.
-* Convinience when you don't need to have full control.
+* Convenience when you don't need to have full control.
 
 Quite some of that list can easily be done without the need of a shell, as already explained. But some of them, still need the shell. To avoid having to invoke a shell as seen in [Variables are not expanded](#variables-are-not-expanded), we provide the methods `#shellCommand:` and `#shell:command:`. Example:
 
@@ -387,15 +387,15 @@ OSSUnixSubprocess new
 	].
 ```
 
-Of course, `outString` is empty now becasue the shell has redirected it to a particular file. 
+Of course, `outString` is empty now because the shell has redirected it to a particular file. 
 
 `#shell:command:` is similar to `#shellCommand:` but allows the user to specify the full path of the shell to use. 
 
-> Note that when using the shell you must type the command exactly as the shell expects it, that is, with all the scaping and everything needed.
+> Note that when using the shell you must type the command exactly as the shell expects it, that is, with all the escaping and everything needed.
 
 
 ## Setting working directory 
-Another common need when spawing processes is to set a working directory (`PWD`) for them. If none is set, by default, they inherit the working directory of the parent. Imagine the Pharo image was launched from a terminal while `PWD` was `/Users/mariano`. Now imagine I want to spawn a process for a git commit for the directory `/Users/mariano/git/OSSubprocess`. For this to work, I must specify the working directory for the child. Otherwise, the `commit` will be triggered in `/Users/mariano`. 
+Another common need when spawning processes is to set a working directory (`PWD`) for them. If none is set, by default, they inherit the working directory of the parent. Imagine the Pharo image was launched from a terminal while `PWD` was `/Users/mariano`. Now imagine I want to spawn a process for a git commit for the directory `/Users/mariano/git/OSSubprocess`. For this to work, I must specify the working directory for the child. Otherwise, the `commit` will be triggered in `/Users/mariano`. 
 
 To support this, we provide the method `#pwd:` as this example shows:
 
@@ -412,7 +412,7 @@ OSSUnixSubprocess new
 		]
 ```
 
-> The implementation of `#pwd:` is quite rudementary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in [Setting environment variables](#setting-environment-variables).
+> The implementation of `#pwd:` is quite rudimentary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in [Setting environment variables](#setting-environment-variables).
 
 
 
