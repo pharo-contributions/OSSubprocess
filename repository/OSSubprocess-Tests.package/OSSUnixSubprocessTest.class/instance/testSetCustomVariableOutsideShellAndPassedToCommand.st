@@ -9,7 +9,7 @@ testSetCustomVariableOutsideShellAndPassedToCommand
 		command: '/bin/echo';
 		arguments: (Array with: '${WHATEVER}');
 		environmentAt: 'WHATEVER' put: 'hello';
-		createAndSetStdoutStream;
+		redirectStdout;
 		runAndWaitOnExitDo: [ :command :outString |
 			self assert: outString trimmed equals: '${WHATEVER}'. 			
 		]

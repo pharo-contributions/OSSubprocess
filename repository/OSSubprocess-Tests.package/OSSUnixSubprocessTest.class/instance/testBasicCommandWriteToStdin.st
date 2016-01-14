@@ -5,8 +5,8 @@ testBasicCommandWriteToStdin
 	string := 'this is a test shat should have been printed in the stdout'.
 	command := self newCommand
 					command: '/bin/cat';
-					createAndSetStdinStream;
-					createAndSetStdoutStream.
+					redirectStdin;
+					redirectStdout.
 					
 	command run.
 	command stdinStream 

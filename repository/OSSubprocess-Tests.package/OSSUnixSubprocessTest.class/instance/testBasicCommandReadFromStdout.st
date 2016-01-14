@@ -5,7 +5,7 @@ testBasicCommandReadFromStdout
 	self newCommand
 		command: '/bin/ls';
 		arguments: (Array with: Smalltalk image imagePath);
-		createAndSetStdoutStream;
+		redirectStdout;
 		runAndWaitOnExitDo: [ :command :outString |
 			self assert: (outString includesSubstring: Smalltalk image imagePath).
 			self assertStreamsInfoWithPrevious: streamsInfo.

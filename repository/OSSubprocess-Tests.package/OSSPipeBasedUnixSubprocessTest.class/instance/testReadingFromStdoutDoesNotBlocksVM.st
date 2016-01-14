@@ -5,7 +5,7 @@ testReadingFromStdoutDoesNotBlocksVM
 	command := self newCommand
 					command: '/bin/sleep';
 					arguments: (Array with: '4');
-					stdoutStream: customStream.
+					redirectStdoutTo: customStream.
 	
 	command run. 
 	self assert:[ command stdoutStream upToEnd ] timeToRun seconds <= 2. 

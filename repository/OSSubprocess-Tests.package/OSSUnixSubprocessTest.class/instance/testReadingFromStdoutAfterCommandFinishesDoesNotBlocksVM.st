@@ -5,7 +5,7 @@ testReadingFromStdoutAfterCommandFinishesDoesNotBlocksVM
 	command := self newCommand
 					command: '/bin/sleep';
 					arguments: (Array with: '2');
-					createAndSetStdoutStream;
+					redirectStdout;
 					runAndWait.
 					
 	"Even with a blocking stream, if the command has finished, we have

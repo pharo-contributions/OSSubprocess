@@ -6,7 +6,7 @@ testCustomStdoutStream
 	self newCommand
 		command: '/bin/ls';
 		arguments: (Array with: Smalltalk image imagePath);
-		stdoutStream: customStream;
+		redirectStdoutTo: customStream;
 		runAndWaitOnExitDo: [ :command :outString |
 			self assert: (outString includesSubstring: Smalltalk image imagePath).
 			self assert: command stdoutStream == customStream	.				

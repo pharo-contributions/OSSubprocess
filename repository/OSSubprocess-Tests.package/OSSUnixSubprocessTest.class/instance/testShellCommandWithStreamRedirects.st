@@ -4,7 +4,7 @@ testShellCommandWithStreamRedirects
 
 	self newCommand
 		shellCommand: 'ps -fea | grep Pharo > /tmp/testShellCommandWithStreamRedirects.deleteme';
-		createAndSetStdoutStream;
+		redirectStdout;
 		runAndWaitOnExitDo: [ :command :outString |
 			self assert: outString isEmpty. 
 			stdOutContents := '/tmp/testShellCommandWithStreamRedirects.deleteme' asFileReference readStreamDo: [ :str | str contents ] .

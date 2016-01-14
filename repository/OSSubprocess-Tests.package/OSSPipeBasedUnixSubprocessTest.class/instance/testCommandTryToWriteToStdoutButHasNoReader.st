@@ -3,8 +3,8 @@ testCommandTryToWriteToStdoutButHasNoReader
 	| command errString  | 
 	command := self newCommand
 					shellCommand: 'sleep 2; echo 42';
-					createAndSetStdoutStream;
-					createAndSetStderrStream.
+					redirectStdout;
+					redirectStderr.
 	
 	command run.
 	command stdoutStream closeReader.				

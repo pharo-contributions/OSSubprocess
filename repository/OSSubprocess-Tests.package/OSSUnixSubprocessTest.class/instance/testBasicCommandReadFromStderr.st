@@ -5,7 +5,7 @@ testBasicCommandReadFromStderr
 	self newCommand
 		command: '/bin/ls';
 		arguments: (Array with: '-' with: 'foo');
-		createAndSetStderrStream;
+		redirectStderr;
 		runAndWaitOnExitDo: [ :command :outString :errString |
 			self assert: (errString includesSubstring: 'foo: No such file or directory').
 			self assert: command stdoutStream isNil.

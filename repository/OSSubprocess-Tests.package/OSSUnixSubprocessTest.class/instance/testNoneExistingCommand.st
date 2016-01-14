@@ -4,8 +4,8 @@ testNoneExistingCommand
 	
 	command := self newCommand
 					command: 'whatever';
-					createAndSetStdoutStream;
-					createAndSetStderrStream.
+					redirectStdout;
+					redirectStderr.
 	
 	"Ideally, I would like to use a should:raise: but not all OS do fail. OSX does send errorl, while Linux does not.
 	So...if error, then it;s ok. But if not, also."

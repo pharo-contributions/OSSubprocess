@@ -4,7 +4,7 @@ testPwd
 	
 	self newCommand
 		command: '/bin/ls';
-		createAndSetStdoutStream;
+		redirectStdout;
 		runAndWaitOnExitDo: [ :command :outString |
 			oldLs := outString. 				
 		].
@@ -14,7 +14,7 @@ testPwd
 	self newCommand
 		command: '/bin/ls';
 		pwd: '/tmp';
-		createAndSetStdoutStream;
+		redirectStdout;
 		runAndWaitOnExitDo: [ :command :outString |
 			newLs := outString. 				
 		].
@@ -27,7 +27,7 @@ testPwd
 	"Parent should have back it's original cwd"
 	self newCommand
 		command: '/bin/ls';
-		createAndSetStdoutStream;
+		redirectStdout;
 		runAndWaitOnExitDo: [ :command :outString  |
 			self assert: oldLs equals: outString
 		].
