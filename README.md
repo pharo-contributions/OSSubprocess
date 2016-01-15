@@ -74,6 +74,9 @@ Metacello new
 
 > Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work. 
 
+Besides the above installation instructions, OSSubprocess can also be installed from the `Catalog Browser`, already present in Pharo. Just open it, search for OSSubprocess, then right click, `Install stable version`.
+
+
 ## Introduction to the API
 OSSubprocess is quite easy to use but depending on the user needs, there are different parts of the API that could be used. We start with a basic example and later we show more complicated scenarios.
 
@@ -178,7 +181,7 @@ process := OSSUnixSubprocess new
 			defaultWriteStreamCreationBlock: [OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe];
 			redirectStdout;
 			redirectStderrTo: '/tmp/customStderr.txt' asFileReference writeStream;
-			defaultReadStreamCreationBlock: [ process createTempFileToBeUsedAsReadStreamOn: '/tmp' ];
+			defaultReadStreamCreationBlock: [ OSSUnixSubprocess createTempFileToBeUsedAsReadStreamOn: '/tmp' ];
 			createMissingStandardStreams: true.	
 Halt halt.			
 process runAndWait.  
