@@ -14,7 +14,9 @@ waitForExitPollingEvery: aDelay retrievingStreams: retrieveStreams
 	^ self 
 		waitForExitPollingEvery: aDelay
 		doing: [ 
-			self retrieveWhatIsAvailableOn: stdoutStream andAddItTo: retrievedStdout.
-			self retrieveWhatIsAvailableOn: stderrStream andAddItTo: retrievedStderr.
+			retrieveStreams ifTrue: [ 
+				self retrieveWhatIsAvailableOn: stdoutStream andAddItTo: retrievedStdout.
+				self retrieveWhatIsAvailableOn: stderrStream andAddItTo: retrievedStderr.
+			]
 		] 
 	

@@ -23,7 +23,8 @@
 		"retrievedStdout",
 		"retrievedStderr",
 		"mutexForSigchld",
-		"shouldContinueWaiting" ],
+		"shouldContinueWaiting",
+		"terminateOnShutdown" ],
 	"name" : "OSSUnixSubprocess",
 	"pools" : [
 		 ],

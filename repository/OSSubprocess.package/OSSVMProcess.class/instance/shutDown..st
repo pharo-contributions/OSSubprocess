@@ -1,4 +1,4 @@
-system startup
+system startup & shutdown
 shutDown: quitting
 	"If we have a process that do not stop automatically (like a tail -f) and it runs
 	with #fork  (at Smalltalk level)	then that process will be continue running 
@@ -12,4 +12,4 @@ shutDown: quitting
 	next startup of the image has no problem. 
 	
 	"
-	quitting ifTrue: [ self activeChildren do: [ :each | each stopWaiting ] ].
+	quitting ifTrue: [ self activeChildren do: [ :each | each shutDown: quitting ] ].

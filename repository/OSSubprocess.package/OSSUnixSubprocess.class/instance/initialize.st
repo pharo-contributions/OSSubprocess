@@ -8,6 +8,7 @@ initialize
 	defaultWriteStreamCreationBlock := [self systemAccessor makeNonBlockingPipe].
 	retrievedStdout := String new writeStream. 
 	retrievedStderr := String new writeStream. 
+	terminateOnShutdown := false.
 	
 	
 		
