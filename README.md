@@ -392,7 +392,7 @@ OSSUnixSubprocess new
 
 Of course, `outString` is empty now because the shell has redirected it to a particular file. 
 
-`#shell:command:` is similar to `#shellCommand:` but allows the user to specify the full path of the shell to use. 
+`shellCommand:` will first try to use the shell defined in the OS by getting the env variable `$SHELL`. If not defined, then it will fallback to `/bin/sh`. `#shell:command:` is similar to `#shellCommand:` but allows the user to specify the full path of the shell to use (for example `/bin/zsh`). 
 
 > Note that when using the shell you must type the command exactly as the shell expects it, that is, with all the escaping and everything needed.
 
