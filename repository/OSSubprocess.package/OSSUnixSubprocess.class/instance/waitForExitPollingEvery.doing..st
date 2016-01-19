@@ -15,7 +15,9 @@ waitForExitPollingEvery: aDelay doing: aClosure
 	[
 		"If the #shutDown: (shouldContinueWaiting was set to false) happened while this process was in the #wait 
 		 then we simply check 'shouldContinueWaiting' here before doing the #queryExitStatus"
-		shouldContinueWaiting ifTrue: [ self queryExitStatus ].
+		shouldContinueWaiting 
+			ifTrue: [ self queryExitStatus ]
+			ifFalse: [ ^ nil ].
 		"nil answer means the child has not yet finished" 
 		(exitStatus isNil and: [ shouldContinueWaiting ])
 	]
@@ -25,5 +27,6 @@ waitForExitPollingEvery: aDelay doing: aClosure
 	].
 	"We might have more contents in the streams that could have been written since the last 'aClosure value' and the moment #queryExitStatus answers non nil.
 	So just in case we execute aClosure one more time"
-	aClosure cull: self cull: stdoutStream cull: stderrStream.
+	shouldContinueWaiting 
+		ifTrue: [ aClosure cull: self cull: stdoutStream cull: stderrStream. ].
 	^ exitStatus  
