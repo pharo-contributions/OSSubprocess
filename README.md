@@ -5,41 +5,43 @@ Forking OS processes from Pharo language
 ##Table of Contents
 
 
-  * [OSSubprocess](#ossubprocess)
-    * [Table of Contents](#table-of-contents)
-    * [Summary](#summary)
-        * [Funding](#funding)
-        * [Status](#status)
-        * [OSProcess influence](#osprocess-influence)
-    * [Installation](#installation)
-    * [Introduction to the API](#introduction-to-the-api)
-    * [Child exit status](#child-exit-status)
-      * [OSSVMProcess and it's child watcher](#ossvmprocess-and-its-child-watcher)
-      * [Accessing child status and interpreting it](#accessing-child-status-and-interpreting-it)
-    * [Streams management](#streams-management)
-      * [Handling pipes within Pharo](#handling-pipes-within-pharo)
-      * [Regular files vs pipes](#regular-files-vs-pipes)
-      * [Customizing streams creation](#customizing-streams-creation)
-      * [Stdin example](#stdin-example)
-    * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
-      * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
-      * [When to process streams](#when-to-process-streams)
-      * [Streams processing at the end](#streams-processing-at-the-end)
-        * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
-        * [Delay-based polling waiting](#delay-based-polling-waiting)
-        * [Which waiting to use?](#which-waiting-to-use)
-      * [Processing streams while running](#processing-streams-while-running)
-      * [Asynchronous runs](#asynchronous-runs)
-    * [Environment variables](#environment-variables)
-      * [Setting environment variables](#setting-environment-variables)
-      * [Variables are not expanded](#variables-are-not-expanded)
-      * [Accessing environment variables](#accessing-environment-variables)
-      * [Inherit variables from parent](#inherit-variables-from-parent)
-    * [Shell commands](#shell-commands)
-    * [Setting working directory](#setting-working-directory)
 
+ * [OSSubprocess](#ossubprocess)
+   * [Table of Contents](#table-of-contents)
+   * [Summary](#summary)
+       * [Funding](#funding)
+       * [Status](#status)
+       * [OSProcess influence](#osprocess-influence)
+   * [Installation](#installation)
+   * [Introduction to the API](#introduction-to-the-api)
+   * [Child exit status](#child-exit-status)
+     * [OSSVMProcess and it's child watcher](#ossvmprocess-and-its-child-watcher)
+     * [Accessing child status and interpreting it](#accessing-child-status-and-interpreting-it)
+   * [Streams management](#streams-management)
+     * [Handling pipes within Pharo](#handling-pipes-within-pharo)
+     * [Regular files vs pipes](#regular-files-vs-pipes)
+     * [Customizing streams creation](#customizing-streams-creation)
+     * [Stdin example](#stdin-example)
+   * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
+     * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
+     * [When to process streams](#when-to-process-streams)
+     * [Streams processing at the end](#streams-processing-at-the-end)
+       * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
+       * [Delay-based polling waiting](#delay-based-polling-waiting)
+       * [Which waiting to use?](#which-waiting-to-use)
+     * [Processing streams while running](#processing-streams-while-running)
+     * [Asynchronous runs](#asynchronous-runs)
+   * [Sending signals to processes](#sending-signals-to-processes)
+   * [System shutdown](#system-shutdown)
+   * [Environment variables](#environment-variables)
+     * [Setting environment variables](#setting-environment-variables)
+     * [Variables are not expanded](#variables-are-not-expanded)
+     * [Accessing environment variables](#accessing-environment-variables)
+     * [Inherit variables from parent](#inherit-variables-from-parent)
+   * [Shell commands](#shell-commands)
+   * [Setting working directory](#setting-working-directory)
 
-
+ 
 
 
 ## Summary
@@ -381,7 +383,7 @@ See this example:
 
 ```Smalltalk
 | counter |
-counter := 0.
+counter := 0. 
 [  
 	OSSUnixSubprocess new
 	command: 'tail';
@@ -406,6 +408,14 @@ If you open a `Transcript` and execute above example, you will see how the chang
 **Again, when and which signals to send depends on the user.**
 
 
+## System shutdown
+What would happen if you are running an asynchronous process (with `#fork`) and Pharo quits? Pharo can quit because of a crash, because the user accidently quits it, or any other reason. 
+
+By default, when Pharo is quitting, the `OSSVMProcess vmProcess` tells all active children to `#stopWaiting`. The `#stopWaiting` basically makes children to stop waiting for the external process and just finish. This allows the external process to finish (at the OS level), even if Pharo has quitted. In this scenario, its likely the child to become an *orphan* process since it's parent has die (Pharo VM). Orhpan processes do what is called  `re-parenting` which basically means they become children of the `init` process. 
+
+Contrary to the default behavior, we also provide the method `OSSUnixSubprocess >> terminateOnShutdown` which tells the system to automatically **terminate** (via `sigterm`) the external process when Pharo is quitting. We also collect the exit status in this case. 
+
+It depends on the user which behavior he wants. 
 
 ## Environment variables
 
