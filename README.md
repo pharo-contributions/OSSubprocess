@@ -24,10 +24,12 @@ Forking OS processes from Pharo language
     * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
       * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
       * [When to process streams](#when-to-process-streams)
-      * [Facilities for synchronous calls and streams processing at the end](#facilities-for-synchronous-calls-and-streams-processing-at-the-end)
+      * [Streams processing at the end](#streams-processing-at-the-end)
         * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
         * [Delay-based polling waiting](#delay-based-polling-waiting)
         * [Which waiting to use?](#which-waiting-to-use)
+      * [Processing streams while running](#processing-streams-while-running)
+      * [Asynchronous runs](#asynchronous-runs)
     * [Environment variables](#environment-variables)
       * [Setting environment variables](#setting-environment-variables)
       * [Variables are not expanded](#variables-are-not-expanded)
@@ -35,6 +37,7 @@ Forking OS processes from Pharo language
       * [Inherit variables from parent](#inherit-variables-from-parent)
     * [Shell commands](#shell-commands)
     * [Setting working directory](#setting-working-directory)
+
 
 
 
@@ -238,9 +241,30 @@ Note that the `#close` we send to the `stdinStream` is very important. This is b
 
 
 ###  Synchronism vs asynchronous runs 
-We call synchronous runs when you create a child process and you wait for it to finish before going to the next task of your code. This is by far the most common approach since many times you need to know which was the exit status (wether it was success or not) and depending on that, do something. 
+We call synchronous runs when you create a child process and you wait for it to finish before going to the next task of your code. This is by far the most common approach since many times you need to know which was the exit status (wether it was success or not) or get some output, and depending on that, change the flow of your code.
 
-Asynchronous runs are when you run a process and you do not care it's results for the next task of your code. In other words, your code can continue its execution no matter what happened with the spawned process. For this scenario, we currently do not support any special facility, although it is planned. If you would be interested in this functionality, please contact me.  
+Asynchronous runs are when you run a process and you do not care it's results for the next task of your code. In other words, your code can continue its execution no matter what happened with the spawned process.
+
+Let's see this example:
+
+```Smalltalk
+| process |
+process := OSSUnixSubprocess new	
+				command: '/bin/ls';
+				run. 	
+process waitForExit.
+process isSuccess 
+	ifTrue: [ self doSomethingWithSucess ]
+	ifFalse: [ self doSomethingWithFailure ].
+process closeAndCleanStreams.
+self myNextCodeAction. 
+```
+
+`myNextCodeAction` represents the user code (user of this library) that will run after spwaning the process. The important question here is when should the line `self myNextCodeAction` be executed? Does `myNextCodeAction` depend on the exit status of the forked process or it needs some of its output? 
+
+If `myNextCodeAction` should be executed after the forked process has finished, then it is synchronous. Otherwise, asynchronous.
+
+**The way the previous and next examples are written are actually synchronous. In [Asynchronous runs](#asynchronous-runs) we see how can we make asynchronous calls.**
 
 ### When to process streams
 If we have defined that we wanted to map a standard stream, it means that at some point we would like to read/write it and **do something with it**. 
@@ -248,11 +272,9 @@ There are basically two possibilities here. The most common approach is to simpl
 
 The other possibility a user may do, is to define some code that loops while the process is still running. For every cycle of the loop, it retrieves what is available from the streams and do something with it. But in this case, **doing something** is not simply accumulating the stream contents in another stream so that it is processed at the end. By doing something we really mean that the user wants to do something with that intermediate result: print it in a `Transcript`, show a progress bar, or whatever.  
 
-If what you need is the second possibility then you will have to write your custom loop code. You can take a look to `#waitForExitPollingEvery:retrievingStreams:` and `#runAndWaitPollingEvery:retrievingStreams:onExitDo:`
 
-
-### Facilities for synchronous calls and streams processing at the end
-For synchronous calls in which streams processing could be done once the process has exited, we provide some facilities methods that should ease the usage. Synchronous calls mean that we must wait for the child to exit. We provide two ways of doing this. 
+### Streams processing at the end
+For the scenario in which streams processing should be done once a process has exited, we provide some facilities methods that should ease the usage. Processing the streams at the end also means that somehow we should wait for the process to finish. We provide two ways of doing this. 
 
 #### Semaphore-based SIGCHLD waiting 
 The first way is with the method `#waitForExit`. This method is used by the high level API methods `#runAndWait` and `#runAndWaitOnExitDo:`. The wait in this scenario does **not** use an image-based delay polling. Instead, it uses a semaphore. Just after the process starts, it waits on a semaphore of the instVar `mutexForSigchld`. When the `OSSVMProcess` child watcher receives a `SIGCHLD` signal, it will notify the child that die with the message `#processHasExitNotification`. That method, will do the `#signal` in the semaphore and hence the execution of `#waitForExit` will continue.
@@ -293,6 +315,62 @@ If you are using files instead of pipes, then it would depend on how long does t
 
 *As you can see, there is no silver bullet. It's up to the user to know which model would fit better for his use-case. If you are uncertain or you are not an expert, then go with the polling approach with `retrievingStreams:` on `true`.*
 
+### Processing streams while running
+Instead of processing the streams once the process has finished, the other alternative is to process the streams while the process runs. 
+
+To demonstrate the facilities we provide for this case, we will see an example in which we invoke the command `tail -f /var/log/system.log`. In this example we use `/var/log/system.log` because it's a file whose contents grows frequently on OSX, but the example could apply to any file. What the example does is to poll with a delay and in every cycle of the loop, read from `stdout` and append that into a `Pharo Playground`:
+
+```Smalltalk
+| streamsInfo totalStdout page playground |
+totalStdout := String new writeStream.
+"These first lines just open a Pharo Playground with an initial content"
+(page := GTPlayPage new)
+	saveContent: 'initial content'.
+(playground := GTPlayground new)
+	openOn: page.
+[
+	OSSUnixSubprocess new
+	command: 'tail';
+	arguments: #('-f' '/var/log/system.log' );
+	redirectStdout;
+	redirectStderr;
+	runAndWaitPollingEvery: (Delay forMilliseconds: 500) 
+	doing: [ :process :outStream :errStream |  
+		| read | 
+		read := outStream upToEnd.
+		"Next 2 lines is to simply update the Playground"
+		page saveContent: (page content, read).
+		playground update.
+		totalStdout nextPutAll: read.
+		errStream upToEnd.
+	]
+	onExitDo: [ :process :outStream :errStream  |
+		process closeAndCleanStreams.
+		Transcript show: 'Total stdout: ', totalStdout contents.
+	]
+] fork.
+```
+
+If you run above code, you will see how a Pharo Playground is opened and every half second the contents are refreshed and appended at the end. The most important method here is `runAndWaitPollingEvery:doing:onExitDo:` which is the facility we provide for these scenarios. However, there are other points to mention:
+
+* The user must explicitly close streams. It could be inside the `onExitDo:` or elsewhere, but must be done. We cannot automatically close streams because we don't know if the user has retrieved their contents or not (we cannot know what the user will do in the `doing:` closure). 
+* If using pipes, the user must be sure to either retrieve steam contents as part of the `doing:` block or else make sure the process will not be writing much on them. Otherwise, you may hit the deadlock mentioned in [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting).
+* Contrary to regular files, the read of a pipe **consumes** the read. That is, you cannot read more than once a particular content. So for example, say you read from `stdout` in the `doing:` closure and then in `onExitDo:` you would like to do something with the total of the `stdout` (in this example, print it in the `Transcript`). If you read from `stdout` in `onExitDo:`, in this example, you will get nothing, because it was already read and consumed. To avoid loosing what you read (in case you need it later), you must store it somewhere yourself (in this example in the temp variable `totalStdout`).
+* If we run above code without the `fork` it will work but the Pharo UI will not be refreshed and it won't display the new Playground until the process has stoppped. This could be considered as an example of asynchronous calls as explained in [Asynchronous runs](#asynchronous-runs).
+
+
+###  Asynchronous runs 
+The previous example of the `tail -f` was an asynchronous run. Why? Because we wanted the user code to continue running (in this case the Pharo UI showing us the Playground with the `tail` contents) regardless of what happened with the spawned process. In general, the way to launch asynchronous processes is like this:
+
+```Smalltalk
+[
+OSSUnixSubprocess new	
+	command: 'whatever';
+	arguments: #();
+	...
+] fork.
+self continueWithOtherCode.
+```
 
 ## Environment variables
 
