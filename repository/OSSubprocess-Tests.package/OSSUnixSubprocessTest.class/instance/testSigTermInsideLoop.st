@@ -21,6 +21,7 @@ testSigTermInsideLoop
 		onExitDo: [ :aProcess :outStream :errStream  |
 			process closeAndCleanStreams.
 			exited := true.
+			self assert: aProcess exitStatusInterpreter printString equals: 'exit due to signal 15'
 		].
 
 	self assert: exited.	
