@@ -13,8 +13,10 @@ waitForExitPollingEvery: aDelay doing: aClosure
 	"
 	shouldContinueWaiting := true.
 	[
+		"If the #shutDown: (shouldContinueWaiting was set to false) happened while this process was in the #wait 
+		 then we simply check 'shouldContinueWaiting' here before doing the #queryExitStatus"
+		shouldContinueWaiting ifTrue: [ self queryExitStatus ].
 		"nil answer means the child has not yet finished" 
-		self queryExitStatus.
 		(exitStatus isNil and: [ shouldContinueWaiting ])
 	]
 	whileTrue: [ 
