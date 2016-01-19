@@ -5,7 +5,7 @@ shutDown: quitting
 	in Pharo. If terminateOnShutdown is true, then we simply terminate the process via sigterm
 	and collect it exit status.
 	If it false, then we simply stop waiting for it, and allow to finish at OS level
-	(althought it may become zombie as the parent will be die).
+	(althought it may become orphan process as the parent will be die).
 	"
 	quitting ifTrue: [ 
 		terminateOnShutdown 
