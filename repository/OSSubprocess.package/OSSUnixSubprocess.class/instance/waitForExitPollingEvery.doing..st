@@ -11,10 +11,11 @@ waitForExitPollingEvery: aDelay doing: aClosure
 	As part of the loop, besides checking the exit status (#queryExitStatus) it also evaluates aClosure
 	
 	"
+	shouldContinueWaiting := true.
 	[
 		"nil answer means the child has not yet finished" 
 		self queryExitStatus.
-		exitStatus isNil.
+		(exitStatus isNil and: [ shouldContinueWaiting ])
 	]
 	whileTrue: [ 
 		aDelay wait.

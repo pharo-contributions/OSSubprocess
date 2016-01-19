@@ -22,7 +22,8 @@
 		"pid",
 		"retrievedStdout",
 		"retrievedStderr",
-		"mutexForSigchld" ],
+		"mutexForSigchld",
+		"shouldContinueWaiting" ],
 	"name" : "OSSUnixSubprocess",
 	"pools" : [
 		 ],
