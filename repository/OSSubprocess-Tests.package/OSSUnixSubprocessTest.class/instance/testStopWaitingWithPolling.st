@@ -1,8 +1,9 @@
 tests - wait
 testStopWaitingWithPolling
-	| process counter forked |
+	| process counter forked oldZombies |
 	process := self newCommand.
-	forked := [
+	oldZombies := self numberOfZombiesProcesses.
+	[
 		process
 			command: 'tail';
 			arguments:  (Array with: '-f' with: Smalltalk image imagePath);
@@ -14,8 +15,13 @@ testStopWaitingWithPolling
 				self assert: process exitStatus isNil.
 				"Since we did not wait for the child to finish we must do a sigterm to avoid zombies
 				when running the tests"
-				process sigterm.
-				forked terminate. 
+				command sigterm.
+				"Not sure about while this delay but it seems it's needed so that the next queryExitStatus
+				does collect exit status and hence avoid zombies"
+				(Delay forSeconds: 2) wait.
+				command queryExitStatus.
+				self assert: self numberOfZombiesProcesses equals: oldZombies.
+				
 			]				
 	] fork.
 

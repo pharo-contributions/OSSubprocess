@@ -12,11 +12,14 @@ testStopWaitingWithSigchld
 			"The counter is to demonstrate that the exit happens only once we did the #stopWaiting
 			and not before"
 			self assert: counter equals: 0. 
-			self assert: process exitStatus isNil.
+			self assert: command exitStatus isNil.
 			"Since we did not wait for the child to finish we must do a sigterm to avoid zombies
 			when running the tests"
-			process sigterm.
-			(Delay forSeconds: 1) wait.
+			command sigterm.
+			"Not sure about while this delay but it seems it's needed so that the next queryExitStatus
+			does collect exit status and hence avoid zombies"
+			(Delay forSeconds: 2) wait.
+			command queryExitStatus.
 			self assert: self numberOfZombiesProcesses equals: oldZombies.
 		]
 	] fork.				
