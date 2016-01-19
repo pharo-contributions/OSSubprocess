@@ -262,7 +262,7 @@ process closeAndCleanStreams.
 self myNextCodeAction. 
 ```
 
-`myNextCodeAction` represents the user code (user of this library) that will run after spwaning the process. The important question here is when should the line `self myNextCodeAction` be executed? Does `myNextCodeAction` depend on the exit status of the forked process or it needs some of its output? 
+`myNextCodeAction` represents the user code (user of this library) that will run after spawning the process. The important question here is when should the line `self myNextCodeAction` be executed? Does `myNextCodeAction` depend on the exit status of the forked process or it needs some of its output? 
 
 If `myNextCodeAction` should be executed after the forked process has finished, then it is synchronous. Otherwise, asynchronous.
 
@@ -358,7 +358,7 @@ If you run above code, you will see how a Pharo Playground is opened and every h
 * The user must explicitly close streams. It could be inside the `onExitDo:` or elsewhere, but must be done. We cannot automatically close streams because we don't know if the user has retrieved their contents or not (we cannot know what the user will do in the `doing:` closure). 
 * If using pipes, the user must be sure to either retrieve steam contents as part of the `doing:` block or else make sure the process will not be writing much on them. Otherwise, you may hit the deadlock mentioned in [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting).
 * Contrary to regular files, the read of a pipe **consumes** the read. That is, you cannot read more than once a particular content. So for example, say you read from `stdout` in the `doing:` closure and then in `onExitDo:` you would like to do something with the total of the `stdout` (in this example, print it in the `Transcript`). If you read from `stdout` in `onExitDo:`, in this example, you will get nothing, because it was already read and consumed. To avoid loosing what you read (in case you need it later), you must store it somewhere yourself (in this example in the temp variable `totalStdout`).
-* If we run above code without the `fork` it will work but the Pharo UI will not be refreshed and it won't display the new Playground until the process has stoppped. This could be considered as an example of asynchronous calls as explained in [Asynchronous runs](#asynchronous-runs).
+* If we run above code without the `fork` it will work but the Pharo UI will not be refreshed and it won't display the new Playground until the process has stopped. This could be considered as an example of asynchronous calls as explained in [Asynchronous runs](#asynchronous-runs).
 
 
 ###  Asynchronous runs 
@@ -375,9 +375,9 @@ self continueWithOtherCode.
 ```
 
 ## Sending signals to processes
-OSSubprocess provides a way of sending UNIX signals (`SIGKILL`, `SIGTERM`, etc.) to the spwaned process. There are many scenarios in which this is useful, such us terminating or killing an existing process for whatever reason you have. Some OS commands, like `tail -f`, do not even finish unless you explicitly tell it to do so. If we consider again the `tail -f` example you may now realize that that process will run forever. 
+OSSubprocess provides a way of sending UNIX signals (`SIGKILL`, `SIGTERM`, etc.) to the spawned process. There are many scenarios in which this is useful, such us terminating or killing an existing process for whatever reason you have. Some OS commands, like `tail -f`, do not even finish unless you explicitly tell it to do so. If we consider again the `tail -f` example you may now realize that that process will run forever. 
 
-Which signals to send and when it completly up to the user. Under the protocol `OS signal sending`, the class `OSSUnixSubprocess` provides one method per signal. Examples: `#sigterm`, `#sigkill`, `#sigint`, `#sighup`, etc. Each of those methods will simply send the signal in question to the external process.
+Which signals to send and when it completely up to the user. Under the protocol `OS signal sending`, the class `OSSUnixSubprocess` provides one method per signal. Examples: `#sigterm`, `#sigkill`, `#sigint`, `#sighup`, etc. Each of those methods will simply send the signal in question to the external process.
 
 See this example:
 
@@ -409,9 +409,9 @@ If you open a `Transcript` and execute above example, you will see how the chang
 
 
 ## System shutdown
-What would happen if you are running an asynchronous process (with `#fork`) and Pharo quits? Pharo can quit because of a crash, because the user accidently quits it, or any other reason. 
+What would happen if you are running an asynchronous process (with `#fork`) and Pharo quits? Pharo can quit because of a crash, because the user accidentally quits it, or any other reason. 
 
-By default, when Pharo is quitting, the `OSSVMProcess vmProcess` tells all active children to `#stopWaiting`. The `#stopWaiting` basically makes children to stop waiting for the external process and just finish. This allows the external process to finish (at the OS level), even if Pharo has quitted. In this scenario, its likely the child to become an *orphan* process since it's parent has die (Pharo VM). Orhpan processes do what is called  `re-parenting` which basically means they become children of the `init` process. 
+By default, when Pharo is quitting, the `OSSVMProcess vmProcess` tells all active children to `#stopWaiting`. The `#stopWaiting` basically makes children to stop waiting for the external process and just finish. This allows the external process to finish (at the OS level), even if Pharo has quitted. In this scenario, its likely the child to become an *orphan* process since it's parent has die (Pharo VM). Orphan processes do what is called  `re-parenting` which basically means they become children of the `init` process. 
 
 Contrary to the default behavior, we also provide the method `OSSUnixSubprocess >> terminateOnShutdown` which tells the system to automatically **terminate** (via `sigterm`) the external process when Pharo is quitting. We also collect the exit status in this case. 
 
