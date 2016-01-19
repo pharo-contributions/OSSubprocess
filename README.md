@@ -171,7 +171,11 @@ The question is now what type of streams are the 'reader' and 'writer' instVars 
 To conclude, we use a system call to create an OS pipe. At Pharo level we represent that pipe as an instance of `OSSPipe`. And a `OSSPipe` has both, a reader and a writer which are both instances of `OSSAttachableFileStream` and that have been attached to the reader and writer end of the pipe. 
 
 ### Regular files vs pipes
-As we said before, both regular files or pipes can be used for mapping standard streams (`stdin`, `stdout` and `stderr`) and OSSubprocess supports both and manages them polymorphically thanks to `OSSPipe` and `OSSAttachableFileStream`. But the user can decide to use one or another. Pipes are normally faster since they run in memory. On the contrary, files may do I/0 operations even with caches (at least creating and deleting the file). With pipes you do not have to handle the deletion of the files as you do with regular files. You can read more about "regular files vs pipes" in the internet and come yourself to a conclusion. 
+As we said before, both regular files or pipes can be used for mapping standard streams (`stdin`, `stdout` and `stderr`) and OSSubprocess supports both and manages them polymorphically thanks to `OSSPipe` and `OSSAttachableFileStream`. 
+
+> **Important:** For regular files, you **must** use instances of `StandardFileStream` since we have some problemas when using instances of `MultiByteFileStream`. So... try not to use the `FileSystem` library for creating file streams but rather `StandardFileStream` directly. 
+
+But the user can decide to use one or another. Pipes are normally faster since they run in memory. On the contrary, files may do I/0 operations even with caches (at least creating and deleting the file). With pipes you do not have to handle the deletion of the files as you do with regular files. You can read more about "regular files vs pipes" in the internet and come yourself to a conclusion. 
 
 There is only one problem with pipes that you should be aware of and it's the fact that you may get a deadlock in certain situations. See [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting) for more details. 
 
@@ -185,7 +189,7 @@ process := OSSUnixSubprocess new
 			arguments: #('-la' '/nonexistent');
 			defaultWriteStreamCreationBlock: [OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe];
 			redirectStdout;
-			redirectStderrTo: '/tmp/customStderr.txt' asFileReference writeStream;
+			redirectStderrTo: (StandardFileStream forceNewFileNamed: '/tmp/customStderr.txt');
 			defaultReadStreamCreationBlock: [ OSSUnixSubprocess createTempFileToBeUsedAsReadStreamOn: '/tmp' ];
 			createMissingStandardStreams: true.	
 Halt halt.			
@@ -202,7 +206,7 @@ process closeAndCleanStreams.
 
 There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEnd` and closing and cleaning streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. The reason we are not using `#runAndWaitOnExitDo:` and instead the low level API, is to have a `Halt halt` while running the process so that you can confirm yourself the existence of the files used for the streams, as explained next. 
 
-With the methods `#redirectStdinTo:`, `#redirectStdoutTo:` and `#redirectStdoutTo:` the user is able to set a custom stream for each standard stream. The received stream could be either a `StandardFileStream` subclass (as is the result of `'/tmp/customStderr.txt' asFileReference writeStream`) or a `OSSPipe` (as is the result of `OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe`).
+With the methods `#redirectStdinTo:`, `#redirectStdoutTo:` and `#redirectStdoutTo:` the user is able to set a custom stream for each standard stream. The received stream could be either a `StandardFileStream` (as is the result of `StandardFileStream forceNewFileNamed: '/tmp/customStderr.txt'`) or a `OSSPipe` (as is the result of `OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe`).
 
 If you do not want to create a custom stream (like above example of `#redirectStderrTo:`) but you still want to create a default stream that would be mapped to a standard stream, then you can use the methods `#redirectStdin:`, `#redirectStdout` and `#redirectStderr`. Those methods will create *default* streams. The *default* streams are defined by the instVars `defaultWriteStreamCreationBlock` and `defaultReadStreamCreationBlock`. And these can be customized too as shown in above example. In this example, all write streams (to be used for `stdout` and `stderr`) will be pipes (forget for the moment about the none blocking part). And all read streams (only used by `stdin`) will be temp files automatically created in `/tmp`. This feature is useful if you want to change the way streams are created without having to specially create each stream. You can see how `OSSPipeBasedUnixSubprocessTest` and `OSSFileBasedUnixSubprocessTest` use these in the method `#newCommand`. 
 
