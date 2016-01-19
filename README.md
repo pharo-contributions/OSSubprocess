@@ -372,6 +372,41 @@ OSSUnixSubprocess new
 self continueWithOtherCode.
 ```
 
+## Sending signals to processes
+OSSubprocess provides a way of sending UNIX signals (`SIGKILL`, `SIGTERM`, etc.) to the spwaned process. There are many scenarios in which this is useful, such us terminating or killing an existing process for whatever reason you have. Some OS commands, like `tail -f`, do not even finish unless you explicitly tell it to do so. If we consider again the `tail -f` example you may now realize that that process will run forever. 
+
+Which signals to send and when it completly up to the user. Under the protocol `OS signal sending`, the class `OSSUnixSubprocess` provides one method per signal. Examples: `#sigterm`, `#sigkill`, `#sigint`, `#sighup`, etc. Each of those methods will simply send the signal in question to the external process.
+
+See this example:
+
+```Smalltalk
+| counter |
+counter := 0.
+[  
+	OSSUnixSubprocess new
+	command: 'tail';
+	arguments: #('-f' '/var/log/system.log' );
+	redirectStdout;
+	runAndWaitPollingEvery: (Delay forMilliseconds: 500) 
+	doing: [ :process :outStream  |  
+		counter := counter + 1.
+		Transcript show: outStream upToEnd; cr.
+		counter > 10 ifTrue: [ process sigterm ]
+	]
+	onExitDo: [ :process :outStream :errStream  |
+		process closeAndCleanStreams.
+		Transcript show: 'Process has exited with status: ', process exitStatusInterpreter printString; cr.
+	]
+] fork.
+```
+
+If you open a `Transcript` and execute above example, you will see how the changes to `/var/log/system.log` are displayed there for approx. 5 seconds and then it stops. It should have also printed `Process has exited with status: exit due to signal 15`, demonstrating that the exit is managed correctly. In addition, it shows up how the `exitStatusInterpreter` correctly interprets that the exit of the process was due to signal 15, which is `SIGTERM`.
+
+
+**Again, when and which signals to send depends on the user.**
+
+
+
 ## Environment variables
 
 ### Setting environment variables
