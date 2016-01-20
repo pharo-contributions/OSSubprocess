@@ -1,5 +1,5 @@
 close and dup2
-allocatePosixSpwanFilesActionStructure
+allocatePosixSpawnFilesActionStructure
 	"IMPORTANT:  It seems posix_spawn_file_actions_init() sometimes allocates AND initializes, and sometimes only initializes.
 	For OSX I found it it also allocates memory, so only allocating for the pointer is enough.
 	For Linux it seems we need to allocate the full structure of posix_spawn_file_actions_t.
