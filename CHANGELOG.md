@@ -2,7 +2,7 @@
 
 
 
-## [v0.1.5](https://github.com/marianopeck/OSSubprocess/tree/v0.1.5) (2016-01-XX)
+## [v0.2.0](https://github.com/marianopeck/OSSubprocess/tree/v0.2.0) (2016-01-19)
 
 
 **Implemented enhancements:**
