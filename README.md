@@ -217,7 +217,8 @@ Previously, we said that if the user does not specify a stream to be mapped to o
 Finally, note that since we are not using the API `#runAndWaitOnExitDo:` in this case, we must explicitly close streams via the message `#closeAndCleanStreams`. This method will also take care of deleting all those streams which were regular files (not pipes). 
 
 
-### Stdin example
+### 
+
 All of the examples so far showed how to redirect `stdout` and `stderr`. Below is an example on how can we redirect `stdin` and write to it from Pharo:
 
 ```Smalltalk
@@ -240,7 +241,7 @@ If you run above example you will see how the strings are first written to the `
 
 Note that the `#close` we send to the `stdinStream` is very important. This is because by default, we use blocking pipes for `stdin` and that means that when the child tries to read he will be locked until data is available. Therefore, somehow, at some point, we must tell the child that we have finished writing and that is via the `#close` message. 
 		
-
+> There are some problems when using regular files for `stdin`. **Therefore, we recommend to always use pipes for `stdin`**. If you want to pass the contents of a file to `stdin` then simply get the `#contents` of the file stream and then do a `nextPutAll:` to the pipe.
 
 
 ## Synchronism and  how to read streams 
