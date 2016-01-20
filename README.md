@@ -46,7 +46,7 @@ Forking OS processes from Pharo language
 
 ## Summary
 
-OSSubprocess is a software project that allows the user to spawn Operating System processes from within Pharo language. The main usage of forking external OS processes is to execute OS commands (.e.g `cat`, `ls`, `ps`, `cp`, etc) as well as arbitrary shell scripts (.e.g `/etc/myShellScript.sh`) from Pharo. 
+OSSubprocess is a software project that allows the user to spawn Operating System processes from within Pharo language. The main usage of forking external OS processes is to execute OS commands (e.g. `cat`, `ls`, `ps`, `cp`, etc) as well as arbitrary shell scripts (e.g. `/etc/myShellScript.sh`) from Pharo. 
 
 An important part of OSSubprocess is how to manage standard streams (`stdin`, `stdout` and `stderr`) and how to provide an API for reading and writing from them at the language level. 
 
@@ -99,7 +99,7 @@ Until we add support for Windows, the entry point will always be OSSUnixSubproce
 
 A subprocess consist of at least a command/binary/program to be executed (in this example `/bin/ls`) plus some optional array of arguments.
 
-The `#command:` could be either the program name (.e.g `ls`) or the full path to the executable (.e.g `/bin/ls`). If the former, then the binary will be searched using `$PATH` variable and may not be found.  
+The `#command:` could be either the program name (e.g. `ls`) or the full path to the executable (e.g. `/bin/ls`). If the former, then the binary will be searched using `$PATH` variable and may not be found.  
 
 For the `#arguments:` array, each argument must be a different element. In other words, passing `#('-la /Users')` is not correct since those are 2 arguments and hence should be 2 elements of the array. It is also incorrect to not specify `#arguments:` and specify the command like this: `command: '/bin/ls -la /Users'`. OSSubprocess does *not* do any parsing of the command or arguments. If you want to execute a command with a full string like `/bin/ls -la /Users`, you may want to take a look to `#bashCommand:` which relies on shell to do that job.
 
