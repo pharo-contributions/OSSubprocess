@@ -1,64 +1,57 @@
 # OSSubprocess
 
-Forking OS processes from Pharo language
+OSSubprocess is a software project that allows the user to spawn Operating System processes from within Pharo language. The main usage of forking external OS processes is to execute OS commands (.e.g `cat`, `ls`, `ps`, `cp`, etc) as well as arbitrary shell scripts (.e.g `/etc/myShellScript.sh`) from Pharo. 
+
+An important part of OSSubprocess is how to manage standard streams (`stdin`, `stdout` and `stderr`) and how to provide an API for reading and writing from them at the language level. 
+
+> It was decided together with Pharo Consortium that as a first step, we should concentrate on making it work on OSX and Unix. If the tool proves to be good and accepted, we could, at a second step, try to add Windows support. 
+OSSubprocess is still in an exploring phase and so it might be unstable. Use this tool with that in mind. That being said, all tests are green in the tested platforms.
+
 
 ##Table of Contents
 
 
 
- * [OSSubprocess](#ossubprocess)
-   * [Table of Contents](#table-of-contents)
-   * [Summary](#summary)
-       * [Funding](#funding)
-       * [Status](#status)
-       * [OSProcess influence](#osprocess-influence)
-   * [Installation](#installation)
-   * [Introduction to the API](#introduction-to-the-api)
-   * [Child exit status](#child-exit-status)
-     * [OSSVMProcess and it's child watcher](#ossvmprocess-and-its-child-watcher)
-     * [Accessing child status and interpreting it](#accessing-child-status-and-interpreting-it)
-   * [Streams management](#streams-management)
-     * [Handling pipes within Pharo](#handling-pipes-within-pharo)
-     * [Regular files vs pipes](#regular-files-vs-pipes)
-     * [Customizing streams creation](#customizing-streams-creation)
-     * [Stdin example](#stdin-example)
-   * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
-     * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
-     * [When to process streams](#when-to-process-streams)
-     * [Streams processing at the end](#streams-processing-at-the-end)
-       * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
-       * [Delay-based polling waiting](#delay-based-polling-waiting)
-       * [Which waiting to use?](#which-waiting-to-use)
-     * [Processing streams while running](#processing-streams-while-running)
-     * [Asynchronous runs](#asynchronous-runs)
-   * [Sending signals to processes](#sending-signals-to-processes)
-   * [System shutdown](#system-shutdown)
-   * [Environment variables](#environment-variables)
-     * [Setting environment variables](#setting-environment-variables)
-     * [Variables are not expanded](#variables-are-not-expanded)
-     * [Accessing environment variables](#accessing-environment-variables)
-     * [Inherit variables from parent](#inherit-variables-from-parent)
-   * [Shell commands](#shell-commands)
-   * [Setting working directory](#setting-working-directory)
+  * [OSSubprocess](#ossubprocess)
+    * [Table of Contents](#table-of-contents)
+    * [Installation](#installation)
+    * [Getting Started](#getting-started)
+    * [API Reference](#api-reference)
+      * [Child exit status](#child-exit-status)
+        * [OSSVMProcess and it's child watcher](#ossvmprocess-and-its-child-watcher)
+        * [Accessing child status and interpreting it](#accessing-child-status-and-interpreting-it)
+      * [Streams management](#streams-management)
+        * [Handling pipes within Pharo](#handling-pipes-within-pharo)
+        * [Regular files vs pipes](#regular-files-vs-pipes)
+        * [Customizing streams creation](#customizing-streams-creation)
+        * [Stdin example](#stdin-example)
+      * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
+        * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
+        * [When to process streams](#when-to-process-streams)
+        * [Streams processing at the end](#streams-processing-at-the-end)
+          * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
+          * [Delay-based polling waiting](#delay-based-polling-waiting)
+          * [Which waiting to use?](#which-waiting-to-use)
+        * [Processing streams while running](#processing-streams-while-running)
+        * [Asynchronous runs](#asynchronous-runs)
+      * [Sending signals to processes](#sending-signals-to-processes)
+      * [System shutdown](#system-shutdown)
+      * [Environment variables](#environment-variables)
+        * [Setting environment variables](#setting-environment-variables)
+        * [Variables are not expanded](#variables-are-not-expanded)
+        * [Accessing environment variables](#accessing-environment-variables)
+        * [Inherit variables from parent](#inherit-variables-from-parent)
+      * [Shell commands](#shell-commands)
+      * [Setting working directory](#setting-working-directory)
+    * [Contributing](#contributing)
+    * [History](#history)
+    * [Authors](#authors)
+    * [License](#license)
+    * [Acknowledgments](#acknowledgments)
+    * [Funding](#funding)
 
- 
 
 
-## Summary
-
-OSSubprocess is a software project that allows the user to spawn Operating System processes from within Pharo language. The main usage of forking external OS processes is to execute OS commands (e.g. `cat`, `ls`, `ps`, `cp`, etc) as well as arbitrary shell scripts (e.g. `/etc/myShellScript.sh`) from Pharo. 
-
-An important part of OSSubprocess is how to manage standard streams (`stdin`, `stdout` and `stderr`) and how to provide an API for reading and writing from them at the language level. 
-
-#### Funding
-This project is carried out by Mariano Martinez Peck and it is sponsored by the Pharo Consortium.
-
-#### Status
-It was decided together with Pharo Consortium that as a first step, we should concentrate on making it work on OSX and Unix. If the tool proves to be good and accepted, we could, at a second step, try to add Windows support. 
-OSSubprocess is still in an exploring phase and so it might be unstable. Use this tool with that in mind. That being said, all tests are green in the tested platforms.
-
-#### OSProcess influence   
-OSSubprocess is highly influenced by a subset of the OSProcess project. There are parts which we even copied and adapted them (OSSPipe, OSSAttachableStream, OSSUnixProcessExitStatus). Other parts, we took them as inspiration (the idea of ThisOSProcess representing the VM process, the child watcher, and many others). In addition, OSSubprocess currently uses some of the OSProcess **plugin** (not OSProcess image side), such as the SIGCHLD handler or the creation of pipes. 
 
 ## Installation
 **OSSubprocess currently only works in Pharo 5.0 with Spur VM**. Until Pharo 5.0 is released, for OSSubprocess, we recommend to always grab a latest image and VM. You can do that in via command line:
@@ -81,8 +74,7 @@ Metacello new
 
 Besides the above installation instructions, OSSubprocess can also be installed from the `Catalog Browser`, already present in Pharo. Just open it, search for OSSubprocess, then right click, `Install stable version`.
 
-
-## Introduction to the API
+## Getting Started
 OSSubprocess is quite easy to use but depending on the user needs, there are different parts of the API that could be used. We start with a basic example and later we show more complicated scenarios.
 
 ```Smalltalk
@@ -99,7 +91,7 @@ Until we add support for Windows, the entry point will always be OSSUnixSubproce
 
 A subprocess consist of at least a command/binary/program to be executed (in this example `/bin/ls`) plus some optional array of arguments.
 
-The `#command:` could be either the program name (e.g. `ls`) or the full path to the executable (e.g. `/bin/ls`). If the former, then the binary will be searched using `$PATH` variable and may not be found.  
+The `#command:` could be either the program name (.e.g `ls`) or the full path to the executable (.e.g `/bin/ls`). If the former, then the binary will be searched using `$PATH` variable and may not be found.  
 
 For the `#arguments:` array, each argument must be a different element. In other words, passing `#('-la /Users')` is not correct since those are 2 arguments and hence should be 2 elements of the array. It is also incorrect to not specify `#arguments:` and specify the command like this: `command: '/bin/ls -la /Users'`. OSSubprocess does *not* do any parsing of the command or arguments. If you want to execute a command with a full string like `/bin/ls -la /Users`, you may want to take a look to `#bashCommand:` which relies on shell to do that job.
 
@@ -107,10 +99,12 @@ With `#redirectStdout` we are saying that we want to create a stream and that we
 
 Finally, we use the `#runAndWaitOnExitDo:` which is a high level API method that runs the process, waits for it until it finishes, reads and then closes the `stdout` stream, and finally invokes the passed closure. In the closure we get as arguments the original `OSSUnixSubprocess` instance we created, and the contents of the read `stdout`. If you inspect `outString` you should see the output of `/bin/ls -la /Users` which should be exactly the same as if run from the command line.
 
-## Child exit status
+## API Reference
+
+### Child exit status
 When you spawn a process in Unix, the new process becomes a "child" of the "parent" process that launched it. In our case, the parent process is the Pharo VM process and the child process would be the one executing the command (in above example, `/bin/ls`). It is a responsibility of the parent process to collect the exit status of the child once it finishes. If the parent does not do this, the child becomes a "zombie" process. The exit status is an integer that represents how the child finished (if successful, if error, which error, if received a signal, etc etc.). Besides avoiding zombies, the exit status is also important for the user to take actions depending on its result. 
 
-### OSSVMProcess and it's child watcher
+#### OSSVMProcess and it's child watcher
 
 In OSSubprocess, we have a class `OSSVMProcess` with a singleton instance accessed via a class side method `vmProcess` which represents the operating system process in which the Pharo VM is currently running. OSSVMProcess can answer some information about the OS process running the VM, such as running PID, children, etc etc. More can be added later. 
 
@@ -120,7 +114,7 @@ This class takes care of running what we call the "child watcher" which is basic
  
 *What is important here is that whether you wait for the process to finish or not (and no matter in which way you wait), the child exit code will be collected and stored in the `exitStatus` instVar of the instance of `OSSUnixSubprocess` representing the exited process, thanks to the `OSSVMProcess` child watcher.* 
 
-### Accessing child status and interpreting it
+#### Accessing child status and interpreting it
 No matter how you waited for the child process to finish, when it exited, the instVar `exitStatus` should have been set. `exitStatus` is an integer bit field answered by the `wait()` system call that contains information about the exit status of the process. The meaning of the bit field varies according to the cause of the process exit. Besides understanding `#exitStatus`, `OSSUnixSubprocess` also understands `#exitStatusInterpreter` which answers an instance of `OSSUnixProcessExitStatus`. The task of this class is to simply decode this integer bit field and provide meaningful information. Please read its class comment for further details. 
 
 In addition to `#exitStatus` and `#exitStatusInterpreter`, `OSSUnixSubprocess` provides testing methods such us `#isSuccess`, `#isComplete`, `isRunning`, etc. 
@@ -158,10 +152,10 @@ The `normal termination with status 1` is the information that `OSSUnixProcessEx
 The second line of the `Transcript` is simply the `stderr` contents.  
 
 
-## Streams management
+### Streams management
 There are many parts of the API and features of OSSubprocess which are related to streams. In this section we will try to explain these topics.
 
-### Handling pipes within Pharo
+#### Handling pipes within Pharo
 Besides regular files (as the files you are used to deal with), Unix provides **pipes**. Since Unix manages pipes  polymorphically to regular files, you can use both for mapping standard streams (`stdin`, `stdout` and `stderr`). That means that both kind of files can be used to communicate a parent and a child process. 
 
 For regular files, Pharo already provides `Stream` classes to write and read from them, such as `StandardFileStream` and subclasses. For pipes things are different because there is a write end and a read end (each having a different file descriptor at Unix level). For this purpose, we have implemented the class called `OSSPipe` which represents a OS pipe and it is a subclass of `Stream`. `OSSPipe` contains both, a `reader` and a `writer`, and it implements the `Stream` protocol by delegating messages to one or the other. For example `OSSPipe>>#nextPutAll:` is delegated to the writer while `#next` is delegated to the reader. That way, we have a Stream-like API for pipes. For more details, please read the class comment of `OSSPipe`.
@@ -170,7 +164,7 @@ The question is now what type of streams are the 'reader' and 'writer' instVars 
 
 To conclude, we use a system call to create an OS pipe. At Pharo level we represent that pipe as an instance of `OSSPipe`. And a `OSSPipe` has both, a reader and a writer which are both instances of `OSSAttachableFileStream` and that have been attached to the reader and writer end of the pipe. 
 
-### Regular files vs pipes
+#### Regular files vs pipes
 As we said before, both regular files or pipes can be used for mapping standard streams (`stdin`, `stdout` and `stderr`) and OSSubprocess supports both and manages them polymorphically thanks to `OSSPipe` and `OSSAttachableFileStream`. 
 
 > **Important:** For regular files, you **must** use instances of `StandardFileStream` since we have some problemas when using instances of `MultiByteFileStream`. So... try not to use the `FileSystem` library for creating file streams but rather `StandardFileStream` directly. 
@@ -179,7 +173,7 @@ But the user can decide to use one or another. Pipes are normally faster since t
 
 There is only one problem with pipes that you should be aware of and it's the fact that you may get a deadlock in certain situations. See [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting) for more details. 
 
-### Customizing streams creation
+#### Customizing streams creation
 Let's consider this example:
 
 ```Smalltalk
@@ -217,8 +211,7 @@ Previously, we said that if the user does not specify a stream to be mapped to o
 Finally, note that since we are not using the API `#runAndWaitOnExitDo:` in this case, we must explicitly close streams via the message `#closeAndCleanStreams`. This method will also take care of deleting all those streams which were regular files (not pipes). 
 
 
-### 
-
+#### Stdin example
 All of the examples so far showed how to redirect `stdout` and `stderr`. Below is an example on how can we redirect `stdin` and write to it from Pharo:
 
 ```Smalltalk
@@ -241,13 +234,13 @@ If you run above example you will see how the strings are first written to the `
 
 Note that the `#close` we send to the `stdinStream` is very important. This is because by default, we use blocking pipes for `stdin` and that means that when the child tries to read he will be locked until data is available. Therefore, somehow, at some point, we must tell the child that we have finished writing and that is via the `#close` message. 
 		
-> There are some problems when using regular files for `stdin`. **Therefore, we recommend to always use pipes for `stdin`**. If you want to pass the contents of a file to `stdin` then simply get the `#contents` of the file stream and then do a `nextPutAll:` to the pipe.
 
 
-## Synchronism and  how to read streams 
+
+### Synchronism and  how to read streams 
 
 
-###  Synchronism vs asynchronous runs 
+####  Synchronism vs asynchronous runs 
 We call synchronous runs when you create a child process and you wait for it to finish before going to the next task of your code. This is by far the most common approach since many times you need to know which was the exit status (wether it was success or not) or get some output, and depending on that, change the flow of your code.
 
 Asynchronous runs are when you run a process and you do not care it's results for the next task of your code. In other words, your code can continue its execution no matter what happened with the spawned process.
@@ -273,24 +266,24 @@ If `myNextCodeAction` should be executed after the forked process has finished, 
 
 **The way the previous and next examples are written are actually synchronous. In [Asynchronous runs](#asynchronous-runs) we see how can we make asynchronous calls.**
 
-### When to process streams
+#### When to process streams
 If we have defined that we wanted to map a standard stream, it means that at some point we would like to read/write it and **do something with it**. 
 There are basically two possibilities here. The most common approach is to simply wait until the process has finished, and once finished, depending on the exit status, **do something** with the stream contents. What to do exactly, depends on the needs the user has for that process.
 
 The other possibility a user may do, is to define some code that loops while the process is still running. For every cycle of the loop, it retrieves what is available from the streams and do something with it. But in this case, **doing something** is not simply accumulating the stream contents in another stream so that it is processed at the end. By doing something we really mean that the user wants to do something with that intermediate result: print it in a `Transcript`, show a progress bar, or whatever.  
 
 
-### Streams processing at the end
+#### Streams processing at the end
 For the scenario in which streams processing should be done once a process has exited, we provide some facilities methods that should ease the usage. Processing the streams at the end also means that somehow we should wait for the process to finish. We provide two ways of doing this. 
 
-#### Semaphore-based SIGCHLD waiting 
+##### Semaphore-based SIGCHLD waiting 
 The first way is with the method `#waitForExit`. This method is used by the high level API methods `#runAndWait` and `#runAndWaitOnExitDo:`. The wait in this scenario does **not** use an image-based delay polling. Instead, it uses a semaphore. Just after the process starts, it waits on a semaphore of the instVar `mutexForSigchld`. When the `OSSVMProcess` child watcher receives a `SIGCHLD` signal, it will notify the child that die with the message `#processHasExitNotification`. That method, will do the `#signal` in the semaphore and hence the execution of `#waitForExit` will continue.
 
 > **IMPORTANT** In this kind of waiting there is no polling and hence we do not read from the streams periodically. Instead, we read the whole contents of each stream at the end. Basically, there is a problem in general (deadlock!) with waiting for an external process to exit before reading its output. If the external process creates a large amount of output, and if the output is a pipe, it will block on writing to the pipe until someone (our VM process) reads some data from the pipe to make room for the writing. That leads to cases where we never read the output (because the external process did not exit) and the external process never exits (because we have not read the data from the pipe to make room for the writing).
 
 > Another point to take into account is that this kind of wait also depends on the child watcher and `SIGCHLD` capture. While we do our best to make this as reliable as possible, it might be cases where we miss some `SIGCHLD` signals. There is a workaround for that (see method `#initializeChildWatcher`), but there may still be issues. If such problem happens, the child process (at our language level) never exits from the `#waitForExit` method. And at the OS level, the child would look like a zombie because the parent did not collect the exit status. 
 
-#### Delay-based polling waiting
+##### Delay-based polling waiting
 The other way we have for waiting a child process is by doing a delay-based in-image polling. That basically means a loop in which we wait some milliseconds, and then check the exit status of the process. For this, we provide the method `#waitForExitPollingEvery:retrievingStreams:`, and it's high level API method `#runAndWaitPollingEvery:retrievingStreams:onExitDo:`.
 
 It is important to note that as part of the loop we send `#queryExitStatus`, which is the one that sends the `waitpid()` in Unix. That means that we are fully independent of the child watcher and the `SIGCHLD` and hence much more reliable than the previous approach.
@@ -313,7 +306,7 @@ OSSUnixSubprocess new
 
 Of course, the main disadvantage of the polling is the cost of it at the language level. The waiting on a semaphore (as with the `SIGCHLD`) has no cost.  
 
-#### Which waiting to use?
+##### Which waiting to use?
 If you are using pipes and you are not sure about how much the child process could write in the streams, then we recommend the polling approach (with `retrievingStreams:` with `true`). 
 
 If you are using pipes and you know the process will not write much, then you can use both approaches. If you want to be sure 100% to never ever get a zombie or related problem, then we think the polling approach is a bit more reliable. If you can live with such a possibility, then maybe the `SIGCHLD` approach could work too. 
@@ -322,7 +315,7 @@ If you are using files instead of pipes, then it would depend on how long does t
 
 *As you can see, there is no silver bullet. It's up to the user to know which model would fit better for his use-case. If you are uncertain or you are not an expert, then go with the polling approach with `retrievingStreams:` on `true`.*
 
-### Processing streams while running
+#### Processing streams while running
 Instead of processing the streams once the process has finished, the other alternative is to process the streams while the process runs. 
 
 To demonstrate the facilities we provide for this case, we will see an example in which we invoke the command `tail -f /var/log/system.log`. In this example we use `/var/log/system.log` because it's a file whose contents grows frequently on OSX, but the example could apply to any file. What the example does is to poll with a delay and in every cycle of the loop, read from `stdout` and append that into a `Pharo Playground`:
@@ -366,7 +359,7 @@ If you run above code, you will see how a Pharo Playground is opened and every h
 * If we run above code without the `fork` it will work but the Pharo UI will not be refreshed and it won't display the new Playground until the process has stopped. This could be considered as an example of asynchronous calls as explained in [Asynchronous runs](#asynchronous-runs).
 
 
-###  Asynchronous runs 
+####  Asynchronous runs 
 The previous example of the `tail -f` was an asynchronous run. Why? Because we wanted the user code to continue running (in this case the Pharo UI showing us the Playground with the `tail` contents) regardless of what happened with the spawned process. In general, the way to launch asynchronous processes is like this:
 
 ```Smalltalk
@@ -379,7 +372,7 @@ OSSUnixSubprocess new
 self continueWithOtherCode.
 ```
 
-## Sending signals to processes
+### Sending signals to processes
 OSSubprocess provides a way of sending UNIX signals (`SIGKILL`, `SIGTERM`, etc.) to the spawned process. There are many scenarios in which this is useful, such us terminating or killing an existing process for whatever reason you have. Some OS commands, like `tail -f`, do not even finish unless you explicitly tell it to do so. If we consider again the `tail -f` example you may now realize that that process will run forever. 
 
 Which signals to send and when it completely up to the user. Under the protocol `OS signal sending`, the class `OSSUnixSubprocess` provides one method per signal. Examples: `#sigterm`, `#sigkill`, `#sigint`, `#sighup`, etc. Each of those methods will simply send the signal in question to the external process.
@@ -413,7 +406,7 @@ If you open a `Transcript` and execute above example, you will see how the chang
 **Again, when and which signals to send depends on the user.**
 
 
-## System shutdown
+### System shutdown
 What would happen if you are running an asynchronous process (with `#fork`) and Pharo quits? Pharo can quit because of a crash, because the user accidentally quits it, or any other reason. 
 
 By default, when Pharo is quitting, the `OSSVMProcess vmProcess` tells all active children to `#stopWaiting`. The `#stopWaiting` basically makes children to stop waiting for the external process and just finish. This allows the external process to finish (at the OS level), even if Pharo has quitted. In this scenario, its likely the child to become an *orphan* process since it's parent has die (Pharo VM). Orphan processes do what is called  `re-parenting` which basically means they become children of the `init` process. 
@@ -422,9 +415,9 @@ Contrary to the default behavior, we also provide the method `OSSUnixSubprocess 
 
 It depends on the user which behavior he wants. 
 
-## Environment variables
+### Environment variables
 
-### Setting environment variables
+#### Setting environment variables
 
 One common requirement for child processes is to define environment variables for them, that may not even exist in the parent process. Let's see an example:
 
@@ -439,7 +432,7 @@ OSSUnixSubprocess new
 
 In this example we are executing `/usr/bin/git` and we are telling it to commit from the directory `/Users/mariano/git/OSSubprocess`. Without any particular environment variable setting, `git` will use the default editor. In my machine, it will use `nano` editor. However, in above example, we are setting a environment variable called `GIT_EDITOR` (which is *not* set in parent process) with the value `/Users/mariano/bin/mate` (TextMate editor for OSX). When we run this example, `git` will then use TextMate for entering the commit message instead of `nano`. 
 
-### Variables are not expanded
+#### Variables are not expanded
 You should not confuse the above example with variables expansions. Consider now this example:
 
 ```Smalltalk
@@ -473,7 +466,7 @@ OSSUnixSubprocess new
 In this case, the `outString` is indeed `hello` and this is simply because `/bin/sh` did the variable expansion before executing the `echo`.
 
 
-### Accessing environment variables
+#### Accessing environment variables
 It seems some people use OSProcess (or maybe even OSSubprocess) to access environment variables. **This is not needed and it's not the best approach**. Pharo provides an out of the box way for accessing environment variables. For example, `Smalltalk platform environment at: 'PWD'` answers `/Users/mariano/Pharo/imagenes`. So, use that API for retrieving environment variables.
 
 Finally, not that you can "expand" yourself the value of a variable prior to spawning a process and hence avoid the need of the shell. example:
@@ -491,12 +484,12 @@ OSSUnixSubprocess new
 In this example, `outString` will be `/Users/mariano`.  
  
 
-### Inherit variables from parent
+#### Inherit variables from parent
 If you don't define any variable via `#environmentAt:put:`, then by default, we will make the child process inherit all the variables from the parent process. If you did define at least one variable, then by default the child inherits no variable. However, you have the method `#addAllEnvVariablesFromParentWithoutOverride` which basically adds all the variables inherit from the parent but those that you have explicitly set (if any). 
 
 
 
-## Shell commands
+### Shell commands
 Sometimes, the process you want to execute is a shell. There are a couple of reasons for doing so:
 
 * Variables expansion.
@@ -525,7 +518,7 @@ Of course, `outString` is empty now because the shell has redirected it to a par
 > Note that when using the shell you must type the command exactly as the shell expects it, that is, with all the escaping and everything needed.
 
 
-## Setting working directory 
+### Setting working directory 
 Another common need when spawning processes is to set a working directory (`PWD`) for them. If none is set, by default, they inherit the working directory of the parent. Imagine the Pharo image was launched from a terminal while `PWD` was `/Users/mariano`. Now imagine I want to spawn a process for a git commit for the directory `/Users/mariano/git/OSSubprocess`. For this to work, I must specify the working directory for the child. Otherwise, the `commit` will be triggered in `/Users/mariano`. 
 
 To support this, we provide the method `#pwd:` as this example shows:
@@ -546,8 +539,35 @@ OSSUnixSubprocess new
 > The implementation of `#pwd:` is quite rudimentary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in [Setting environment variables](#setting-environment-variables).
 
 
+## Contributing
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+
+## History
+You can see the whole changelog of the project [Changelog](CHANGELOG.md) for details about the release history. 
 
 
+## Authors
+
+* **Mariano Martinez Peck** - *Initial work* - [Mariano Martinez Peck](https://github.com/marianopeck)
+
+See also the list of [contributors](https://github.com/marianopeck/OSSubprocess/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Acknowledgments
+
+* OSSubprocess is highly influenced by a subset of the [OSProcess](http://wiki.squeak.org/squeak/708) project. There are parts which we even copied and adapted them (OSSPipe, OSSAttachableStream, OSSUnixProcessExitStatus). Other parts, we took them as inspiration (the idea of ThisOSProcess representing the VM process, the child watcher, and many others). In addition, OSSubprocess currently uses some of the OSProcess **plugin** (not OSProcess image side), such as the SIGCHLD handler or the creation of pipes. 
+* Took some ideas from [Limbo](https://github.com/theseion/liblimbo)
+
+## Funding
+This project is sponsored by the [Pharo Consortium](http://consortium.pharo.org/).
 
 
 
