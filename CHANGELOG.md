@@ -32,7 +32,7 @@
 - Add new doc for all new features and enchacements
 - Added a ChangeLog file to doc.
 
-[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.1.4...v0.1.5)
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.1.4...v0.2.0)
 
 
 ## [v0.1.4](https://github.com/marianopeck/OSSubprocess/tree/v0.1.4) (2016-01-14)
