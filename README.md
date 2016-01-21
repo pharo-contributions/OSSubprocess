@@ -540,12 +540,31 @@ OSSUnixSubprocess new
 
 
 ## Contributing
+This project is developed with [GitFileTree](https://github.com/dalehenrich/filetree), which, starting in Pharo 5.0, provides what is called `Metadata-less` FileTree. That basically means that there are certain FileTree files (`version` and `methodProperties`) which are not created. **Therefore, you cannot use regular FileTree to contribute to this project. You must use `GitFileTree`.**
 
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+The following are the steps to contribute to this project:
+
+* Fork it using Github web interface!
+* Clone it to your local machine: `git clone git@github.com:YOUR_NAME/OSSubprocess.git`
+* Create your feature branch: `git checkout -b MY_NEW_FEATURE`
+* Download latest Pharo 5.0 and load GitFileTree and this project:
+
+```Smalltalk 
+Metacello new
+ 	baseline: 'FileTree';
+   	repository: 'github://dalehenrich/filetree:issue_171/repository';
+   	load: 'Git'.	
+Metacello new
+	baseline: 'OSSubprocess';
+ 	repository: 'gitfiletree:///path/to/your/local/clone/OSSubprocess/repository';
+	onConflict: [ :ex | ex allow ];
+	load.
+```
+
+* You can now perform the changes you want at Pharo level and commit using the regular Monticello Browser.
+* Run all OSSubprocess tests to make sure you did not break anything. 
+* Push to the branch. Either from MC browser of with `git push origin MY_NEW_FEATURE`
+* Submit a pull request from github web interface.
 
 ## History
 You can see the whole changelog of the project [Changelog](CHANGELOG.md) for details about the release history. 
@@ -565,6 +584,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 * OSSubprocess is highly influenced by a subset of the [OSProcess](http://wiki.squeak.org/squeak/708) project. There are parts which we even copied and adapted them (OSSPipe, OSSAttachableStream, OSSUnixProcessExitStatus). Other parts, we took them as inspiration (the idea of ThisOSProcess representing the VM process, the child watcher, and many others). In addition, OSSubprocess currently uses some of the OSProcess **plugin** (not OSProcess image side), such as the SIGCHLD handler or the creation of pipes. 
 * Took some ideas from [Limbo](https://github.com/theseion/liblimbo)
+
 
 ## Funding
 This project is sponsored by the [Pharo Consortium](http://consortium.pharo.org/).
