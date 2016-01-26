@@ -43,13 +43,13 @@ OSSubprocess is still in an exploring phase and so it might be unstable. Use thi
         * [Inherit variables from parent](#inherit-variables-from-parent)
       * [Shell commands](#shell-commands)
       * [Setting working directory](#setting-working-directory)
+    * [Running the tests](#running-the-tests)
     * [Contributing](#contributing)
     * [History](#history)
     * [Authors](#authors)
     * [License](#license)
     * [Acknowledgments](#acknowledgments)
     * [Funding](#funding)
-
 
 
 
@@ -537,6 +537,10 @@ OSSUnixSubprocess new
 ```
 
 > The implementation of `#pwd:` is quite rudimentary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in [Setting environment variables](#setting-environment-variables).
+
+
+##Running the tests
+You need to run the tests of the package `'OSSubprocess-Tests'`. The current test coverage is about 65%.
 
 
 ## Contributing
