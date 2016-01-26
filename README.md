@@ -540,7 +540,7 @@ OSSUnixSubprocess new
 
 
 ##Running the tests
-You need to run the tests of the package `'OSSubprocess-Tests'`. The current test coverage is about 65%.
+You need to run the tests of the package `OSSubprocess-Tests`. The current test coverage is about 65%.
 
 
 ## Contributing
