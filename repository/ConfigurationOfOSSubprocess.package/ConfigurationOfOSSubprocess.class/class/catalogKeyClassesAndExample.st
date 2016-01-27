@@ -1,8 +1,3 @@
 catalog
 catalogKeyClassesAndExample
-	^ '[Usage]
-To use...
-
-[Other]
-You can..
-'
+	^ ' See https://github.com/marianopeck/OSSubprocess/ '

@@ -1,3 +1,3 @@
 catalog
 catalogChangeLog
-	^ 'v0.1.0 [26.03.2015]: Initial release.'
+	^ 'See https://github.com/marianopeck/OSSubprocess/blob/master/CHANGELOG.md'
