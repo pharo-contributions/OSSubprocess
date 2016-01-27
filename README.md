@@ -46,6 +46,7 @@ OSSubprocess is still in an exploring phase and so it might be unstable. Use thi
     * [Running the tests](#running-the-tests)
     * [Contributing](#contributing)
     * [History](#history)
+    * [Future work](#future-work)
     * [Authors](#authors)
     * [License](#license)
     * [Acknowledgments](#acknowledgments)
@@ -573,6 +574,14 @@ Metacello new
 ## History
 You can see the whole changelog of the project [Changelog](CHANGELOG.md) for details about the release history. 
 
+## Future work
+Besides the [issues](https://github.com/marianopeck/OSSubprocess/issues), the following are also desired features:
+
+* Instead of using asynchronous I/O operations with FFI blocking callouts, sse synchronous I/O operations but with threaded FFI callouts. This will only be possible once Pharo VM and FFI supports threaded callouts.
+* Experiment with a VM plugin with a single `forkAndExec` kind of primitive (based on OSProcess one) and avoid using `posix_spawn()` family of functions.
+* Experiment with a Windows support by calling via FFI to `CreateProcess()`. Note there is a VM plugin called [ProcessorWrapper](http://leves.web.elte.hu/ProcessWrapper/) that wraps such a function. So we can base our work from it. 
+* Implement a pipeline at Pharo level. That is, to be able to create multiple instances of `OSSUnixSubprocess` which we will be piped each other. We can base our work in OSProcess `ProxyPipeline`.
+* Add this project to Pharo CI or Travis
 
 ## Authors
 
