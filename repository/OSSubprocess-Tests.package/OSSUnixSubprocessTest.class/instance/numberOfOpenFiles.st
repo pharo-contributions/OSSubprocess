@@ -7,7 +7,6 @@ numberOfOpenFiles
 	| tmpFileName openFilesNumber |
 	tmpFileName := '/tmp/openFilesByPharoVM-' , UUID new printString.
 	tmpFileName asFileReference ensureDelete.
-	Transcript show: tmpFileName; cr.
 	self systemAccessor system: ('lsof -p ', OSSVMProcess vmProcess pid printString, ' | wc -l  > ', tmpFileName, ' 2>&1').
 	openFilesNumber := tmpFileName asFileReference readStreamDo: [ :str |
 		"The -1 is because the above command brings one line which is a header." 

@@ -12,7 +12,6 @@ testWaitForExitPollingEveryDoing
 		doing: [ :process :outStream :errStream |  
 			| read | 
 			read := outStream upToEnd.
-			Transcript show: 'Read: ', read; cr. 
 			totalRead nextPutAll: read.
 		]
 		onExitDo: [ :process :outStream :errStream  |
