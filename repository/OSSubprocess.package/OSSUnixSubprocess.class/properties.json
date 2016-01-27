@@ -27,6 +27,6 @@
 		"terminateOnShutdown" ],
 	"name" : "OSSUnixSubprocess",
 	"pools" : [
-		 ],
+		"LibCSignalSharedPool" ],
 	"super" : "Object",
 	"type" : "normal" }

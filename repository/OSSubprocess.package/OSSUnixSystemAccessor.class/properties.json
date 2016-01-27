@@ -9,6 +9,6 @@
 		 ],
 	"name" : "OSSUnixSystemAccessor",
 	"pools" : [
-		 ],
+		"LibCWaitSharedPool" ],
 	"super" : "Object",
 	"type" : "normal" }

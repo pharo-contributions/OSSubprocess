@@ -1,4 +1,4 @@
 sizeof
 sizeOfInt
 	
-	^ self primSizeOfInt
+	^ FFIExternalType sizeOf: #int

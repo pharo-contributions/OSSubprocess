@@ -2,4 +2,4 @@ OS signal sending
 sigchld
 	"Send a SIGCHLD signal to the external process represented by self"
 
-	^ self systemAccessor primSendSigchldTo: self pid
+	^ self systemAccessor kill: self pid signal: SIGCHLD

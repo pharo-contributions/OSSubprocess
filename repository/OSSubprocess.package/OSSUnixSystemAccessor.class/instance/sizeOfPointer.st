@@ -1,4 +1,6 @@
 sizeof
 sizeOfPointer
 	
-	^ self primSizeOfPointer
+	^ FFIExternalType pointerSize
+	
+
