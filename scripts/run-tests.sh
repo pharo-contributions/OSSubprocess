@@ -11,4 +11,4 @@ Metacello new
 	load.
 "
 
-./pharo Pharo.image test --junit-xml-output --fail-on-failure "OSSubprocess.*" 2>&1
+./pharo Pharo.image test --fail-on-failure "OSSubprocess.*" 2>&1
