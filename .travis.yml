@@ -1,8 +1,13 @@
 language: c
-sudo: required
-env: 
-  - OS=linux
-install: 
-  - scripts/prepare-travis-linux.sh
+os:
+  - linux
+  - osx
+addons:
+  apt:
+    packages:
+      - lib32asound2
+      - lib32z1
+      - lib32bz2-1.0
+      - libssl1.0.0:i386
 script: 
-  - scripts/run-tests.sh
+  - scripts/run-tests.sh  
