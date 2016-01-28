@@ -1,0 +1,8 @@
+language: c
+sudo: required
+env: 
+  - OS=linux
+install: 
+  - scripts/prepare-travis-linux.sh
+script: 
+  - scripts/run-tests.sh
