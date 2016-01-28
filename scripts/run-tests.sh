@@ -9,6 +9,11 @@ Metacello new
 	baseline: 'OSSubprocess';
 	repository: 'filetree://repository';
 	load.
+	
+	Gofer it
+		url: 'http://smalltalkhub.com/mc/Pharo/Pharo50Inbox/main';
+		package: 'SLICE-Issue-17490-Command-Line-Handler-test-runner-should-print-a-small-stack-for-failures-and-errors';
+	load.	
 "
 
 ./pharo Pharo.image test --no-xterm --fail-on-failure "OSSubprocess.*" 2>&1

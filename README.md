@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/marianopeck/OSSubprocess.png?branch=master)](https://travis-ci.org/marianopeck/OSSubprocess)
+
 # OSSubprocess
 
 OSSubprocess is a software project that allows the user to spawn Operating System processes from within Pharo language. The main usage of forking external OS processes is to execute OS commands (.e.g `cat`, `ls`, `ps`, `cp`, etc) as well as arbitrary shell scripts (.e.g `/etc/myShellScript.sh`) from Pharo. 

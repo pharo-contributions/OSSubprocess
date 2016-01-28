@@ -5,6 +5,7 @@ os:
 addons:
   apt:
     packages:
+      # General needed packages for Pharo
       - lib32asound2
       - lib32z1
       - lib32bz2-1.0
