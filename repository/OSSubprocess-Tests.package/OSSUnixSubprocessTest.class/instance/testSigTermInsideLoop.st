@@ -9,7 +9,7 @@ testSigTermInsideLoop
 	
 	process 
 		command: 'tail';
-		arguments: #('-f' '/var/log/system.log' );
+		arguments: (Array with: '-f' with: Smalltalk image changesName);
 		redirectStdout;
 		redirectStderr;
 		runAndWaitPollingEvery: (Delay forMilliseconds: 500) 

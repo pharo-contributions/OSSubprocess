@@ -6,11 +6,10 @@ testSigTerm
 	exited := false.
 	streamsInfo := self getStreamsInfoForRunningTest.
 	process := self newCommand.
-	
 	[
 	process 
 		command: 'tail';
-		arguments: #('-f' '/var/log/system.log' );
+		arguments: (Array with: '-f' with: Smalltalk image changesName);
 		redirectStdout;
 		redirectStderr;
 		runAndWaitPollingEvery: (Delay forMilliseconds: 500) 
