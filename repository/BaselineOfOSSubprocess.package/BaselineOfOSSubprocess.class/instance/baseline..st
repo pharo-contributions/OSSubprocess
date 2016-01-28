@@ -10,7 +10,7 @@ baseline: spec
 			
 			spec project: 'FFICHeaderExtractor' with: [
   				spec
-    					className: 'ConfigurationOfFFICHeaderExtractor';
-    					version: 'v0.1.0';
+    					className: 'BaselineOfFFICHeaderExtractor';
+    					"version: 'v0.1.0';"
     					repository: 'github://marianopeck/FFICHeaderExtractor:master/repository' ]
 				]
