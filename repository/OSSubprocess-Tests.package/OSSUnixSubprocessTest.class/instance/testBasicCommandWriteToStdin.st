@@ -11,6 +11,7 @@ testBasicCommandWriteToStdin
 	command run.
 	command stdinStream 
 		nextPutAll: string;
+		flush;
 		close.
 	command waitForExit.
 	stdOutString := command stdoutStream upToEnd.
