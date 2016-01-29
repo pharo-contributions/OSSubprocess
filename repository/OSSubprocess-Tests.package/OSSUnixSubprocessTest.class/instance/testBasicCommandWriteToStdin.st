@@ -4,7 +4,7 @@ testBasicCommandWriteToStdin
 	streamsInfo := self getStreamsInfoForRunningTest.
 	string := 'this is a test shat should have been printed in the stdout'.
 	command := self newCommand
-					command: '/bin/cat';
+					command: 'cat';
 					redirectStdin;
 					redirectStdout.
 					
