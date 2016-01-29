@@ -1,5 +1,31 @@
 # Change Log
 
+## [Unreleased](https://github.com/marianopeck/OSSubprocess/tree/HEAD)
+
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.0...HEAD)
+
+**Implemented enhancements:**
+
+- Added Travis CI integration
+- Added dependency to [FFICHeaderExtractor](https://github.com/marianopeck/FFICHeaderExtractor), needed by issue [\#15](https://github.com/marianopeck/OSSubprocess/issues/15)
+
+**Closed issues:**
+
+- Use FFICHeaderExtractor to minimize usage of OSProcss [\#15](https://github.com/marianopeck/OSSubprocess/issues/15)
+
+**Merged pull requests:**
+
+- Typos in comments and a method name [\#14](https://github.com/marianopeck/OSSubprocess/pull/14) ([cdlm](https://github.com/cdlm))
+
+**Fixed bugs:**
+
+- Fix random test failures that used `fork`. 
+
+**Documentation updates**
+
+- Re-organization of the main README
+- Added section for [Future Work](https://github.com/marianopeck/OSSubprocess#future-work)
+- Added section for [Running Tests](https://github.com/marianopeck/OSSubprocess#running-the-tests)
 
 
 ## [v0.2.0](https://github.com/marianopeck/OSSubprocess/tree/v0.2.0) (2016-01-19)
