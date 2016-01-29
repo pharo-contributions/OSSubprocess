@@ -14,6 +14,7 @@ testBasicCommandWriteToStdin
 	command run.
 	stdinStream close. 
 	command waitForExit.
+	command stdoutStream reset. 
 	stdOutString := command stdoutStream upToEnd.
 	command closeAndCleanStreams.
 	self assert: command isSuccess.
