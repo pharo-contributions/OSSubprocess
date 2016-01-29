@@ -4,16 +4,15 @@ testBasicCommandWriteToStdin
 	streamsInfo := self getStreamsInfoForRunningTest.
 	string := 'this is a test shat should have been printed in the stdout'.
 	command := self newCommand
-					command: 'cat';
+					command: '/bin/cat';
+					arguments: #('-u');
 					redirectStdin;
 					redirectStdout.
-
+					
+	command run.
 	command stdinStream 
 		nextPutAll: string;
-		flush;
-		close.					
-	command run.
-
+		close.
 	command waitForExit.
 	stdOutString := command stdoutStream upToEnd.
 	command closeAndCleanStreams.
