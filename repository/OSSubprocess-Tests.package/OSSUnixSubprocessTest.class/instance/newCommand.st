@@ -1,8 +1,10 @@
 helpers
 newCommand
-	| command |
-	command := self commandClass new.
-	command defaultReadStreamCreationBlock: [ OSSUnixSubprocess createTempFileToBeUsedAsReadStreamOn: '/tmp' ].
-	command defaultWriteStreamCreationBlock: [ OSSUnixSubprocess createTempFileToBeUsedAsWriteStreamOn: '/tmp' ].
-	^ command 
+	
+	^ self commandClass new
+			"For pipes, we can use a pipe for both reading or writing"
+			defaultReadStreamCreationBlock: [self systemAccessor makeBlockingPipe];
+			defaultWriteStreamCreationBlock: [self systemAccessor makeNonBlockingPipe];
+			yourself 
+	
 	

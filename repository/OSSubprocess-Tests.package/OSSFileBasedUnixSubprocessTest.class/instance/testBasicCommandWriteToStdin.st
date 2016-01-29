@@ -1,17 +1,18 @@
-tests - streams
+tests
 testBasicCommandWriteToStdin
-	| command stdOutString string streamsInfo | 
+	| command stdOutString string streamsInfo stdinStream | 
 	streamsInfo := self getStreamsInfoForRunningTest.
+	stdinStream := OSSUnixSubprocess createTempFileToBeUsedAsReadStreamOn: '/tmp'. 
 	string := 'this is a test shat should have been printed in the stdout'.
+	stdinStream 
+		nextPutAll: string;
+		reopen.
 	command := self newCommand
 					command: '/bin/cat';
-					redirectStdin;
-					redirectStdout.
-					
+					redirectStdout;
+					redirectStdinTo: stdinStream.		
 	command run.
-	command stdinStream 
-		nextPutAll: string;
-		close.
+	stdinStream close. 
 	command waitForExit.
 	stdOutString := command stdoutStream upToEnd.
 	command closeAndCleanStreams.
