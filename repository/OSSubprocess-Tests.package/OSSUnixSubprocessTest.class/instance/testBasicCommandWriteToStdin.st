@@ -5,11 +5,11 @@ testBasicCommandWriteToStdin
 	string := 'this is a test shat should have been printed in the stdout'.
 	command := self newCommand
 					command: '/bin/cat';
-					arguments: #('-u');
 					redirectStdin;
 					redirectStdout.
 					
 	command run.
+	(Delay forSeconds: 2) wait. 
 	command stdinStream 
 		nextPutAll: string;
 		close.
