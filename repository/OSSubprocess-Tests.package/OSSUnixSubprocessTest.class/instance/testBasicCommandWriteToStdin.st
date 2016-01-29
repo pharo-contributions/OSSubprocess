@@ -7,12 +7,13 @@ testBasicCommandWriteToStdin
 					command: 'cat';
 					redirectStdin;
 					redirectStdout.
-					
-	command run.
+
 	command stdinStream 
 		nextPutAll: string;
 		flush;
-		close.
+		close.					
+	command run.
+
 	command waitForExit.
 	stdOutString := command stdoutStream upToEnd.
 	command closeAndCleanStreams.
