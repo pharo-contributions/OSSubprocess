@@ -172,7 +172,9 @@ As we said before, both regular files or pipes can be used for mapping standard 
 
 > **Important:** For regular files, you **must** use instances of `StandardFileStream` since we have some problemas when using instances of `MultiByteFileStream`. So... try not to use the `FileSystem` library for creating file streams but rather `StandardFileStream` directly. 
 
-But the user can decide to use one or another. Pipes are normally faster since they run in memory. On the contrary, files may do I/0 operations even with caches (at least creating and deleting the file). With pipes you do not have to handle the deletion of the files as you do with regular files. You can read more about "regular files vs pipes" in the internet and come yourself to a conclusion. 
+The user can decide to use one or another. Pipes are normally faster since they run in memory. On the contrary, files may do I/0 operations even with caches (at least creating and deleting the file). With pipes you do not have to handle the deletion of the files as you do with regular files. You can read more about "regular files vs pipes" in the internet and come yourself to a conclusion. 
+
+> **Important** We have found some problems when using regular files for the `stdin`. While we do not stricty forbid that, we recommend you do so only if you know very well what you are doing. Otherwise, use blocking pipes for `stdin` (default behavior). 
 
 There is only one problem with pipes that you should be aware of and it's the fact that you may get a deadlock in certain situations. See [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting) for more details. 
 
@@ -543,7 +545,7 @@ OSSUnixSubprocess new
 
 
 ##Running the tests
-You need to run the tests of the package `OSSubprocess-Tests`. The current test coverage is about 65%.
+You need to run the tests of the package `OSSubprocess-Tests`. The current test coverage is about 65%. You may want to take a look to our [Travis CI integration](https://travis-ci.org/marianopeck/OSSubprocess/).
 
 
 ## Contributing
@@ -583,7 +585,6 @@ Besides the [issues](https://github.com/marianopeck/OSSubprocess/issues), the fo
 * Experiment with a VM plugin with a single `forkAndExec` kind of primitive (based on OSProcess one) and avoid using `posix_spawn()` family of functions.
 * Experiment with a Windows support by calling via FFI to `CreateProcess()`. Note there is a VM plugin called [ProcessorWrapper](http://leves.web.elte.hu/ProcessWrapper/) that wraps such a function. So we can base our work from it. 
 * Implement a pipeline at Pharo level. That is, to be able to create multiple instances of `OSSUnixSubprocess` which we will be piped each other. We can base our work in OSProcess `ProxyPipeline`.
-* Add this project to Pharo CI or Travis
 
 ## Authors
 
