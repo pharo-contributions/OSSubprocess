@@ -10,7 +10,7 @@ testPwd
 		].
 	
 	(FileSystem workingDirectory / 'testing') ensureCreateDirectory.
-	File openForWriteFileNamed: (FileSystem workingDirectory / 'testing' / 'testPwd.deleteme') fullName.
+	(File openForWriteFileNamed: (FileSystem workingDirectory / 'testing' / 'testPwd.deleteme') fullName) close.
 	
 	self newCommand
 		command: '/bin/ls';

@@ -3,7 +3,7 @@ ppidOf: childPid
 	"Answers the parent pid (ppid) of the childPid
 	"
 	| tmpFileName openFilesNumber |
-	tmpFileName := '/tmp/ppidOf-' , UUID new printString.
+	tmpFileName := (FileSystem workingDirectory / ' ppidof-' , UUID new printString) fullName.
 	tmpFileName asFileReference ensureDelete.
 	Transcript show: tmpFileName; cr.
 	self systemAccessor system: ('ps -p ', childPid , ' -o ppid=').

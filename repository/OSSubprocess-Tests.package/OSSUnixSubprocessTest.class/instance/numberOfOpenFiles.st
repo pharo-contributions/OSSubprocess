@@ -5,7 +5,7 @@ numberOfOpenFiles
 	This should work in most Unix-like and Linux
 	"
 	| tmpFileName openFilesNumber |
-	tmpFileName := '/tmp/openFilesByPharoVM-' , UUID new printString.
+	tmpFileName := (FileSystem workingDirectory / ' openFilesByPharoVM-' , UUID new printString) fullName.
 	tmpFileName asFileReference ensureDelete.
 	self systemAccessor system: ('lsof -p ', OSSVMProcess vmProcess pid printString, ' | wc -l  > ', tmpFileName, ' 2>&1').
 	openFilesNumber := tmpFileName asFileReference readStreamDo: [ :str |
