@@ -1,33 +1,19 @@
 tests - pwd
 testPwd
-	| oldLs newLs | 
+	| oldPwd | 
 
+	oldPwd := self systemAccessor getcwd.
 	(FileSystem workingDirectory / 'testing') ensureCreateDirectory.
 	
 	self newCommand
-		command: '/bin/ls';
-		redirectStdout;
-		runAndWaitOnExitDo: [ :command :outString |
-			oldLs := outString. 				
-		].
-
-	self newCommand
-		command: '/bin/ls';
+		shellCommand: 'pwd';
 		pwd: (FileSystem workingDirectory / 'testing') fullName;
 		redirectStdout;
 		runAndWaitOnExitDo: [ :command :outString |
-			newLs := outString. 				
+			self assert: outString trimmed equals: (FileSystem workingDirectory / 'testing') fullName.	
 		].
-	
-	self deny: oldLs = newLs.	
-	
-	"Parent should have back it's original cwd"
-	self newCommand
-		command: '/bin/ls';
-		redirectStdout;
-		runAndWaitOnExitDo: [ :command :outString  |
-			self assert: oldLs equals: outString
-		].
+ 
+	self assert: self systemAccessor getcwd trimmed equals: oldPwd trimmed.
 		 
 	(FileSystem workingDirectory / 'testing' ) ensureDelete.
 	
