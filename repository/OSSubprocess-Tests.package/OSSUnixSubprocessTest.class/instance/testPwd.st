@@ -1,6 +1,8 @@
 tests - pwd
 testPwd
 	| oldLs newLs | 
+
+	(FileSystem workingDirectory / 'testing') ensureCreateDirectory.
 	
 	self newCommand
 		command: '/bin/ls';
@@ -8,11 +10,7 @@ testPwd
 		runAndWaitOnExitDo: [ :command :outString |
 			oldLs := outString. 				
 		].
-	
-	(FileSystem workingDirectory / 'testing') ensureCreateDirectory.
 
-"	(File openForWriteFileNamed: (FileSystem workingDirectory / 'testing' / 'testPwd.deleteme') fullName) close.
-"	
 	self newCommand
 		command: '/bin/ls';
 		pwd: (FileSystem workingDirectory / 'testing') fullName;
@@ -20,14 +18,8 @@ testPwd
 		runAndWaitOnExitDo: [ :command :outString |
 			newLs := outString. 				
 		].
-	"
-	
-	(FileSystem workingDirectory / 'testing' / 'testPwd.deleteme') ensureDelete.	
-	(FileSystem workingDirectory / 'testing' ) ensureDelete.	 "
 	
 	self deny: oldLs = newLs.	
-	"self assert: (newLs includesSubstring: 'testPwd.deleteme').
-	"
 	
 	"Parent should have back it's original cwd"
 	self newCommand
@@ -37,5 +29,5 @@ testPwd
 			self assert: oldLs equals: outString
 		].
 		 
-	
+	(FileSystem workingDirectory / 'testing' ) ensureDelete.
 	
