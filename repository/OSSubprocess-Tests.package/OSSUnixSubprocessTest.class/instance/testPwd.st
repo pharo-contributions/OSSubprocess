@@ -19,8 +19,9 @@ testPwd
 		runAndWaitOnExitDo: [ :command :outString |
 			newLs := outString. 				
 		].
-		 
+	
 	(FileSystem workingDirectory / 'testing' / 'testPwd.deleteme') ensureDelete.	
+	(FileSystem workingDirectory / 'testing' ) ensureDelete.	 
 	
 	self deny: oldLs = newLs.	
 	self assert: (newLs includesSubstring: 'testPwd.deleteme').

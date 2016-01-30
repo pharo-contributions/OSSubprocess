@@ -10,7 +10,7 @@ testCommandTryToWriteToStdoutButHasNoReader
 	command stdoutStream closeReader.				
 	command waitForExit.
 	"This should be a SIGPIPE because there is no reader opened for the pipe and someone is trying to write to it. " 
-	errString := command stderrStream upToEnd.
+	errString := command stderrStream upToEndOfFile.
 	self assert: command exitStatusInterpreter exitStatus > 0. "It ended with error".
 	"Ideally I would also add this assert, but it seems not all OS write this on stderr. For example,
 	OSX does write it, while Linux does not."

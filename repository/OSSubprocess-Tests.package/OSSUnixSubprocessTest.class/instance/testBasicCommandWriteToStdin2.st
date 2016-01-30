@@ -14,7 +14,7 @@ testBasicCommandWriteToStdin2
 			close.
 
 	command waitForExit.
-	outString := command stdoutStream upToEnd. 
+	outString := command stdoutStream upToEndOfFile. 
 	command closeAndCleanStreams.				
 	self assert: command isSuccess.
 	"It's hard to test the output of wc crossplatform..."

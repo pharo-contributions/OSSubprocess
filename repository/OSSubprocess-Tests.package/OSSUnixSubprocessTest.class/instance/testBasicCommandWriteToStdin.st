@@ -13,7 +13,7 @@ testBasicCommandWriteToStdin
 		nextPutAll: string;
 		close.
 	command waitForExit.
-	stdOutString := command stdoutStream upToEnd.
+	stdOutString := command stdoutStream upToEndOfFile.
 	command closeAndCleanStreams.
 	self assert: command isSuccess.
 	self assert: stdOutString equals: string.
