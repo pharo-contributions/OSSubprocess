@@ -1,9 +1,7 @@
 *OSSubprocess
 upToEndOfFile
-	"Answer a subcollection from the current access position through
-	the last element of the receiver.  Use #atEndOfFile to determine end
-	of file status with feof(), required for reliable end of file test on
-	OS pipes."
+	"Answer a subcollection from the current access position through the last element of the receiver.  Use #atEndOfFile to determine end of file status with feof(), required for reliable end of file test on OS pipes or in files that could have been written by another (child) process different than the VM process."
+	
 
 	| newStream buffer |
 	self closed 
