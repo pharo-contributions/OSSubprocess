@@ -169,11 +169,13 @@ To conclude, we use a system call to create an OS pipe. At Pharo level we repres
 #### Regular files vs pipes
 As we said before, both regular files or pipes can be used for mapping standard streams (`stdin`, `stdout` and `stderr`) and OSSubprocess supports both and manages them polymorphically thanks to `OSSPipe` and `OSSAttachableFileStream`.
 
-> **Important:** For regular files, you **must** use instances of `StandardFileStream` since we have some problemas when using instances of `MultiByteFileStream`. So... try not to use the `FileSystem` library for creating file streams but rather `StandardFileStream` directly.
+> **Important:** For regular files, you **must** use instances of `StandardFileStream` since we have some problems when using instances of `MultiByteFileStream`. So... try not to use the `FileSystem` library for creating file streams but rather `StandardFileStream` directly.
 
 The user can decide to use one or another. Pipes are normally faster since they run in memory. On the contrary, files may do I/0 operations even with caches (at least creating and deleting the file). With pipes you do not have to handle the deletion of the files as you do with regular files. You can read more about "regular files vs pipes" in the internet and come yourself to a conclusion.
 
-> **Important** We have found some problems when using regular files for the `stdin`. While we do not stricty forbid that, we recommend you do so only if you know very well what you are doing. Otherwise, use blocking pipes for `stdin` (default behavior).
+> **Important** We have found some problems when using regular files for the `stdin`. While we do not strictly forbid that, we recommend you do so only if you know very well what you are doing. Otherwise, use blocking pipes for `stdin` (default behavior).
+
+> **Important** Our recommendation as a rule of thumb is to always use pipes rather than regular files. That is, none-blocking pipes for `stdout` and `stderr` and blocking pipes for `stdin`.
 
 There is only one problem with pipes that you should be aware of and it's the fact that you may get a deadlock in certain situations. See [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting) for more details.
 
@@ -193,16 +195,16 @@ process := OSSUnixSubprocess new
 Halt halt.			
 process runAndWait.  
 process isSuccess
-	ifTrue: [ Transcript show: 'Command exited correctly with output: ', process stdoutStream upToEnd. ]
+	ifTrue: [ Transcript show: 'Command exited correctly with output: ', process stdoutStream upToEndOfFile. ]
 	ifFalse: [
 		"OSSUnixProcessExitStatus has a nice #printOn: "
 		Transcript show: 'Command exit with error status: ', process exitStatusInterpreter printString; cr.
-		Transcript show: 'Stderr contents: ', process stderrStream upToEnd.
+		Transcript show: 'Stderr contents: ', process stderrStream upToEndOfFile.
 	].
 process closeAndCleanStreams.
 ```
 
-There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEnd` and closing and cleaning streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. The reason we are not using `#runAndWaitOnExitDo:` and instead the low level API, is to have a `Halt halt` while running the process so that you can confirm yourself the existence of the files used for the streams, as explained next.
+There are many things to explain in this example. First of all, we are not using the API `#runAndWaitOnExitDo:` and so certain things must be done manually (like retrieving the contents of the streams via `#upToEndOfFile` and closing and cleaning streams with `#closeAndCleanStreams`). Now you get a better idea of what `#runAndWaitOnExitDo:` does automatically for you. The reason we are not using `#runAndWaitOnExitDo:` and instead the low level API, is to have a `Halt halt` while running the process so that you can confirm yourself the existence of the files used for the streams, as explained next.
 
 With the methods `#redirectStdinTo:`, `#redirectStdoutTo:` and `#redirectStdoutTo:` the user is able to set a custom stream for each standard stream. The received stream could be either a `StandardFileStream` (as is the result of `StandardFileStream forceNewFileNamed: '/tmp/customStderr.txt'`) or a `OSSPipe` (as is the result of `OSSVMProcess vmProcess systemAccessor makeNonBlockingPipe`).
 
@@ -230,7 +232,7 @@ process stdinStream
 		nextPutAll: 'we again!';
 		close.		
 process waitForExit.
-process stdoutStream upToEnd inspect.
+process stdoutStream upToEndOfFile inspect.
 process closeAndCleanStreams.
 ```
 
@@ -311,7 +313,7 @@ OSSUnixSubprocess new
 Of course, the main disadvantage of the polling is the cost of it at the language level. The waiting on a semaphore (as with the `SIGCHLD`) has no cost.  
 
 ##### Which waiting to use?
-If you are using pipes and you are not sure about how much the child process could write in the streams, then we recommend the polling approach (with `retrievingStreams:` with `true`).
+If you are using pipes (which is our recommendation) and you are not sure about how much the child process could write in the streams, then we recommend the polling approach (with `retrievingStreams:` with `true`).
 
 If you are using pipes and you know the process will not write much, then you can use both approaches. If you want to be sure 100% to never ever get a zombie or related problem, then we think the polling approach is a bit more reliable. If you can live with such a possibility, then maybe the `SIGCHLD` approach could work too.
 
@@ -360,6 +362,8 @@ If you run above code, you will see how a Pharo Playground is opened and every h
 * The user must explicitly close streams. It could be inside the `onExitDo:` or elsewhere, but must be done. We cannot automatically close streams because we don't know if the user has retrieved their contents or not (we cannot know what the user will do in the `doing:` closure).
 * If using pipes, the user must be sure to either retrieve steam contents as part of the `doing:` block or else make sure the process will not be writing much on them. Otherwise, you may hit the deadlock mentioned in [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting).
 * Contrary to regular files, the read of a pipe **consumes** the read. That is, you cannot read more than once a particular content. So for example, say you read from `stdout` in the `doing:` closure and then in `onExitDo:` you would like to do something with the total of the `stdout` (in this example, print it in the `Transcript`). If you read from `stdout` in `onExitDo:`, in this example, you will get nothing, because it was already read and consumed. To avoid loosing what you read (in case you need it later), you must store it somewhere yourself (in this example in the temp variable `totalStdout`).
+* So far in this guide we have always used `upToEndOfFile` to retrieve streams contents. Sending such message is ideal once the process has exited. But if it is running and still writing into the standard streams, then the message to send is `upToEnd` which simply reads all available data in the stream. And that does not necessary mean the end of the file or the pipe (the child process may have written even more on it).
+* For this type of "Processing streams while running" we strongly recommend pipes over regular files. 
 * If we run above code without the `fork` it will work but the Pharo UI will not be refreshed and it won't display the new Playground until the process has stopped. This could be considered as an example of asynchronous calls as explained in [Asynchronous runs](#asynchronous-runs).
 
 

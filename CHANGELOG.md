@@ -1,17 +1,37 @@
 # Change Log
 
+
 ## [Unreleased](https://github.com/marianopeck/OSSubprocess/tree/HEAD)
 
-[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.0...HEAD)
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.1...HEAD)
+
+**Implemented enhancements:**
+
+**Closed issues:**
+
+**Merged pull requests:**
+
+**Fixed bugs:**
+
+
+**Documentation updates**
+
+
+
+## [v0.2.1](https://github.com/marianopeck/OSSubprocess/tree/v0.2.1) (2016-01-31)
+
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.0...v0.2.1)
 
 **Implemented enhancements:**
 
 - Added Travis CI integration
 - Added dependency to [FFICHeaderExtractor](https://github.com/marianopeck/FFICHeaderExtractor), needed by issue [\#15](https://github.com/marianopeck/OSSubprocess/issues/15)
+- Update to new `registerToolClassNamed:` mechanisim rather than `addToStartUpList:` and `addToShutDownList:` as for Pharo 50558.
 
 **Closed issues:**
 
 - Use FFICHeaderExtractor to minimize usage of OSProcss [\#15](https://github.com/marianopeck/OSSubprocess/issues/15)
+- `upToEnd` may fail when child process is writing [\#16](https://github.com/marianopeck/OSSubprocess/issues/16)
 
 **Merged pull requests:**
 
@@ -19,7 +39,7 @@
 
 **Fixed bugs:**
 
-- Fix random test failures that used `fork`. 
+- Fix random test failures that used `fork`.
 
 **Documentation updates**
 
@@ -63,4 +83,3 @@
 
 ## [v0.1.4](https://github.com/marianopeck/OSSubprocess/tree/v0.1.4) (2016-01-14)
 First milestone release.
-
