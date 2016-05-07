@@ -1,9 +1,8 @@
 # Change Log
 
-
 ## [Unreleased](https://github.com/marianopeck/OSSubprocess/tree/HEAD)
 
-[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.1...HEAD)
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.2...HEAD)
 
 **Implemented enhancements:**
 
@@ -13,9 +12,21 @@
 
 **Fixed bugs:**
 
-
 **Documentation updates**
 
+
+
+## [v0.2.2](https://github.com/marianopeck/OSSubprocess/tree/v0.2.2) (2016-05-07)
+
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.1...v0.2.2)
+
+**Closed issues:**
+
+- Problem trying to terminate already terminated childWatcher on system startup [\#17](https://github.com/marianopeck/OSSubprocess/issues/17)
+
+**Fixed bugs:**
+
+- Do not use "v" as part of the Metacello version string so that this project can be used as a dependency via Versionner until the bug is fixed in Metacello [\#392](https://github.com/dalehenrich/metacello-work/issues/392)
 
 
 ## [v0.2.1](https://github.com/marianopeck/OSSubprocess/tree/v0.2.1) (2016-01-31)
@@ -30,7 +41,7 @@
 
 **Closed issues:**
 
-- Use FFICHeaderExtractor to minimize usage of OSProcss [\#15](https://github.com/marianopeck/OSSubprocess/issues/15)
+- Use FFICHeaderExtractor to minimize usage of OSProcess [\#15](https://github.com/marianopeck/OSSubprocess/issues/15)
 - `upToEnd` may fail when child process is writing [\#16](https://github.com/marianopeck/OSSubprocess/issues/16)
 
 **Merged pull requests:**
