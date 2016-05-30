@@ -2,7 +2,7 @@
 
 ## [Unreleased](https://github.com/marianopeck/OSSubprocess/tree/HEAD)
 
-[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.3...HEAD)
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.4...HEAD)
 
 **Implemented enhancements:**
 
