@@ -1,16 +1,12 @@
-language: c
+language: smalltalk
+sudo: false
+
+# Select operating system(s)
 os:
   - linux
   - osx
-addons:
-  apt:
-    packages:
-      # General needed packages for Pharo
-      - lib32asound2
-      - lib32z1
-      - lib32bz2-1.0
-      - libssl1.0.0:i386
-script: 
-  - scripts/run-tests.sh  
-after_failure:
-  - cat PharoDebug.log
+
+# Select compatible Smalltalk image(s)
+smalltalk:
+  - Pharo-alpha
+  - Pharo-5.0
