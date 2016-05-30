@@ -2,7 +2,7 @@
 
 ## [Unreleased](https://github.com/marianopeck/OSSubprocess/tree/HEAD)
 
-[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.2...HEAD)
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.3...HEAD)
 
 **Implemented enhancements:**
 
@@ -13,6 +13,20 @@
 **Fixed bugs:**
 
 **Documentation updates**
+
+
+
+## [v0.2.3](https://github.com/marianopeck/OSSubprocess/tree/v0.2.3) (2016-05-30)
+
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.2...v0.2.3)
+
+**Implemented enhancements:**
+
+- Rename `pwd:` to `workingDirectory:` [\#18](https://github.com/marianopeck/OSSubprocess/issues/18)
+
+**Closed issues:**
+
+- Childs processes never finished (Pharo delaySchedulerClass bug) [\#19](https://github.com/marianopeck/OSSubprocess/issues/19)
 
 
 ## [v0.2.2](https://github.com/marianopeck/OSSubprocess/tree/v0.2.2) (2016-05-07)
