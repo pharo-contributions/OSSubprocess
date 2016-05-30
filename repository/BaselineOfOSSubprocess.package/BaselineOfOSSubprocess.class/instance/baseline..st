@@ -2,8 +2,10 @@ baseline
 baseline: spec
 	<baseline>
 	spec
-		for: #common
+		for: #pharo
 		do: [ 
+			spec postLoadDoIt: #initializeForPharo.	
+				
 			spec
 				package: 'OSSubprocess' with: [ spec requires: 'FFICHeaderExtractor' ];
 				package: 'OSSubprocess-Tests' with: [ spec requires: 'OSSubprocess' ].
