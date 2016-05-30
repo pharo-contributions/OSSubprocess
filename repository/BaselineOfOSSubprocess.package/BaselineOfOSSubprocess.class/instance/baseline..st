@@ -4,7 +4,7 @@ baseline: spec
 	spec
 		for: #pharo
 		do: [ 
-			spec postLoadDoIt: #initializeForPharo.	
+			spec preLoadDoIt: #initializeForPharo.	
 				
 			spec
 				package: 'OSSubprocess' with: [ spec requires: 'FFICHeaderExtractor' ];
