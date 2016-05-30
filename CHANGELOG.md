@@ -16,6 +16,19 @@
 
 
 
+## [v0.2.4](https://github.com/marianopeck/OSSubprocess/tree/v0.2.4) (2016-05-30)
+
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.3...v0.2.4)
+
+**Implemented enhancements:**
+
+- Migrate from our custom Travis CI scripts to [smalltalk-ci](https://github.com/hpi-swa/smalltalkCI)
+**Closed issues:**
+
+- Childs processes never finished (Pharo delaySchedulerClass bug) [NOW FOR REAL] [\#19](https://github.com/marianopeck/OSSubprocess/issues/19)
+
+
+
 ## [v0.2.3](https://github.com/marianopeck/OSSubprocess/tree/v0.2.3) (2016-05-30)
 
 [Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.2...v0.2.3)
