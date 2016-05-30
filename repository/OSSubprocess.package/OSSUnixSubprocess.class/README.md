@@ -6,7 +6,7 @@ This class also allows you to define streams  (either StandardFileStream or OSSP
 
 It also provides code for checking the status or waiting the exit of the OS process. Different strategies are supported (SIGCHLD based or delay polling). See the different methods in the protocol 'running'.' In addition, once the subprocess was started, the subprocess instance is registered in OSSVMProcess which takes care of handling the child death via the childWatcher. 
 
-Some additional features involved env variable settings (environmentAt:put:) for the child, defining a working directory (#pwd: ), facilities for shell commands, etc.
+Some additional features involved env variable settings (environmentAt:put:) for the child, defining a working directory (#workingDirectory: ), facilities for shell commands, etc.
 
 To achieve it's goals, this class relies on OSSUnixSystemAccessor for accessing Unix system calls. 
 
@@ -21,7 +21,7 @@ OSSUnixSubprocess new
 	redirectStdout; "automatic default stream creation...above closure."
 	redirectStderrTo: '/tmp/stderrFile.txt' asFileReference writeStream; "custom stream creation"
 	createMissingStandardStreams: false; "therefore won't create stdin stream"
-	pwd: '/home'; "set working directory for child"
+	workingDirectory: '/home'; "set working directory for child"
 	environmentAt: 'HOME' put: '/tmp/home';
 	addAllEnvVariablesFromParentWithoutOverride; "we will inherit then all but $HOME"
 	runAndWaitOnExitDo: [ :command :outString :errString |

@@ -11,13 +11,13 @@ internalRun
 	pidtPointer := ExternalAddress allocate: self systemAccessor sizeOfPointer.
 	self registerPointer: pidtPointer.
 	self closeAndDup2FilesActions.
-	pwd 
+	workingDirectory 
 		ifNil: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ] 
 		ifNotNil: [ 
-			"This is a hack in order to support a #pwd: kind of feature. 
+			"This is a hack in order to support a #workingDirectory: kind of feature. 
 			Please read the comment of lockCwdWithValue:during: "
 			OSSVMProcess vmProcess
-				lockCwdWithValue: pwd 
+				lockCwdWithValue: workingDirectory 
 				during: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ]
 		].
 	(returnValue > 0) 

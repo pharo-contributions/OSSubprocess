@@ -4,7 +4,7 @@
 		 ],
 	"classvars" : [
 		 ],
-	"commentStamp" : "MarianoMartinezPeck 1/14/2016 09:45",
+	"commentStamp" : "MarianoMartinezPeck 5/30/2016 11:25",
 	"instvars" : [
 		"command",
 		"arguments",
@@ -12,7 +12,6 @@
 		"posixSpawnFileActionsT",
 		"exitStatus",
 		"envVariables",
-		"pwd",
 		"stderrStream",
 		"stdinStream",
 		"stdoutStream",
@@ -24,7 +23,8 @@
 		"retrievedStderr",
 		"mutexForSigchld",
 		"shouldContinueWaiting",
-		"terminateOnShutdown" ],
+		"terminateOnShutdown",
+		"workingDirectory" ],
 	"name" : "OSSUnixSubprocess",
 	"pools" : [
 		"LibCSignalSharedPool" ],
