@@ -363,7 +363,7 @@ If you run above code, you will see how a Pharo Playground is opened and every h
 * If using pipes, the user must be sure to either retrieve steam contents as part of the `doing:` block or else make sure the process will not be writing much on them. Otherwise, you may hit the deadlock mentioned in [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting).
 * Contrary to regular files, the read of a pipe **consumes** the read. That is, you cannot read more than once a particular content. So for example, say you read from `stdout` in the `doing:` closure and then in `onExitDo:` you would like to do something with the total of the `stdout` (in this example, print it in the `Transcript`). If you read from `stdout` in `onExitDo:`, in this example, you will get nothing, because it was already read and consumed. To avoid loosing what you read (in case you need it later), you must store it somewhere yourself (in this example in the temp variable `totalStdout`).
 * So far in this guide we have always used `upToEndOfFile` to retrieve streams contents. Sending such message is ideal once the process has exited. But if it is running and still writing into the standard streams, then the message to send is `upToEnd` which simply reads all available data in the stream. And that does not necessary mean the end of the file or the pipe (the child process may have written even more on it).
-* For this type of "Processing streams while running" we strongly recommend pipes over regular files. 
+* For this type of "Processing streams while running" we strongly recommend pipes over regular files.
 * If we run above code without the `fork` it will work but the Pharo UI will not be refreshed and it won't display the new Playground until the process has stopped. This could be considered as an example of asynchronous calls as explained in [Asynchronous runs](#asynchronous-runs).
 
 
@@ -529,13 +529,13 @@ Of course, `outString` is empty now because the shell has redirected it to a par
 ### Setting working directory
 Another common need when spawning processes is to set a working directory (`PWD`) for them. If none is set, by default, they inherit the working directory of the parent. Imagine the Pharo image was launched from a terminal while `PWD` was `/Users/mariano`. Now imagine I want to spawn a process for a git commit for the directory `/Users/mariano/git/OSSubprocess`. For this to work, I must specify the working directory for the child. Otherwise, the `commit` will be triggered in `/Users/mariano`.
 
-To support this, we provide the method `#pwd:` as this example shows:
+To support this, we provide the method `#workingDirectory:` as this example shows:
 
 ```Smalltalk
 OSSUnixSubprocess new
 	command: '/usr/bin/git';
 	arguments: #('commit' '-m' 'testing');
-	pwd: '/Users/mariano/git/OSSubprocess';
+	workingDirectory: '/Users/mariano/git/OSSubprocess';
 	redirectStdout;
 	redirectStderr;
 	runAndWaitOnExitDo: [ :process :outString :errString |
@@ -544,7 +544,7 @@ OSSUnixSubprocess new
 		]
 ```
 
-> The implementation of `#pwd:` is quite rudimentary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in [Setting environment variables](#setting-environment-variables).
+> The implementation of `#workingDirectory::` is quite rudimentary and bad from performance point of view (read the method comment for details). If the program you are executing allows you to specify the path, then we recommend you to do so. For example, in this case, `git` allow us to specify the path with the argument `-C`. That approach would be better, as shown in [Setting environment variables](#setting-environment-variables).
 
 
 ##Running the tests
