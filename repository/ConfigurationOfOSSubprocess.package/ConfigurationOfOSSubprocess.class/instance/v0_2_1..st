@@ -1,6 +1,6 @@
 versions
 v0_2_1: spec
-	<version: 'v0.2.1'>
+	<version: '0.2.1'>
 	
 	spec
 		for: #'common'
