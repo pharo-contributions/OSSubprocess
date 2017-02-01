@@ -1,0 +1,18 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"blockingPipe" : " 1/31/2017 19:00:18",
+		"nonBlockingPipe" : " 1/31/2017 19:00:18",
+		"readFromAndClose:writingTo:" : " 1/31/2017 19:00:18",
+		"systemAccessor" : " 1/31/2017 19:00:18",
+		"testBasicWriteAndRead" : " 1/31/2017 19:00:18",
+		"testBlocking" : " 1/31/2017 19:00:18",
+		"testBlockingPeek" : " 1/31/2017 19:00:18",
+		"testIsAtEndOfFile" : " 1/31/2017 19:00:18",
+		"testIsAtEndOfFile2" : " 1/31/2017 19:00:18",
+		"testNonBlocking" : " 1/31/2017 19:00:18",
+		"testNonBlockingPeek" : " 1/31/2017 19:00:18",
+		"testReadAfterClosedReadEnd" : " 1/31/2017 19:00:18",
+		"testWriteAfterClosedWriteEnd" : " 1/31/2017 19:00:18",
+		"writeStuffOnThenClose:" : " 1/31/2017 19:00:18" } }

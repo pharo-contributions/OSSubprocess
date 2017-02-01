@@ -1,0 +1,12 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"commandClass" : " 1/31/2017 19:00:18",
+		"newCommand" : " 1/31/2017 19:00:18",
+		"systemAccessor" : " 1/31/2017 19:00:18",
+		"testChangeDir" : " 1/31/2017 19:00:18",
+		"testChangeDirWithNonExistingDir" : " 1/31/2017 19:00:18",
+		"testChildrenCollectionsWithOneProcessBeforeAndAfter" : " 1/31/2017 19:00:18",
+		"testInitializeChildren" : " 1/31/2017 19:00:18",
+		"testPruneExitedChildrenAfter" : " 1/31/2017 19:00:18" } }

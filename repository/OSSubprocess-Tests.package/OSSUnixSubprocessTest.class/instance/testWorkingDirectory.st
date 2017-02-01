@@ -15,5 +15,5 @@ testWorkingDirectory
  
 	self assert: self systemAccessor getcwd trimmed equals: oldWorkingDirectory trimmed.
 		 
-	(FileSystem workingDirectory / 'testing' ) ensureDelete.
+	(FileSystem workingDirectory / 'testing') ensureDelete.
 	
