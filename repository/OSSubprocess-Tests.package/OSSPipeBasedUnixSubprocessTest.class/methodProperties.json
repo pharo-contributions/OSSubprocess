@@ -1,8 +1,0 @@
-{
-	"class" : {
-		 },
-	"instance" : {
-		"newCommand" : " 1/31/2017 19:00:18",
-		"testCommandTryToWriteToStdoutButHasNoReader" : " 1/31/2017 19:00:18",
-		"testReadingFromStdoutBlocksVM" : " 1/31/2017 19:00:18",
-		"testReadingFromStdoutDoesNotBlocksVM" : " 1/31/2017 19:00:18" } }
