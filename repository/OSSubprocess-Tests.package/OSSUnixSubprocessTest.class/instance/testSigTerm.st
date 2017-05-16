@@ -27,6 +27,6 @@ testSigTerm
 
 	(Delay forSeconds: 2) wait. 
 	process sigterm. 
-	(Delay forSeconds: 1) wait. 
+	(Delay forSeconds: 10) wait. 
 	self assert: exited.	
 	self assertStreamsInfoWithPrevious: streamsInfo.
