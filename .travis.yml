@@ -9,4 +9,5 @@ os:
 # Select compatible Smalltalk image(s)
 smalltalk:
   - Pharo-alpha
+  - Pharo-6.1
   - Pharo-5.0
