@@ -1,17 +1,16 @@
 {
-	"category" : "OSSubprocess",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "MarianoMartinezPeck 1/10/2016 23:41",
+	"super" : "Stream",
+	"category" : "OSSubprocess",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
 	"instvars" : [
 		"readBlocking",
 		"writer",
 		"reader",
-		"nextChar" ],
+		"nextChar"
+	],
 	"name" : "OSSPipe",
-	"pools" : [
-		 ],
-	"super" : "Stream",
-	"type" : "normal" }
+	"type" : "normal"
+}
