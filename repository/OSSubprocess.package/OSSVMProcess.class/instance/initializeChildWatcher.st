@@ -15,7 +15,7 @@ initializeChildWatcher
 				self sigChldSemaphore waitTimeoutMSecs: 1000.
 				processSynchronizationDelay wait. "Avoids lost signals in heavy process switching"
 				self updateActiveChildrenAndNotifyDead.
-				] repeat] newProcess.
+				] repeat] newProcess priority: Processor highIOPriority.
 
 		childWatcher resume.
 		"name selected to look reasonable in the process browser"

@@ -16,6 +16,9 @@ waitForExit
 	
 	Therefore, use this method (and all its senders) only when using FileStreams for the standard streams, 
 	when not defining standard streams at all, or when you know the command to be executed does not write much in stdout/stderr."
+
+	exitStatus ifNotNil: [ ^ exitStatus ].
+
 	mutexForSigchld := Semaphore new.
 	mutexForSigchld wait. 
 	^ exitStatus  
