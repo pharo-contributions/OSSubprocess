@@ -2,7 +2,7 @@
 
 ## [Unreleased](https://github.com/marianopeck/OSSubprocess/tree/HEAD)
 
-[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.4...HEAD)
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.5...HEAD)
 
 **Implemented enhancements:**
 
@@ -14,6 +14,19 @@
 
 **Documentation updates**
 
+
+## [v0.2.5](https://github.com/marianopeck/OSSubprocess/tree/v0.2.5)
+
+[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.4...v0.2.5)
+
+
+**Merged pull requests:**
+
+- Many enhancements [\#25](https://github.com/marianopeck/OSSubprocess/pull/25)
+
+**Documentation updates**
+
+- Added small comment on installation instructions about iTimer Linux VM issue. 
 
 
 ## [v0.2.4](https://github.com/marianopeck/OSSubprocess/tree/v0.2.4) (2016-05-30)
