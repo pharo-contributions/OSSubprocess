@@ -8,7 +8,7 @@ SmalltalkCISpec {
   ],
   #testing : [
     #include : {
-      #categories : [ 'OSSubprocess-Tests-Unit' ]
+      #categories : [ 'OSSubprocess-Tests-Stress' ]
     }
   ]
 }
