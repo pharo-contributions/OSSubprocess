@@ -17,8 +17,10 @@ waitForExitWithTimeout: aDuration
 	Therefore, use this method (and all its senders) only when using FileStreams for the standard streams, 
 	when not defining standard streams at all, or when you know the command to be executed does not write much in stdout/stderr."
 
+	| expired |
 	exitStatus ifNotNil: [ ^ exitStatus ].
 
 	mutexForSigchld := Semaphore new.
-	mutexForSigchld waitTimeoutMSecs: aDuration asMilliSeconds.
+	expired := mutexForSigchld waitTimeoutMSecs: aDuration asMilliSeconds.
+	expired ifTrue: [ OSSTimeout signal: 'Process not finished after ', aDuration asString ].
 	^ exitStatus  
