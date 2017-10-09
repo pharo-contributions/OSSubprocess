@@ -3,9 +3,12 @@ doTestProcessEventuallyFinishesForSeconds: aDuration
 
 	| command |
 	"We set the sunit test timeout to 2 times the sleep duration.
-	Otherwise default sunit test timeout is 1 minute."
-	self timeLimit: aDuration * 2.
-	
+	Otherwise default sunit test timeout is 1 minute.
+	This is for Pharo version >= 6.0"
+	(self respondsTo: #timeLimit:) ifTrue: [ 
+		self timeLimit: aDuration * 2.
+	].
+
 	command := self newCommand
 		command: '/bin/sleep';
 		arguments: { aDuration asSeconds asString };
