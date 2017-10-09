@@ -1,6 +1,6 @@
 {
 	"commentStamp" : "",
-	"super" : "Exception",
+	"super" : "Error",
 	"category" : "OSSubprocess",
 	"classinstvars" : [ ],
 	"pools" : [ ],
