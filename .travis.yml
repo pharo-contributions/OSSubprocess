@@ -1,32 +1,41 @@
 language: smalltalk
 sudo: false
-
-# Select operating system(s)
-os:
-  - linux
-  - osx
-
-# Select compatible Smalltalk image(s)
-smalltalk:
-  - Pharo-alpha
-  - Pharo-6.1
-  - Pharo-5.0
-  
-smalltalk_config:
-  - .smalltalk.ston
-  - .stress.smalltalk.ston
   
 matrix:
   include:
     - smalltalk: Pharo-alpha
       smalltalk_config: .smalltalk.ston
+	  os: linux
     - smalltalk: Pharo-6.1
       smalltalk_config: .smalltalk.ston
+	  os: linux
     - smalltalk: Pharo-5.0
       smalltalk_config: .smalltalk.ston
+	  os: linux
     - smalltalk: Pharo-alpha
       smalltalk_config: .stress.smalltalk.ston
+	  os: linux
     - smalltalk: Pharo-6.1
       smalltalk_config: .stress.smalltalk.ston
+	  os: linux
     - smalltalk: Pharo-5.0
       smalltalk_config: .stress.smalltalk.ston
+	  os: linux
+    - smalltalk: Pharo-alpha
+      smalltalk_config: .smalltalk.ston
+	  os: osx
+    - smalltalk: Pharo-6.1
+      smalltalk_config: .smalltalk.ston
+	  os: osx
+    - smalltalk: Pharo-5.0
+      smalltalk_config: .smalltalk.ston
+	  os: osx
+    - smalltalk: Pharo-alpha
+      smalltalk_config: .stress.smalltalk.ston
+	  os: osx
+    - smalltalk: Pharo-6.1
+      smalltalk_config: .stress.smalltalk.ston
+	  os: osx
+    - smalltalk: Pharo-5.0
+      smalltalk_config: .stress.smalltalk.ston
+	  os: osx
