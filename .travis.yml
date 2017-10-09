@@ -5,37 +5,37 @@ matrix:
   include:
     - smalltalk: Pharo-alpha
       smalltalk_config: .smalltalk.ston
-	  os: linux
+      os: linux
     - smalltalk: Pharo-6.1
       smalltalk_config: .smalltalk.ston
-	  os: linux
+      os: linux
     - smalltalk: Pharo-5.0
       smalltalk_config: .smalltalk.ston
-	  os: linux
+      os: linux
     - smalltalk: Pharo-alpha
       smalltalk_config: .stress.smalltalk.ston
-	  os: linux
+      os: linux
     - smalltalk: Pharo-6.1
       smalltalk_config: .stress.smalltalk.ston
-	  os: linux
+      os: linux
     - smalltalk: Pharo-5.0
       smalltalk_config: .stress.smalltalk.ston
-	  os: linux
+      os: linux
     - smalltalk: Pharo-alpha
       smalltalk_config: .smalltalk.ston
-	  os: osx
+      os: osx
     - smalltalk: Pharo-6.1
       smalltalk_config: .smalltalk.ston
-	  os: osx
+      os: osx
     - smalltalk: Pharo-5.0
       smalltalk_config: .smalltalk.ston
-	  os: osx
+      os: osx
     - smalltalk: Pharo-alpha
       smalltalk_config: .stress.smalltalk.ston
-	  os: osx
+      os: osx
     - smalltalk: Pharo-6.1
       smalltalk_config: .stress.smalltalk.ston
-	  os: osx
+      os: osx
     - smalltalk: Pharo-5.0
       smalltalk_config: .stress.smalltalk.ston
-	  os: osx
+      os: osx
