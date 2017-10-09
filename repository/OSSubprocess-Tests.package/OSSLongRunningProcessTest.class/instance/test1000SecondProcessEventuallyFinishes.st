@@ -1,0 +1,4 @@
+tests
+test1000SecondProcessEventuallyFinishes
+
+	self doTestProcessEventuallyFinishesForSeconds: 1000 second
