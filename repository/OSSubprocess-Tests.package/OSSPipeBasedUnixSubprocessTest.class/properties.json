@@ -1,7 +1,7 @@
 {
 	"commentStamp" : "",
 	"super" : "OSSUnixSubprocessTest",
-	"category" : "OSSubprocess-Tests",
+	"category" : "OSSubprocess-Tests-Unit",
 	"classinstvars" : [ ],
 	"pools" : [ ],
 	"classvars" : [ ],
