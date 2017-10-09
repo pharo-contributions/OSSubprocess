@@ -15,3 +15,18 @@ smalltalk:
 smalltalk_config:
   - .smalltalk.ston
   - .stress.smalltalk.ston
+  
+matrix:
+  include:
+    - smalltalk: Pharo-alpha
+      smalltalk_config: .smalltalk.ston
+    - smalltalk: Pharo-6.1
+      smalltalk_config: .smalltalk.ston
+    - smalltalk: Pharo-5.0
+      smalltalk_config: .smalltalk.ston
+    - smalltalk: Pharo-alpha
+      smalltalk_config: .stress.smalltalk.ston
+    - smalltalk: Pharo-6.1
+      smalltalk_config: .stress.smalltalk.ston
+    - smalltalk: Pharo-5.0
+      smalltalk_config: .stress.smalltalk.ston
