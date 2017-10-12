@@ -1,6 +1,6 @@
 {
 	"commentStamp" : "",
-	"super" : "TestCase",
+	"super" : "OSSAbstractUnixSubprocessTest",
 	"category" : "OSSubprocess-Tests-Unit",
 	"classinstvars" : [ ],
 	"pools" : [ ],
