@@ -1,0 +1,4 @@
+tests
+test10ProcessEventuallyFinishes
+
+	self launchAndWaitForProcessesToFinish: 10

@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "OSSAbstractUnixSubprocessTest",
+	"category" : "OSSubprocess-Tests-Unit",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "OSSVMProcessTest",
+	"type" : "normal"
+}
