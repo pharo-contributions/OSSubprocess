@@ -8,9 +8,14 @@ numberOfOpenFiles
 	tmpFileName := (FileSystem workingDirectory / 'openFilesByPharoVM-' , UUID new printString) fullName.
 	tmpFileName asFileReference ensureDelete.
 	self systemAccessor system: ('lsof -p ', OSSVMProcess vmProcess pid printString, ' > "', tmpFileName, '" 2>&1').
-	openFiles := tmpFileName asFileReference readStreamDo: [ :str |
-		"The -1 is because the above command brings one line which is a header." 
-		str contents lines allButFirst sorted
+	openFiles := tmpFileName asFileReference readStreamDo: [ :str | | lines |
+		"We avoid the first header line" 
+		lines := str contents lines allButFirst sorted.
+		lines collect: [ :each | | fields |
+			fields := each substrings.
+			"We ignore the 7th field of lsof: SIZE/OFF.
+			Size of an open file may change during test. We only care about open files."
+			Character space join: ((fields first: 6), (fields last: 2))  ]
 	].
 	tmpFileName asFileReference ensureDelete.
 	^ openFiles
