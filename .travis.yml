@@ -25,7 +25,8 @@ env:
     
 install:
     - wget -O - get.pharo.org/${PHARO_VERSION}+vm | bash
-    - ./pharo Pharo.image eval --save "Metacello new baseline: 'OSSubprocess'; repository: 'filetree://.'; load"
+    - |- #Necessary to not escape the double quotes below
+        ./pharo Pharo.image eval --save "Metacello new baseline: 'OSSubprocess'; repository: 'filetree://.'; load"
     
 script:
-    - travis-wait ./pharo Pharo.image test --no-xterm --fail-on-failure "OSSubprocess-Tests-${TEST}"
+    - travis_wait ./pharo Pharo.image test --no-xterm --fail-on-failure "OSSubprocess-Tests-${TEST}"
