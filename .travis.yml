@@ -1,41 +1,31 @@
-language: smalltalk
-sudo: false
-  
-matrix:
-  include:
-    - smalltalk: Pharo-alpha
-      smalltalk_config: .smalltalk.ston
-      os: linux
-    - smalltalk: Pharo-6.1
-      smalltalk_config: .smalltalk.ston
-      os: linux
-    - smalltalk: Pharo-5.0
-      smalltalk_config: .smalltalk.ston
-      os: linux
-    - smalltalk: Pharo-alpha
-      smalltalk_config: .stress.smalltalk.ston
-      os: linux
-    - smalltalk: Pharo-6.1
-      smalltalk_config: .stress.smalltalk.ston
-      os: linux
-    - smalltalk: Pharo-5.0
-      smalltalk_config: .stress.smalltalk.ston
-      os: linux
-    - smalltalk: Pharo-alpha
-      smalltalk_config: .smalltalk.ston
-      os: osx
-    - smalltalk: Pharo-6.1
-      smalltalk_config: .smalltalk.ston
-      os: osx
-    - smalltalk: Pharo-5.0
-      smalltalk_config: .smalltalk.ston
-      os: osx
-    - smalltalk: Pharo-alpha
-      smalltalk_config: .stress.smalltalk.ston
-      os: osx
-    - smalltalk: Pharo-6.1
-      smalltalk_config: .stress.smalltalk.ston
-      os: osx
-    - smalltalk: Pharo-5.0
-      smalltalk_config: .stress.smalltalk.ston
-      os: osx
+language: generic
+
+addons:
+  apt:
+    packages:
+    - libasound2:i386
+    - libz1:i386
+    - libbz2-1.0:i386
+    - libssl1.0.0:i386
+    - libfreetype6:i386
+    - libsqlite3-0:i386
+
+os:
+  - linux
+  - osx
+
+env:
+  matrix:
+    - PHARO_VERSION=70 TEST=Unit
+    - PHARO_VERSION=70 TEST=Stress
+    - PHARO_VERSION=61 TEST=Unit
+    - PHARO_VERSION=61 TEST=Stress
+    - PHARO_VERSION=50 TEST=Unit
+    - PHARO_VERSION=50 TEST=Stress
+    
+install:
+    - wget -O - get.pharo.org/${PHARO_VERSION}+vm | bash
+    - ./pharo Pharo.image eval --save "Metacello new baseline: 'OSSubprocess'; repository: 'filetree://.'; load"
+    
+script:
+    - travis-wait ./pharo Pharo.image test --no-xterm --fail-on-failure "OSSubprocess-Tests-${TEST}"
