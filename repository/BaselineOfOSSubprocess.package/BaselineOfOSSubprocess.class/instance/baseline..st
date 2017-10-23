@@ -8,7 +8,8 @@ baseline: spec
 				
 			spec
 				package: 'OSSubprocess' with: [ spec requires: 'FFICHeaderExtractor' ];
-				package: 'OSSubprocess-Tests' with: [ spec requires: 'OSSubprocess' ].
+				package: 'OSSubprocess-Tests-Unit' with: [ spec requires: 'OSSubprocess-Tests-Unit' ];
+				package: 'OSSubprocess-Tests-Stress' with: [ spec requires: 'OSSubprocess' ].
 			
 			spec baseline: 'FFICHeaderExtractor' with: [
     			spec repository: 'github://marianopeck/FFICHeaderExtractor:master/repository' ]
