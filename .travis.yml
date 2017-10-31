@@ -1,32 +1,20 @@
-language: generic
+language: smalltalk
 
-addons:
-  apt:
-    packages:
-    - libasound2:i386
-    - libz1:i386
-    - libbz2-1.0:i386
-    - libssl1.0.0:i386
-    - libfreetype6:i386
-    - libsqlite3-0:i386
+sudo: false
 
 os:
   - linux
   - osx
+  
+smalltalk:
+  - Pharo-7.0
+  - Pharo-6.1
+  - Pharo-5.0
 
 env:
   matrix:
-    - PHARO_VERSION=70 TEST=Unit
-    - PHARO_VERSION=70 TEST=Stress
-    - PHARO_VERSION=61 TEST=Unit
-    - PHARO_VERSION=61 TEST=Stress
-    - PHARO_VERSION=50 TEST=Unit
-    - PHARO_VERSION=50 TEST=Stress
-    
-install:
-    - wget -O - get.pharo.org/${PHARO_VERSION}+vm | bash
-    - |- #Necessary to not escape the double quotes below
-        ./pharo Pharo.image eval --save "Metacello new baseline: 'OSSubprocess'; repository: 'filetree://repository/'; load"
+    - CI_FILE=.smalltalk.ston
+    - CI_FILE=.stress.smalltalk.ston
     
 script:
-    - travis_wait ./pharo Pharo.image test --no-xterm --fail-on-failure "OSSubprocess-Tests-${TEST}"
+  - travis_wait "$SMALLTALK_CI_HOME/run.sh" ${CI_FILE}
