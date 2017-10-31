@@ -3,6 +3,13 @@ testSigTerm
 	"Same as super impl but special handling for #assertStreamsInfoWithPrevious:. Read comment at the bottom"
 	| process exited streamsInfo |
 	
+	"We set the sunit test timeout to 2 times the sleep duration.
+	Otherwise default sunit test timeout is 1 minute.
+	This is for Pharo version >= 6.0"
+	(self respondsTo: #timeLimit:) ifTrue: [ 
+		self timeLimit: 30 seconds.
+	].
+	
 	exited := false.
 	streamsInfo := self getStreamsInfoForRunningTest.
 	process := self newCommand.

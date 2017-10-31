@@ -3,6 +3,13 @@ testSigTerm
 
 	| process exited streamsInfo |
 	
+	"We set the sunit test timeout to 30 seconds.
+	Otherwise default sunit test timeout is 10 seconds.
+	This is for Pharo version >= 6.0"
+	(self respondsTo: #timeLimit:) ifTrue: [ 
+		self timeLimit: 30 seconds.
+	].
+	
 	exited := false.
 	streamsInfo := self getStreamsInfoForRunningTest.
 	process := self newCommand.
