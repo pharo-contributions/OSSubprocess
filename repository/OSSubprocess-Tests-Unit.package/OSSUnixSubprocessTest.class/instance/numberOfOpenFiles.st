@@ -11,11 +11,9 @@ numberOfOpenFiles
 	openFiles := tmpFileName asFileReference readStreamDo: [ :str | | lines |
 		"We avoid the first header line" 
 		lines := str contents lines allButFirst sorted.
-		lines collect: [ :each | | fields |
-			fields := each substrings.
-			"We ignore the 7th field of lsof: SIZE/OFF.
-			Size of an open file may change during test. We only care about open files."
-			Character space join: ((fields first: 6), (fields last: 2))  ]
+		
+		"We then ignore all file properties except for the file name"
+		lines collect: [ :each | each substrings last ]
 	].
 	tmpFileName asFileReference ensureDelete.
 	^ openFiles
