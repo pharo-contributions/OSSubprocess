@@ -1,13 +1,20 @@
 language: smalltalk
+
 sudo: false
 
-# Select operating system(s)
 os:
   - linux
   - osx
-
-# Select compatible Smalltalk image(s)
+  
 smalltalk:
-  - Pharo-alpha
+  - Pharo-7.0
   - Pharo-6.1
   - Pharo-5.0
+
+env:
+  matrix:
+    - CI_FILE=.smalltalk.ston
+    - CI_FILE=.stress.smalltalk.ston
+    
+script:
+  - travis_wait "$SMALLTALK_CI_HOME/run.sh" ${CI_FILE}

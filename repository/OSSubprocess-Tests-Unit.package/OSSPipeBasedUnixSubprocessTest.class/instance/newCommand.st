@@ -1,4 +1,4 @@
-helpers
+helper
 newCommand
 	
 	^ self commandClass new

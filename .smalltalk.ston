@@ -5,5 +5,10 @@ SmalltalkCISpec {
       #directory : 'repository',
       #platforms : [ #pharo ]
     }
-  ]
+  ],
+  #testing : {
+    #include : {
+      #categories : [ 'OSSubprocess-Tests-Unit' ]
+    }
+  }
 }

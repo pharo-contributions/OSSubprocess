@@ -1,3 +1,3 @@
-helpers
+private
 systemAccessor
 	^ OSSVMProcess vmProcess systemAccessor

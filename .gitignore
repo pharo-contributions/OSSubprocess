@@ -1,0 +1,13 @@
+#Image files
+Pharo.changes
+Pharo.image
+Pharo7.0-*.sources
+PharoDebug.log
+
+icon-packs/
+
+#VM files
+pharo
+pharo-local/
+pharo-ui
+pharo-vm/
