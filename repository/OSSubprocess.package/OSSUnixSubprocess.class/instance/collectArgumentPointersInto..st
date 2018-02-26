@@ -9,6 +9,6 @@ collectArgumentPointersInto: aPointer
 		self registerPointer: pointer.
 		LibC memCopy: string to: pointer size: string size.
 		pointer nbUInt8AtOffset: string size put: 0. "string terminating null char"
-		aPointer nbUInt32AtOffset: (index - 1) * self systemAccessor sizeOfPointer put: pointer value ].
+		aPointer platformUnsignedLongAt: ((index - 1) * self systemAccessor sizeOfPointer) + 1 put: pointer value ].
 
-	aPointer nbUInt32AtOffset: (self argVArguments size - 1) * self systemAccessor sizeOfPointer put: 0
+	aPointer platformUnsignedLongAt: ((self argVArguments size - 1) * self systemAccessor sizeOfPointer) + 1 put: 0.
