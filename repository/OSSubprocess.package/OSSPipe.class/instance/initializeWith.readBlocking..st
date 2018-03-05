@@ -4,4 +4,3 @@ initializeWith: fileIDsArray readBlocking: aBoolean
 	readBlocking := aBoolean.
 	self openReadStreamFor: fileIDsArray first withName: 'pipeReader'.
 	self openWriteStreamFor: fileIDsArray second withName: 'pipeWriter'.
-	
