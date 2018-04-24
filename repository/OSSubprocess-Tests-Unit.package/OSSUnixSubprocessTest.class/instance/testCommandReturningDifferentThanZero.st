@@ -8,4 +8,4 @@ testCommandReturningDifferentThanZero
 					arguments: {'asdasdasdasdsad'}.
 	
 	command runAndWait. 
-	self assert: command exitStatusInterpreter exitStatus equals: 1. 
+	self deny: command exitStatusInterpreter exitStatus equals: 0. 
