@@ -11,6 +11,11 @@ smalltalk:
   - Pharo-6.1
   - Pharo-5.0
 
+before_install:
+- eval "$(ssh-agent)"
+- ssh-keyscan github.com >> ~/.ssh/known_hosts
+- ssh -T git@github.com || echo "Ok"
+
 env:
   matrix:
     - CI_FILE=.smalltalk.ston
