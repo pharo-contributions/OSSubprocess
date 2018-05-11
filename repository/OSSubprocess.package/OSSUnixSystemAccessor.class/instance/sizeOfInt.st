@@ -1,4 +1,4 @@
 sizeof
 sizeOfInt
 	
-	^ FFIExternalType sizeOf: #int
+	^ FFIExternalType sizeOf: #long

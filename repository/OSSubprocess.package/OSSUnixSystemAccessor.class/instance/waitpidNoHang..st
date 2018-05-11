@@ -17,7 +17,7 @@ waitpidNoHang: childPidInteger
 		(returnValue = childPidInteger) ifTrue: [ 
 			"If wait() or waitpid() returns because the status of a child process is available, these functions shall return a value equal to the process ID of the child process for which status is reported.
 			This means...status is available. It has finished. "
-			answer := statusPointer signedLongAt: 1.
+			answer := statusPointer platformLongAt: 1.
 			^ answer.
 		]
 	] ensure: [ statusPointer free ]

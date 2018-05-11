@@ -7,9 +7,10 @@ os:
   - osx
   
 smalltalk:
-  - Pharo-7.0
+  - Pharo64-alpha
+  - Pharo64-6.1
+  - Pharo-alpha
   - Pharo-6.1
-  - Pharo-5.0
 
 env:
   matrix:
