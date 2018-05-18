@@ -4,4 +4,4 @@ catalogDescription
 
 An important part of OSSubprocess is how to manage standard streams (stdin, stdout and stderr) and how to provide an API for reading and writing from them at the language level.
 
-For more details see: https://github.com/marianopeck/OSSubprocess'
+For more details see: https://github.com/pharo-contributions/OSSubprocess'

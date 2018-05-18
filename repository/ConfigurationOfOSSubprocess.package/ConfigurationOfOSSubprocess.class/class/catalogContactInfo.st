@@ -1,3 +1,3 @@
 catalog
 catalogContactInfo
-	^ 'https://marianopeck.wordpress.com'
+	^ 'Pharo mailing list'

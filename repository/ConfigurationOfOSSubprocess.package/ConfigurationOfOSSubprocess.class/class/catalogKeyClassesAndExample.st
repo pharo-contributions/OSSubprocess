@@ -1,3 +1,3 @@
 catalog
 catalogKeyClassesAndExample
-	^ ' See https://github.com/marianopeck/OSSubprocess/ '
+	^ ' See https://github.com/pharo-contributions/OSSubprocess/ '
