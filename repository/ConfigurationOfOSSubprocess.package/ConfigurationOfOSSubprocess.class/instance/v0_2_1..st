@@ -7,5 +7,5 @@ v0_2_1: spec
 		do: [ 
 			spec
 				baseline: 'OSSubprocess'
-					with: [ spec repository: 'github://marianopeck/OSSubprocess:v0.2.1/repository' ];
+					with: [ spec repository: 'github://pharo-contributions/OSSubprocess:v0.2.1/repository' ];
 				import: 'OSSubprocess' ].
