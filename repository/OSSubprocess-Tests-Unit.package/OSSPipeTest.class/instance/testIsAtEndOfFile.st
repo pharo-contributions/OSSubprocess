@@ -26,9 +26,8 @@ testIsAtEndOfFile
 	self deny: pipe atEndOfFile. "no read yet, so flag has not been set"
 	
 	"From Pharo 7 on, #atEnd does detect EOF on a pipe"
-	SystemVersion current major <= 6
-		ifTrue: [ self deny: pipe reader atEnd ]
-		ifFalse: [ self assert: pipe reader atEnd ].
+	SystemVersion current major >= 7
+		ifTrue: [ self assert: pipe reader atEnd ].
 
 	self assert: pipe atEnd. "writer closed and read gives nil"
 
@@ -36,9 +35,8 @@ testIsAtEndOfFile
 	self assert: (pipe reader atEndOfFile).
 
 	"From Pharo 7 on, #atEnd does detect EOF on a pipe"
-	SystemVersion current major <= 6
-		ifTrue: [ self deny: pipe reader atEnd ]
-		ifFalse: [ self assert: pipe reader atEnd ].
+	SystemVersion current major >= 7
+		ifTrue: [ self assert: pipe reader atEnd ].
 	
 	self assert: pipe reader atEndOfFile.
 	self assert: pipe atEnd.
