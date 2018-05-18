@@ -8,4 +8,6 @@ testCommandReturningDifferentThanZero
 					arguments: {'asdasdasdasdsad'}.
 	
 	command runAndWait. 
-	self deny: command exitStatusInterpreter exitStatus equals: 0. 
+	
+	"Do not use #deny:equals: for Pharo 6 compatibility"
+	self deny: (command exitStatusInterpreter exitStatus = 0)
