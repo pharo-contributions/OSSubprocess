@@ -6,8 +6,6 @@ queryExitStatus
 	This method could be called directly from the childWatcher process of the OSSVMProcess 
 	when a SIGCHLD was received (#updateActiveChildrenAndNotifyDead) or from a image-side polling
 	 like #waitForExitPollingEvery:doing:"
-	^ exitStatus ifNil: [ 
+	^ self isRunning ifTrue: [ 
 			exitStatus := self systemAccessor waitpidNoHang: pid.
-			exitStatus
-		]
-		
+			exitStatus ]
