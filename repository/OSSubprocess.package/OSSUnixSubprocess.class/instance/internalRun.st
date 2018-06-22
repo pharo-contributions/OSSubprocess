@@ -22,6 +22,6 @@ internalRun
 		].
 	(returnValue > 0) 
 		ifTrue: [ self systemAccessor strerror: returnValue message: 'posix_spawn()'. ].
-	pid := pidtPointer nbInt32AtOffset: 0.
+	pid := pidtPointer platformLongAt: 0.
 	OSSVMProcess vmProcess registerChildProcess: self.
 	
