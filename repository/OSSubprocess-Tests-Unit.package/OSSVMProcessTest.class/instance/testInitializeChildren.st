@@ -1,7 +1,7 @@
 tests
 testInitializeChildren
 
-	OSSVMProcess vmProcess initializeAllMyChildren. 
+	OSSVMProcess vmProcess initializeAllMyChildren.
 	
 	self assert: OSSVMProcess vmProcess allMyChildren isEmpty.
 	self assert: OSSVMProcess vmProcess activeChildren isEmpty.

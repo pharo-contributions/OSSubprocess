@@ -1,5 +1,6 @@
 accessing
 exitStatus
+	
 	self isExited ifTrue: [^self statusIfExited].
 	self isSignaled ifTrue: [^self statusIfSignaled].
 	self isStopped ifTrue: [^self statusIfStopped].

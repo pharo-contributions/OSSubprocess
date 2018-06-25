@@ -22,6 +22,8 @@ internalRun
 		].
 	(returnValue > 0) 
 		ifTrue: [ self systemAccessor strerror: returnValue message: 'posix_spawn()'. ].
-	pid := pidtPointer platformLongAt: 1.
+		
+	"Pid is of type pid_t, which is mostly 32bits even in 64bit platforms"
+	pid := pidtPointer unsignedLongAt: 1.
 	OSSVMProcess vmProcess registerChildProcess: self.
 	

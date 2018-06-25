@@ -18,4 +18,5 @@ env:
     - CI_FILE=.stress.smalltalk.ston
     
 script:
-  - travis_wait "$SMALLTALK_CI_HOME/run.sh" ${CI_FILE}
+  - travis_wait 120 sleep infinity &
+  - $SMALLTALK_CI_HOME/run.sh ${CI_FILE}

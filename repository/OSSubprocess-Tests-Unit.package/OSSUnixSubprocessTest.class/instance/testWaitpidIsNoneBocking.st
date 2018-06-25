@@ -10,5 +10,5 @@ testWaitpidIsNoneBocking
 	self assert: command pid > 0.
 	(Duration seconds: 1) wait.
 	self assert: [ childStatus := command exitStatusInterpreter ] timeToRun asSeconds < 1.
-	self assert: childStatus isNil.
+	self assert: childStatus value isNil.
 	command waitForExit.
