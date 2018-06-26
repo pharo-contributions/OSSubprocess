@@ -1,4 +1,4 @@
-waiting - primitives
+child watching
 primitiveWaitpid: aProcessId statusPointer: statusPointer options: optionBits
 	
 	^ self ffiCall: #( int waitpid(int aProcessId, void* statusPointer, int optionBits) )

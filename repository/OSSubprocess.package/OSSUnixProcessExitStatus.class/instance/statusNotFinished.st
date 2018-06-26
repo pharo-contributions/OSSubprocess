@@ -1,0 +1,4 @@
+accessing
+statusNotFinished
+
+	^ 'Not finished'

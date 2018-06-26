@@ -1,0 +1,4 @@
+testing
+notFinished
+	
+	^ intValue isNil

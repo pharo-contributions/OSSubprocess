@@ -1,6 +1,8 @@
 printing
 printOn: aStream
 
+	self notFinished
+		ifTrue: [^ aStream nextPutAll: 'Not finished'].
 	self isExited
 		ifTrue: [aStream nextPutAll: 'normal termination with status ';
 				 nextPutAll: self statusIfExited asString].

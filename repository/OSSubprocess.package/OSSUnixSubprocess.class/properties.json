@@ -26,7 +26,8 @@
 		"mutexForSigchld",
 		"shouldContinueWaiting",
 		"terminateOnShutdown",
-		"workingDirectory"
+		"workingDirectory",
+		"waitPidCriticalSemaphore"
 	],
 	"name" : "OSSUnixSubprocess",
 	"type" : "normal"

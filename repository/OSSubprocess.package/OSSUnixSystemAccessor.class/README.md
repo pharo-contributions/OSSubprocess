@@ -6,3 +6,9 @@ The functionallity that is NOT GENERAL (like the call to posix_spawn() family of
 
 For the parts that are based on FFI calls, we split each call in two sides. The first side is the method that does the FFI call (under a 'XXX - primitives' protocol, for example, #primitiveFileno:). The other side, is wrapper method that calls the primitive internally but also takes care about managing possible errors of it, informing those, etc (for example, #fileno:). Therefore, is very much likely that the "code users" of this class, will be using the latter side (wrappers) of the methods and not the primitive ones.
 
+!! Management of dead processes
+
+New processes are created as childs of the current process. The method #waitpidNoHang: is used to query the exit status of processes.
+However, since we use the waitpid() function using WNOHANG, it returns a finished process id that is not necessarily the one that is asked for.
+Becayse of this, the Accessor contains a map of process exit statuses.
+If the asked process is the one returned by waitpid, we return the corresponding exit status, otherwise we store that value in the map for later accesses.

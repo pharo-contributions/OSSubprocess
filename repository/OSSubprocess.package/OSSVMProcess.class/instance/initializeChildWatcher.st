@@ -3,7 +3,7 @@ initializeChildWatcher
 	"This is a process which waits for the death of a child processes. Use SIGCHLD events rather than a Delay to poll."
 
 	| processSynchronizationDelay |
-	processSynchronizationDelay := Delay forMilliseconds: 20.
+	processSynchronizationDelay := Delay forMilliseconds: 30.
 	childWatcher	 ifNil: [
 		childWatcher := [[
 				"OSProcess authors suspected that there were various ways in which OS signals
@@ -14,7 +14,7 @@ initializeChildWatcher
 				"
 				self sigChldSemaphore waitTimeoutMSecs: 1000.
 				processSynchronizationDelay wait. "Avoids lost signals in heavy process switching"
-				self updateActiveChildrenAndNotifyDead.
+				self checkFinishedChildren.
 				] repeat] newProcess priority: Processor highIOPriority.
 
 		childWatcher resume.

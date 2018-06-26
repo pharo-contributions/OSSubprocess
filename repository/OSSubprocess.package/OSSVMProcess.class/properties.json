@@ -3,7 +3,10 @@
 	"super" : "Object",
 	"category" : "OSSubprocess",
 	"classinstvars" : [ ],
-	"pools" : [ ],
+	"pools" : [
+		"LibCErrnoSharedPool",
+		"LibCWaitSharedPool"
+	],
 	"classvars" : [
 		"VMProcess"
 	],
@@ -16,7 +19,8 @@
 		"sessionID",
 		"mutexForCwd",
 		"sigChldSemaphore",
-		"childWatcher"
+		"childWatcher",
+		"earlyFinishedProcesses"
 	],
 	"name" : "OSSVMProcess",
 	"type" : "normal"
