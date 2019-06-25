@@ -1,5 +1,7 @@
 initialize - release
 initialize
+	Smalltalk os isWindows ifTrue: [ ^ self ]. "Cannot be initialized nor used on Windows."
+	
 	self initializeVMProcessInstance. 
 	self flag: #removeIt.
 	"This IF will be eliminated soon...only here temporary"
