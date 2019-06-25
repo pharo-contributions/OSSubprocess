@@ -8,9 +8,9 @@ os:
   
 smalltalk:
   - Pharo64-alpha
-  - Pharo64-6.1
+  - Pharo64-stable
   - Pharo-alpha
-  - Pharo-6.1
+  - Pharo-stable
 
 env:
   matrix:
