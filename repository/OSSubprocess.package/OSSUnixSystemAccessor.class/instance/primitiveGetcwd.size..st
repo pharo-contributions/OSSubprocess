@@ -1,5 +1,5 @@
 cwd - primitives
 primitiveGetcwd: buffer size: size
 	
-	^ self ffiCall: #( char * getcwd(char *buffer, int size) )
+	^ self ffiCall: #( String getcwd(char *buffer, int size) )
 	

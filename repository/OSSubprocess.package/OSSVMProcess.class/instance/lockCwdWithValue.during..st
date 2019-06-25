@@ -26,7 +26,7 @@ lockCwdWithValue: cwdNewValue during: aBlock
 		| oldCwd |
 		oldCwd := self systemAccessor getcwd.
 		[
-			self systemAccessor chdir: cwdNewValue.
+			self systemAccessor chdir: cwdNewValue utf8Encoded asString.
 			mutexForCwd critical: aBlock.
 		]
 		ensure: [ 
