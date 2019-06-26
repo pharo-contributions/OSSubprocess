@@ -56,7 +56,7 @@ OSSubprocess is still in an exploring phase and so it might be unstable. Use thi
 
 
 ## Installation
-**Currently, OSSubprocess only works in Pharo >= 5.0 with Spur VM and only 32 bits VMs**. In any case, we recommend to always grab a latest image and VM. You can do that in via command line:
+**Currently, OSSubprocess only works in Pharo >= 5.0 with Spur VM**. In any case, we recommend to always grab a latest image and VM. You can do that in via command line:
 
 ```bash
 wget -O- get.pharo.org/alpha+vm | bash
@@ -74,7 +74,7 @@ Metacello new
 
 > Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work.
 
-> Important2: If you are installing under Linux, then you must use a threaded heartbeat VM (not the itimer one). For Pharo 5.0 and 6.0 you can search for "cog_linux32x86_pharo.cog.spur_XXXXXXXXXXXX.tar.gz" in [Pharo static file server](http://files.pharo.org/vm/pharo-spur32/linux/). Since Pharo 7.0, threaded heartbeat VM has become the default installation, so you shouldn't have to explicitly download a specific VM.
+> Important2: If you are installing under Linux, then you must use a threaded heartbeat VM (not the itimer one). For Pharo 5.0 and 6.0 you can search for "cog_linux32x86_pharo.cog.spur_XXXXXXXXXXXX.tar.gz" i32 [Pharo static file server](http://files.pharo.org/vm/pharo-spur32/linux/). Since Pharo 7.0, threaded heartbeat VM has become the default installation, so you shouldn't have to explicitly download a specific VM.
 
 Besides the above installation instructions, OSSubprocess can also be installed from the `Catalog Browser`, already present in Pharo. Just open it, search for OSSubprocess, then right click, `Install stable version`.
 
