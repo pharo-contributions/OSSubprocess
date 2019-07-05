@@ -16,7 +16,10 @@ env:
   matrix:
     - CI_FILE=.smalltalk.ston
     - CI_FILE=.stress.smalltalk.ston
-    
+
+before_script:
+  - mkdir -p $SMALLTALK_CI_BUILD/UCD && cp UCD/* $SMALLTALK_CI_BUILD/UCD/
+
 script:
   - travis_wait 120 sleep infinity &
   - $SMALLTALK_CI_HOME/run.sh ${CI_FILE}
