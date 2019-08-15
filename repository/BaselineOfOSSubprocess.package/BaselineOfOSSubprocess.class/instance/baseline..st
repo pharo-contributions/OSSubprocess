@@ -19,4 +19,8 @@ baseline: spec
 					className: #ConfigurationOfUnicode;
 					versionString: #'stable';
 					repository: 'http://smalltalkhub.com/mc/Pharo/Unicode/main/' ].
+			
+			spec
+				group: 'default' with: #( 'OSSubprocess' );
+				group: 'Tests' with: #( 'OSSubprocess-Tests-Unit' 'OSSubprocess-Tests-Stress' ).
 		]
