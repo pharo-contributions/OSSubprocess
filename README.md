@@ -66,9 +66,8 @@ Then, from within Pharo, execute the following to install OSSubprocess:
 
 ```Smalltalk
 Metacello new
- 	configuration: 'OSSubprocess';
+ 	baseline: 'OSSubprocess';
  	repository: 'github://pharo-contributions/OSSubprocess:master/repository';
-	version: #stable;
 	load.
 ```
 
