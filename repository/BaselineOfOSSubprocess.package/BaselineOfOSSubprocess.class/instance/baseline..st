@@ -22,6 +22,5 @@ baseline: spec
 			
 			spec
 				group: 'Core' with: #( 'OSSubprocess' );
-				group: 'Tests' with: #( 'OSSubprocess-Tests-Unit' 'OSSubprocess-Tests-Stress' );
-				group: 'default' with: #( 'Core' 'Tests' ).
+				group: 'Tests' with: #( 'OSSubprocess-Tests-Unit' 'OSSubprocess-Tests-Stress' ).
 		]
