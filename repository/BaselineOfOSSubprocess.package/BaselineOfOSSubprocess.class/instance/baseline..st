@@ -3,9 +3,7 @@ baseline: spec
 	<baseline>
 	spec
 		for: #pharo
-		do: [ 
-			spec preLoadDoIt: #initializeForPharo.	
-				
+		do: [				
 			spec
 				package: 'OSSubprocess' with: [ spec requires: 'FFICHeaderExtractor' ];
 				package: 'OSSubprocess-Tests-Unit' with: [ spec requires: #('OSSubprocess' 'Unicode') ];
