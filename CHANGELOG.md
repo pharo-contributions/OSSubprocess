@@ -1,19 +1,16 @@
+<!--
+git log --pretty="* %s ([%h](https://github.com/pharo-contributions/OSSubProcess/commit/%H))" v1.1.1...HEAD --grep="Merge pull" 
+('Content' copyWithRegex: 'Merge pull request #[0-9]+ from [^/]+/[0-9]*' matchesReplacedWith: '') copyReplaceAll: '-' with: ' '
+-->
+
 # Change Log
 
-## [Unreleased](https://github.com/marianopeck/OSSubprocess/tree/HEAD)
+## [v1.1.1](https://github.com/pharo-contributions/OSSubProcess/compare/v1.1...v1.1.1) (2019-11-15)
 
-[Full Changelog](https://github.com/marianopeck/OSSubprocess/compare/v0.2.5...HEAD)
+**Cleanings**
 
-**Implemented enhancements:**
-
-**Closed issues:**
-
-**Merged pull requests:**
-
-**Fixed bugs:**
-
-**Documentation updates**
-
+*  Remove useless postload ([39db253](https://github.com/pharo contributions/OSSubProcess/commit/39db2530ce53dfd90221d1a2edf20cc02fc74fee))
+*  Add Core and Tests groups ([cb8c577](https://github.com/pharo contributions/OSSubProcess/commit/cb8c577b0b81a419261bea05dbc3cacfe3165704))
 
 ## [v0.2.5](https://github.com/marianopeck/OSSubprocess/tree/v0.2.5)
 
