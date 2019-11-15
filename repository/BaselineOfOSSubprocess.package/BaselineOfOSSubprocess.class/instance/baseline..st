@@ -21,6 +21,7 @@ baseline: spec
 					repository: 'http://smalltalkhub.com/mc/Pharo/Unicode/main/' ].
 			
 			spec
-				group: 'default' with: #( 'OSSubprocess' );
-				group: 'Tests' with: #( 'OSSubprocess-Tests-Unit' 'OSSubprocess-Tests-Stress' ).
+				group: 'Core' with: #( 'OSSubprocess' );
+				group: 'Tests' with: #( 'OSSubprocess-Tests-Unit' 'OSSubprocess-Tests-Stress' );
+				group: 'default' with: #( 'Core' 'Tests' ).
 		]
