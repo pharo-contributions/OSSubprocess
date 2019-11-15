@@ -9,8 +9,8 @@ git log --pretty="* %s ([%h](https://github.com/pharo-contributions/OSSubProcess
 
 **Cleanings**
 
-*  Remove useless postload ([39db253](https://github.com/pharo contributions/OSSubProcess/commit/39db2530ce53dfd90221d1a2edf20cc02fc74fee))
-*  Add Core and Tests groups ([cb8c577](https://github.com/pharo contributions/OSSubProcess/commit/cb8c577b0b81a419261bea05dbc3cacfe3165704))
+*  Remove useless postload ([39db253](https://github.com/pharo-contributions/OSSubProcess/commit/39db2530ce53dfd90221d1a2edf20cc02fc74fee))
+*  Add Core and Tests groups ([cb8c577](https://github.com/pharo-contributions/OSSubProcess/commit/cb8c577b0b81a419261bea05dbc3cacfe3165704))
 
 ## [v0.2.5](https://github.com/marianopeck/OSSubprocess/tree/v0.2.5)
 
