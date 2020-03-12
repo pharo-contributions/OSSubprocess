@@ -6,7 +6,8 @@ testChangeDirWithNonAsciiCharacters
 	newDir ensureCreateDirectory.
 
 	OSSVMProcess vmProcess
-		lockCwdWithValue: newDir fullName 
+		lockCwdWithValue: newDir fullName
+		encoding: #utf8
 		during: [ duringSystemCwd := self systemAccessor getcwd ].
 	duringSystemCwd := UnicodeNormalizer new toNFC: duringSystemCwd asByteArray utf8Decoded.
 

@@ -5,5 +5,5 @@ shellCommand: aShellCommandString
 	rather than having to do set the command sh, send the '-c' argument, etc etc etc.
 	We first try to use the SHELL defined in the OS by getting the env variable $SHELL. 
 	If not found, then we fallback to /bin/sh"
-	command := self shellCommand.
-	arguments := Array with: '-c' with: aShellCommandString. 
+	
+	self shell: self shellCommand command: aShellCommandString. 
