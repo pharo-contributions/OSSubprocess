@@ -1,3 +1,3 @@
 settings
-command: anObject
-	command := anObject
+command: aString
+	command := (aString encodeWith: encoding) asString

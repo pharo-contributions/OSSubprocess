@@ -17,7 +17,8 @@ internalRun
 			"This is a hack in order to support a #workingDirectory: kind of feature. 
 			Please read the comment of lockCwdWithValue:during: "
 			OSSVMProcess vmProcess
-				lockCwdWithValue: workingDirectory 
+				lockCwdWithValue: workingDirectory
+				encoding: encoding 
 				during: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ]
 		].
 	(returnValue > 0) 

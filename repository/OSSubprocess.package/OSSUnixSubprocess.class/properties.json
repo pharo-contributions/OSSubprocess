@@ -27,7 +27,8 @@
 		"shouldContinueWaiting",
 		"terminateOnShutdown",
 		"workingDirectory",
-		"waitPidCriticalSemaphore"
+		"waitPidCriticalSemaphore",
+		"encoding"
 	],
 	"name" : "OSSUnixSubprocess",
 	"type" : "normal"

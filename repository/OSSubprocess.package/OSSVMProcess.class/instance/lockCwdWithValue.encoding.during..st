@@ -1,5 +1,5 @@
 cwd
-lockCwdWithValue: cwdNewValue during: aBlock
+lockCwdWithValue: cwdNewValue encoding: encoding during: aBlock
 	"This method is a complete hack in order to support a #cmd: option in OSSUnixSubprocess. 
 	OSSUnixSubprocess relies in posix_spawn() family of functions to spwan processes in the OS,
 	and these functions do not allow specifying a starting working directory for the child process. 
@@ -26,7 +26,7 @@ lockCwdWithValue: cwdNewValue during: aBlock
 		| oldCwd |
 		oldCwd := self systemAccessor getcwd.
 		[
-			self systemAccessor chdir: cwdNewValue utf8Encoded asString.
+			self systemAccessor chdir: (cwdNewValue encodeWith: encoding) asString.
 			mutexForCwd critical: aBlock.
 		]
 		ensure: [ 
