@@ -12,7 +12,7 @@ testReadingFromStdoutAfterCommandFinishesDoesNotBlocksVM
 	streamsInfo := self getStreamsInfoForRunningTest.
 	command := self newCommand
 					command: '/bin/sleep';
-					arguments: (Array with: '15');
+					arguments: (Array with: '1');
 					redirectStdout;
 					runAndWait.
 					
