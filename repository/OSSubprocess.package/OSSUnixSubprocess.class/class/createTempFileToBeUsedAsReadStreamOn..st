@@ -11,4 +11,4 @@ createTempFileToBeUsedAsReadStreamOn: aDirectoryPath
 	
 	"
 	
-	^ StandardFileStream forceNewFileNamed: (aDirectoryPath asFileReference / self createTempFilename) fullName
+	^ OldStandardFileStream forceNewFileNamed: (aDirectoryPath asFileReference / self createTempFilename) fullName
