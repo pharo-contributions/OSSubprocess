@@ -5,6 +5,7 @@ baseline: spec
 		for: #pharo
 		do: [				
 			spec
+				package: 'OldFileStream';
 				package: 'OSSubprocess' with: [ spec requires: #('FFICHeaderExtractor' 'OldFileStream') ];
 				package: 'OSSubprocess-Tests-Unit' with: [ spec requires: #('OSSubprocess' 'Unicode') ];
 				package: 'OSSubprocess-Tests-Stress' with: [ spec requires: 'OSSubprocess-Tests-Unit' ].
