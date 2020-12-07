@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/pharo-contributions/OSSubprocess.png?branch=master)](https://travis-ci.org/marianopeck/OSSubprocess)
+
 
 # OSSubprocess
 
