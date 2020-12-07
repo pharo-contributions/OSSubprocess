@@ -2,19 +2,13 @@
 
 # OSSubprocess
 
-OSSubprocess is a software project that allows the user to spawn Operating System processes from within Pharo language. The main usage of forking external OS processes is to execute OS commands (.e.g `cat`, `ls`, `ps`, `cp`, etc) as well as arbitrary shell scripts (.e.g `/etc/myShellScript.sh`) from Pharo.
+OSSubprocess allows users to spawn Operating System processes from within Pharo language. The main usage of forking external OS processes is to execute OS commands (.e.g `cat`, `ls`, `ps`, `cp`, etc) as well as arbitrary shell scripts (.e.g `/etc/myShellScript.sh`) from Pharo. Up until now OSSubprocess works on Mac and Linux.
 
 An important part of OSSubprocess is how to manage standard streams (`stdin`, `stdout` and `stderr`) and how to provide an API for reading and writing from them at the language level.
 
 > It was decided together with Pharo Consortium that as a first step, we should concentrate on making it work on OSX and Unix. If the tool proves to be good and accepted, we could, at a second step, try to add Windows support.
-OSSubprocess is still in an exploring phase and so it might be unstable. Use this tool with that in mind. That being said, all tests are green in the tested platforms.
-
 
 ## Table of Contents
-
-
-  * [OSSubprocess](#ossubprocess)
-    * [Table of Contents](#table-of-contents)
     * [Installation](#installation)
     * [Getting Started](#getting-started)
     * [API Reference](#api-reference)
@@ -56,13 +50,7 @@ OSSubprocess is still in an exploring phase and so it might be unstable. Use thi
 
 
 ## Installation
-**Currently, OSSubprocess only works in Pharo >= 5.0 with Spur VM**. In any case, we recommend to always grab a latest image and VM. You can do that in via command line:
-
-```bash
-wget -O- get.pharo.org/alpha+vm | bash
-```
-
-Then, from within Pharo, execute the following to install OSSubprocess:
+OSSubprocess only works in Pharo >= 5.0 with Spur VM.
 
 ```Smalltalk
 Metacello new
@@ -74,8 +62,6 @@ Metacello new
 > Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work.
 
 > Important2: If you are installing under Linux, then you must use a threaded heartbeat VM (not the itimer one). For Pharo 5.0 and 6.0 you can search for "cog_linux32x86_pharo.cog.spur_XXXXXXXXXXXX.tar.gz" i32 [Pharo static file server](http://files.pharo.org/vm/pharo-spur32/linux/). Since Pharo 7.0, threaded heartbeat VM has become the default installation, so you shouldn't have to explicitly download a specific VM.
-
-Besides the above installation instructions, OSSubprocess can also be installed from the `Catalog Browser`, already present in Pharo. Just open it, search for OSSubprocess, then right click, `Install stable version`.
 
 ## Getting Started
 OSSubprocess is quite easy to use but depending on the user needs, there are different parts of the API that could be used. We start with a basic example and later we show more complicated scenarios.
@@ -241,11 +227,7 @@ If you run above example you will see how the strings are first written to the `
 
 Note that the `#close` we send to the `stdinStream` is very important. This is because by default, we use blocking pipes for `stdin` and that means that when the child tries to read he will be locked until data is available. Therefore, somehow, at some point, we must tell the child that we have finished writing and that is via the `#close` message.
 
-
-
-
 ### Synchronism and  how to read streams
-
 
 ####  Synchronism vs asynchronous runs
 We call synchronous runs when you create a child process and you wait for it to finish before going to the next task of your code. This is by far the most common approach since many times you need to know which was the exit status (wether it was success or not) or get some output, and depending on that, change the flow of your code.
@@ -549,56 +531,26 @@ OSSUnixSubprocess new
 
 
 ##Running the tests
-You need to run the tests of the package `OSSubprocess-Tests`. The current test coverage is about 65%. You may want to take a look to our [Travis CI integration](https://travis-ci.org/marianopeck/OSSubprocess/).
-
-
-## Contributing
-This project is developed with [GitFileTree](https://github.com/dalehenrich/filetree), which, starting in Pharo 5.0, provides what is called `Metadata-less` FileTree. That basically means that there are certain FileTree files (`version` and `methodProperties`) which are not created. **Therefore, you cannot use regular FileTree to contribute to this project. You must use `GitFileTree`.**
-
-The following are the steps to contribute to this project:
-
-* Fork it using Github web interface!
-* Clone it to your local machine: `git clone git@github.com:YOUR_NAME/OSSubprocess.git`
-* Create your feature branch: `git checkout -b MY_NEW_FEATURE`
-* Download latest Pharo 5.0 and load GitFileTree and this project:
-
-```Smalltalk
-Metacello new
- 	baseline: 'FileTree';
-   	repository: 'github://dalehenrich/filetree:issue_171/repository';
-   	load: 'Git'.
-Metacello new
-	baseline: 'OSSubprocess';
- 	repository: 'gitfiletree:///path/to/your/local/clone/OSSubprocess/repository';
-	onConflict: [ :ex | ex allow ];
-	load.
-```
-
-* You can now perform the changes you want at Pharo level and commit using the regular Monticello Browser.
-* Run all OSSubprocess tests to make sure you did not break anything.
-* Push to the branch. Either from MC browser of with `git push origin MY_NEW_FEATURE`
-* Submit a pull request from github web interface.
+You need to run the tests of the package `OSSubprocess-Tests`. The current test coverage is about 65%. 
 
 ## History
 You can see the whole changelog of the project [Changelog](CHANGELOG.md) for details about the release history.
 
 ## Change Log
-- [v0.1.0](https://github.com/pharo-contributions/FFICHeaderExtractor/tree/v0.1.0) (2016-01-27) First milestone release. Version for <= Pharo 8.0
-- 
+- [v1.3.0](https://github.com/pharo-contributions/OSSubprocess/tree/v1.3.0) [2020-12] Make sure that it works on Pharo 90 after removal of StandarFileStream. (all tests are green). The next version should be rewritten without the internal copied and renamed StandardFileStream.
+- [v1.2.2](https://github.com/pharo-contributions/OSSubprocess/tree/v1.2.2) [2020-05] Fix unicode
+- [v1.2.1](https://github.com/pharo-contributions/OSSubprocess/tree/v1.2.1) [2020-04] Little fixes regarding travis.
+- [v1.2](https://github.com/pharo-contributions/OSSubprocess/tree/v1.2) [2020-03] Encoded arguments.
+- [v1.1.1](https://github.com/pharo-contributions/OSSubprocess/tree/v1.2.1) [2019-11] Cleaning.
+For the rest check the tags.
 
 ## Future work
-Besides the [issues](https://github.com/marianopeck/OSSubprocess/issues), the following are also desired features:
+Besides the [issues](https://github.com/pharo-contributions/OSSubprocess/issues), the following are also desired features:
 
 * Instead of using asynchronous I/O operations with FFI blocking callouts, sse synchronous I/O operations but with threaded FFI callouts. This will only be possible once Pharo VM and FFI supports threaded callouts.
 * Experiment with a VM plugin with a single `forkAndExec` kind of primitive (based on OSProcess one) and avoid using `posix_spawn()` family of functions.
 * Experiment with a Windows support by calling via FFI to `CreateProcess()`. Note there is a VM plugin called [ProcessorWrapper](http://leves.web.elte.hu/ProcessWrapper/) that wraps such a function. So we can base our work from it.
 * Implement a pipeline at Pharo level. That is, to be able to create multiple instances of `OSSUnixSubprocess` which we will be piped each other. We can base our work in OSProcess `ProxyPipeline`.
-
-## Authors
-
-* **Mariano Martinez Peck** - *Initial work* - [Mariano Martinez Peck](https://github.com/marianopeck)
-
-See also the list of [contributors](https://github.com/marianopeck/OSSubprocess/contributors) who participated in this project.
 
 ## License
 
