@@ -1,0 +1,18 @@
+{
+	"commentStamp" : "",
+	"super" : "OldFileStream",
+	"category" : "OldFileStream-Base",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [
+		"Registry"
+	],
+	"instvars" : [
+		"name",
+		"fileID",
+		"buffer1",
+		"rwmode"
+	],
+	"name" : "OldStandardFileStream",
+	"type" : "normal"
+}

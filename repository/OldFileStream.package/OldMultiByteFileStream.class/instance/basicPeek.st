@@ -1,0 +1,4 @@
+private
+basicPeek
+
+	^ super peek

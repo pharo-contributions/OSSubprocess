@@ -1,0 +1,3 @@
+modes
+ascii
+	isBinary := false

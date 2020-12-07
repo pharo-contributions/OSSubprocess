@@ -1,0 +1,4 @@
+private
+basicSetToEnd
+
+	^ super setToEnd.

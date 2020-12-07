@@ -1,0 +1,17 @@
+{
+	"commentStamp" : "",
+	"super" : "ReadWriteStream",
+	"category" : "OldFileStream-Base",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [
+		"Stderr",
+		"Stdin",
+		"StdioFiles",
+		"Stdout",
+		"TheStdioHandles"
+	],
+	"instvars" : [ ],
+	"name" : "OldFileStream",
+	"type" : "normal"
+}

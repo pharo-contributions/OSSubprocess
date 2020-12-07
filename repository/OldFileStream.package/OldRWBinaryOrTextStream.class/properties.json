@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "SD 12/7/2020 08:33",
+	"super" : "ReadWriteStream",
+	"category" : "OldFileStream-Base",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"isBinary"
+	],
+	"name" : "OldRWBinaryOrTextStream",
+	"type" : "normal"
+}

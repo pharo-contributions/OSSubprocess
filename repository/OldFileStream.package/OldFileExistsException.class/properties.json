@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "FileException",
+	"category" : "OldFileStream-Exceptions",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"fileClass"
+	],
+	"name" : "OldFileExistsException",
+	"type" : "normal"
+}

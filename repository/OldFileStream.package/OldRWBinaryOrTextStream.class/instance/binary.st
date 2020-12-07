@@ -1,0 +1,3 @@
+modes
+binary
+	isBinary := true

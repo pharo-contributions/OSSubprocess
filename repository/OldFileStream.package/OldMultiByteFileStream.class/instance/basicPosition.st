@@ -1,0 +1,4 @@
+private
+basicPosition
+
+	^ super position.

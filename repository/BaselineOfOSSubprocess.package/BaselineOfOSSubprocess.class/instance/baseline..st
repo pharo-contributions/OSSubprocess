@@ -5,12 +5,12 @@ baseline: spec
 		for: #pharo
 		do: [				
 			spec
-				package: 'OSSubprocess' with: [ spec requires: 'FFICHeaderExtractor' ];
+				package: 'OSSubprocess' with: [ spec requires: #('FFICHeaderExtractor' 'OldFileStream') ];
 				package: 'OSSubprocess-Tests-Unit' with: [ spec requires: #('OSSubprocess' 'Unicode') ];
 				package: 'OSSubprocess-Tests-Stress' with: [ spec requires: 'OSSubprocess-Tests-Unit' ].
 
 			spec baseline: 'FFICHeaderExtractor' with: [
-    			spec repository: 'github://marianopeck/FFICHeaderExtractor/repository' ].
+    			spec repository: 'github://pharo-contributions/FFICHeaderExtractor/repository' ].
 
 			spec baseline: 'Unicode' with: [
 				spec repository: 'github://pharo-contributions/pharo-unicode/src' ].
