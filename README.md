@@ -582,6 +582,10 @@ Metacello new
 ## History
 You can see the whole changelog of the project [Changelog](CHANGELOG.md) for details about the release history.
 
+## Change Log
+- [v0.1.0](https://github.com/pharo-contributions/FFICHeaderExtractor/tree/v0.1.0) (2016-01-27) First milestone release. Version for <= Pharo 8.0
+- 
+
 ## Future work
 Besides the [issues](https://github.com/marianopeck/OSSubprocess/issues), the following are also desired features:
 
@@ -600,11 +604,9 @@ See also the list of [contributors](https://github.com/marianopeck/OSSubprocess/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-## Acknowledgments
+## Acknowledgments and Funding
 
 * OSSubprocess is highly influenced by a subset of the [OSProcess](http://wiki.squeak.org/squeak/708) project. There are parts which we even copied and adapted them (OSSPipe, OSSAttachableStream, OSSUnixProcessExitStatus). Other parts, we took them as inspiration (the idea of ThisOSProcess representing the VM process, the child watcher, and many others). In addition, OSSubprocess currently uses some of the OSProcess **plugin** (not OSProcess image side), such as the SIGCHLD handler or the creation of pipes.
 * Took some ideas from [Limbo](https://github.com/theseion/liblimbo)
 
-
-## Funding
 This project is sponsored by the [Pharo Consortium](http://consortium.pharo.org/).
