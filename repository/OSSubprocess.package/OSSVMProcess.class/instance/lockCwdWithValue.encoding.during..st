@@ -26,11 +26,11 @@ lockCwdWithValue: cwdNewValue encoding: encoding during: aBlock
 		| oldCwd |
 		oldCwd := self systemAccessor getcwd.
 		[
-			self systemAccessor chdir: (cwdNewValue encodeWith: encoding) asString.
+			self systemAccessor chdir: cwdNewValue encoding: encoding.
 			mutexForCwd critical: aBlock.
 		]
 		ensure: [ 
-			self systemAccessor chdir: oldCwd.
+			self systemAccessor chdir: oldCwd encoding: encoding.
 			completed signal.	
 		]
 	] forkAt: Processor userInterruptPriority.
