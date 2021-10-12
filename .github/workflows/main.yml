@@ -24,8 +24,9 @@ jobs:
           - Pharo64-9.0
           # Waiting a 32-bit version of Pharo 90 before re-enabling this version
           #  - Pharo32-9.0
+        smalltalk_config: [ .smalltalk.ston, .stress.smalltalk.ston ]
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.smalltalk }} on ${{ matrix.os }} 
+    name: ${{ matrix.smalltalk }}, ${{ matrix.smalltalk_config }} on ${{ matrix.os }} 
     steps:
       - uses: actions/checkout@v2
       - uses: hpi-swa/setup-smalltalkCI@v1
