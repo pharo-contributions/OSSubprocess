@@ -1,1 +1,0 @@
-Deprecated package including the old file stream implementations

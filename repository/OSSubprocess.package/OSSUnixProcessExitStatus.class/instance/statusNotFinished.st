@@ -1,4 +1,0 @@
-accessing
-statusNotFinished
-
-	^ 'Not finished'

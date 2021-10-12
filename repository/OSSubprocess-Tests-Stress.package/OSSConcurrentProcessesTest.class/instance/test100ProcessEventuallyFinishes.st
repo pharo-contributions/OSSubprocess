@@ -1,4 +1,0 @@
-tests
-test100ProcessEventuallyFinishes
-
-	self launchAndWaitForProcessesToFinish: 100
