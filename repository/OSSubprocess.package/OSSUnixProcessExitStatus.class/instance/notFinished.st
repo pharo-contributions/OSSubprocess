@@ -1,4 +1,0 @@
-testing
-notFinished
-	
-	^ intValue isNil
