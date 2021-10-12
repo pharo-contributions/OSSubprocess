@@ -18,7 +18,7 @@ internalRun
 			Please read the comment of lockCwdWithValue:during: "
 			OSSVMProcess vmProcess
 				lockCwdWithValue: workingDirectory
-				encoding: encoding 
+				encoding: encoding identifier
 				during: [ returnValue := self primitivePosixSpawn: pidtPointer command: command fileActions: posixSpawnFileActionsT attributes: nil argPointer: self buildPrimitiveArgVArgument envPointer: self buildPrimitiveEnvArgument. ]
 		].
 	(returnValue > 0) 

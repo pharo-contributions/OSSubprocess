@@ -9,7 +9,7 @@ testChangeDirWithNonAsciiCharacters
 		lockCwdWithValue: newDir fullName
 		encoding: #utf8
 		during: [ duringSystemCwd := self systemAccessor getcwd ].
-	duringSystemCwd := UnicodeNormalizer new toNFC: duringSystemCwd asByteArray utf8Decoded.
+	duringSystemCwd := UnicodeNormalizer new toNFC: duringSystemCwd.
 
 	"Grrr in latest OSX /tmp is mapped to /private/tmp..."
 	self assert: ((duringSystemCwd = newDir fullName) or: [ duringSystemCwd = ('/private' , newDir fullName) ]).
