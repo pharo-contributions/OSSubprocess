@@ -6,51 +6,60 @@ OSSubprocess allows users to spawn Operating System processes from within Pharo 
 
 An important part of OSSubprocess is how to manage standard streams (`stdin`, `stdout` and `stderr`) and how to provide an API for reading and writing from them at the language level.
 
-> It was decided together with Pharo Consortium that as a first step, we should concentrate on making it work on OSX and Unix. If the tool proves to be good and accepted, we could, at a second step, try to add Windows support.
+> It was decided together with Pharo Consortium that as a first step, we should concentrate on making it work on OSX and Unix. If the tool proves to be good and accepted, we could, at a second step, try to add Windows support. If you need Windows support, you can take a look at the https://github.com/pharo-contributions/OSWinSubprocess project.
 
 ## Table of Contents
-    * [Installation](#installation)
-    * [Getting Started](#getting-started)
-    * [API Reference](#api-reference)
-      * [Child exit status](#child-exit-status)
-        * [OSSVMProcess and it's child watcher](#ossvmprocess-and-its-child-watcher)
-        * [Accessing child status and interpreting it](#accessing-child-status-and-interpreting-it)
-      * [Streams management](#streams-management)
-        * [Handling pipes within Pharo](#handling-pipes-within-pharo)
-        * [Regular files vs pipes](#regular-files-vs-pipes)
-        * [Customizing streams creation](#customizing-streams-creation)
-        * [Stdin example](#stdin-example)
-      * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
-        * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
-        * [When to process streams](#when-to-process-streams)
-        * [Streams processing at the end](#streams-processing-at-the-end)
-          * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
-          * [Delay-based polling waiting](#delay-based-polling-waiting)
-          * [Which waiting to use?](#which-waiting-to-use)
-        * [Processing streams while running](#processing-streams-while-running)
-        * [Asynchronous runs](#asynchronous-runs)
-      * [Sending signals to processes](#sending-signals-to-processes)
-      * [System shutdown](#system-shutdown)
-      * [Environment variables](#environment-variables)
-        * [Setting environment variables](#setting-environment-variables)
-        * [Variables are not expanded](#variables-are-not-expanded)
-        * [Accessing environment variables](#accessing-environment-variables)
-        * [Inherit variables from parent](#inherit-variables-from-parent)
-      * [Shell commands](#shell-commands)
-      * [Setting working directory](#setting-working-directory)
-    * [Running the tests](#running-the-tests)
-    * [Contributing](#contributing)
-    * [History](#history)
-    * [Future work](#future-work)
-    * [Authors](#authors)
-    * [License](#license)
-    * [Acknowledgments](#acknowledgments)
-    * [Funding](#funding)
-
-
+* [Installation](#installation)
+* [Getting Started](#getting-started)
+* [API Reference](#api-reference)
+  * [Child exit status](#child-exit-status)
+    * [OSSVMProcess and it's child watcher](#ossvmprocess-and-its-child-watcher)
+    * [Accessing child status and interpreting it](#accessing-child-status-and-interpreting-it)
+  * [Streams management](#streams-management)
+    * [Handling pipes within Pharo](#handling-pipes-within-pharo)
+    * [Regular files vs pipes](#regular-files-vs-pipes)
+    * [Customizing streams creation](#customizing-streams-creation)
+    * [Stdin example](#stdin-example)
+  * [Synchronism and  how to read streams](#synchronism-and--how-to-read-streams)
+    * [Synchronism vs asynchronous runs](#synchronism-vs-asynchronous-runs)
+    * [When to process streams](#when-to-process-streams)
+    * [Streams processing at the end](#streams-processing-at-the-end)
+      * [Semaphore-based SIGCHLD waiting](#semaphore-based-sigchld-waiting)
+      * [Delay-based polling waiting](#delay-based-polling-waiting)
+      * [Which waiting to use?](#which-waiting-to-use)
+    * [Processing streams while running](#processing-streams-while-running)
+    * [Asynchronous runs](#asynchronous-runs)
+  * [Sending signals to processes](#sending-signals-to-processes)
+  * [System shutdown](#system-shutdown)
+  * [Environment variables](#environment-variables)
+    * [Setting environment variables](#setting-environment-variables)
+    * [Variables are not expanded](#variables-are-not-expanded)
+    * [Accessing environment variables](#accessing-environment-variables)
+    * [Inherit variables from parent](#inherit-variables-from-parent)
+  * [Shell commands](#shell-commands)
+  * [Setting working directory](#setting-working-directory)
+* [History](#history)
+* [Future work](#future-work)
+* [License](#license)
+* [Acknowledgments and Funding](#acknowledgments-and-funding)
 
 ## Installation
 OSSubprocess only works in Pharo >= 5.0 with Spur VM.
+
+> Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work.
+
+### Pharo 5.0 to 8.0
+Use the latest compatible version: `v1.3.0`.
+```Smalltalk
+Metacello new
+ 	baseline: 'OSSubprocess';
+ 	repository: 'github://pharo-contributions/OSSubprocess:v1.3.0/repository';
+	load.
+```
+> Important2: If you are installing under Linux, then you must use a threaded heartbeat VM (not the itimer one). For Pharo 5.0 and 6.0 you can search for "cog_linux32x86_pharo.cog.spur_XXXXXXXXXXXX.tar.gz" i32 [Pharo static file server](http://files.pharo.org/vm/pharo-spur32/linux/). Since Pharo 7.0, threaded heartbeat VM has become the default installation, so you shouldn't have to explicitly download a specific VM.
+
+### Pharo 9.0 or above
+You need to use the `master` branch or a version `> v1.3.0` (API changes).
 
 ```Smalltalk
 Metacello new
@@ -58,10 +67,6 @@ Metacello new
  	repository: 'github://pharo-contributions/OSSubprocess:master/repository';
 	load.
 ```
-
-> Important: Do not load OSProcess project in the same image of OSSubprocess because the latter won't work.
-
-> Important2: If you are installing under Linux, then you must use a threaded heartbeat VM (not the itimer one). For Pharo 5.0 and 6.0 you can search for "cog_linux32x86_pharo.cog.spur_XXXXXXXXXXXX.tar.gz" i32 [Pharo static file server](http://files.pharo.org/vm/pharo-spur32/linux/). Since Pharo 7.0, threaded heartbeat VM has become the default installation, so you shouldn't have to explicitly download a specific VM.
 
 ## Getting Started
 OSSubprocess is quite easy to use but depending on the user needs, there are different parts of the API that could be used. We start with a basic example and later we show more complicated scenarios.
