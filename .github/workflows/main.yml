@@ -18,13 +18,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
         smalltalk:
           - Pharo64-10
           - Pharo64-9.0
           # Waiting a 32-bit version of Pharo 90 before re-enabling this version
           #  - Pharo32-9.0
         smalltalk_config: [ .smalltalk.ston, .stress.smalltalk.ston ]
+        os: [ ubuntu-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.smalltalk }}, ${{ matrix.smalltalk_config }} on ${{ matrix.os }} 
     steps:
