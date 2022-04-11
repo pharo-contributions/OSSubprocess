@@ -10,7 +10,7 @@ For more details see: https://github.com/marianopeck/OSSubprocess
 Class {
 	#name : #BaselineOfOSSubprocess,
 	#superclass : #BaselineOf,
-	#category : 'BaselineOfOSSubprocess'
+	#category : #BaselineOfOSSubprocess
 }
 
 { #category : #baseline }
@@ -29,7 +29,7 @@ BaselineOfOSSubprocess >> baseline: spec [
     			spec repository: 'github://pharo-contributions/FFICHeaderExtractor:v1.0.2/repository' ].
 
 			spec baseline: 'Unicode' with: [
-				spec repository: 'github://pharo-contributions/pharo-unicode/src' ].
+				spec repository: 'github://pharo-contributions/pharo-unicode:v1.1.0/src' ].
 
 			spec
 				group: 'Core' with: #( 'OSSubprocess' );
