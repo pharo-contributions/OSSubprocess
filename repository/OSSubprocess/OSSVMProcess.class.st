@@ -30,33 +30,24 @@ Class {
 		'LibCErrnoSharedPool',
 		'LibCWaitSharedPool'
 	],
-	#category : 'OSSubprocess'
+	#category : #OSSubprocess
 }
 
 { #category : #'initialize - release' }
 OSSVMProcess class >> initialize [
-	Smalltalk os isWindows ifTrue: [ ^ self ]. "Cannot be initialized nor used on Windows."
-	
-	self initializeVMProcessInstance. 
-	self flag: #removeIt.
-	"This IF will be eliminated soon...only here temporary"
-	(SystemVersion current highestUpdate >= 50558)
-		ifTrue: [ 
-			SessionManager default registerToolClassNamed: self name
-			 ]
-		ifFalse: [ 
-			Smalltalk addToStartUpList: OSSVMProcess.
-			Smalltalk addToShutDownList: OSSVMProcess.
- 		]
-	
+
+	self initializeVMProcessInstance.
+	SessionManager default registerToolClassNamed: self name
 ]
 
 { #category : #'initialize - release' }
 OSSVMProcess class >> initializeVMProcessInstance [
-	VMProcess isNil 
-		ifTrue: [ VMProcess := self basicNew. ]
-		ifFalse: [ VMProcess finalizePreviousSession ].
-	VMProcess initialize.
+
+	VMProcess ifNotNil: [
+		VMProcess finalizePreviousSession.
+		VMProcess := nil ].
+	Smalltalk os isWindows ifFalse: [
+		VMProcess := self basicNew initialize ]
 ]
 
 { #category : #'instance creation' }
@@ -73,18 +64,8 @@ OSSVMProcess class >> shutDown: quitting [
 
 { #category : #'system startup' }
 OSSVMProcess class >> startUp: resuming [
-	
-	resuming ifTrue: [ 
-		"To understand why the #stopWaiting, first read the comment of 
-		OSSVMProcess shutDown:
-		It could happen that when the shutDown happened, the child process
-		was in the wait of #waitForExitPollingEvery:doing:. Therefore, until the
-		next cycle of the loop it won't do the queryExitStatus. So we may still 
-		have this problem in image startup. So just in case we run it too in the startup code.
-		 "
-		self vmProcess activeChildren do: [ :each | each stopWaiting ].
-		self initializeVMProcessInstance.
-		]
+
+	resuming ifTrue: [ self initializeVMProcessInstance ]
 ]
 
 { #category : #'OS Process' }
@@ -187,15 +168,19 @@ OSSVMProcess >> finalizePreviousSession [
 	"This method is likely called at image startup and it's job is to finalize
 	stuff related to the previous run and let everything clean so that 
 	the unique instance vmProcess of OSSVMProcess can be initialized correctly at startup. "
-	childWatcher ifNotNil: [ 
+
+	childWatcher ifNotNil: [
 		childWatcher isTerminated ifFalse: [ childWatcher terminate ].
-		childWatcher := nil.
-	].
+		childWatcher := nil ].
 	sigChldSemaphore ifNotNil: [
 		self systemAccessor restoreSigChld.
-		sigChldSemaphore := nil
-	]
-
+		sigChldSemaphore := nil ].
+	"To understand why the #stopWaiting, first read the comment of #shutDown:.
+	It could happen that when the shutDown happened, the child process was in
+	the wait of #waitForExitPollingEvery:doing:. Therefore, until the next cycle
+	of the loop it won't do the queryExitStatus. So we may still 	have this
+	problem in image startup. So just in case we run it too in the startup code."
+	self activeChildren do: [ :each | each stopWaiting ]
 ]
 
 { #category : #'initialize - release' }

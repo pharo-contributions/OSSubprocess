@@ -65,8 +65,18 @@ Class {
 	#pools : [
 		'LibCSignalSharedPool'
 	],
-	#category : 'OSSubprocess'
+	#category : #OSSubprocess
 }
+
+{ #category : #'temp files' }
+OSSUnixSubprocess class >> createTempFilename [
+	"Read comment of createTempFileToBeUsedAsReadStreamOn:.
+	
+	This answers just ONE WAY of defining a temp filename"
+	
+	^ self name , '-p', OSSVMProcess vmProcess pid asString, '-', UUID new printString, '.deleteme'
+	
+]
 
 { #category : #'temp files' }
 OSSUnixSubprocess class >> createTempFileToBeUsedAsReadStreamOn: aDirectoryPath [
@@ -88,16 +98,6 @@ OSSUnixSubprocess class >> createTempFileToBeUsedAsReadStreamOn: aDirectoryPath 
 OSSUnixSubprocess class >> createTempFileToBeUsedAsWriteStreamOn: aDirectoryPath [
 	"See comment of #createTempFileToBeUsedAsReadStreamOn:."
 	^  OldStandardFileStream forceNewFileNamed: (aDirectoryPath asFileReference / self createTempFilename) fullName
-]
-
-{ #category : #'temp files' }
-OSSUnixSubprocess class >> createTempFilename [
-	"Read comment of createTempFileToBeUsedAsReadStreamOn:.
-	
-	This answers just ONE WAY of defining a temp filename"
-	
-	^ self name , '-p', OSSVMProcess vmProcess pid asString, '-', UUID new printString, '.deleteme'
-	
 ]
 
 { #category : #'env building' }
@@ -262,7 +262,7 @@ OSSUnixSubprocess >> collectArgumentPointersInto: aPointer [
 		pointer := ExternalAddress allocate: string size + 1.
 		self registerPointer: pointer.
 		LibC memCopy: string to: pointer size: string size.
-		pointer nbUInt8AtOffset: string size put: 0. "string terminating null char"
+		pointer uint8AtOffset: string size put: 0. "string terminating null char"
 		aPointer platformUnsignedLongAt: ((index - 1) * self systemAccessor sizeOfPointer) + 1 put: pointer value ].
 
 	aPointer platformUnsignedLongAt: ((self argVArguments size - 1) * self systemAccessor sizeOfPointer) + 1 put: 0.
@@ -279,7 +279,7 @@ OSSUnixSubprocess >> collectEnvVariablesPointersInto: aPointer [
 		pointer := ExternalAddress allocate: string size + 1.
 		self registerPointer: pointer.
 		LibC memCopy: string to: pointer size: string size.
-		pointer nbUInt8AtOffset: string size put: 0. "string terminating null char"
+		pointer uint8AtOffset: string size put: 0. "string terminating null char"
 		aPointer platformUnsignedLongAt: ((index - 1) * self systemAccessor sizeOfPointer) + 1 put: pointer value
 	].
 	"The array of pointers also needs to finish with a NULL"
