@@ -69,6 +69,16 @@ Class {
 }
 
 { #category : #'temp files' }
+OSSUnixSubprocess class >> createTempFilename [
+	"Read comment of createTempFileToBeUsedAsReadStreamOn:.
+	
+	This answers just ONE WAY of defining a temp filename"
+	
+	^ self name , '-p', OSSVMProcess vmProcess pid asString, '-', UUID new printString, '.deleteme'
+	
+]
+
+{ #category : #'temp files' }
 OSSUnixSubprocess class >> createTempFileToBeUsedAsReadStreamOn: aDirectoryPath [
 	"Important: for some reason, if we use MultiByteFileStream instances, we have some test failures.
 	So for the moment, until we fix or understand this, always use StandardFileStream instances.
@@ -88,16 +98,6 @@ OSSUnixSubprocess class >> createTempFileToBeUsedAsReadStreamOn: aDirectoryPath 
 OSSUnixSubprocess class >> createTempFileToBeUsedAsWriteStreamOn: aDirectoryPath [
 	"See comment of #createTempFileToBeUsedAsReadStreamOn:."
 	^  OldStandardFileStream forceNewFileNamed: (aDirectoryPath asFileReference / self createTempFilename) fullName
-]
-
-{ #category : #'temp files' }
-OSSUnixSubprocess class >> createTempFilename [
-	"Read comment of createTempFileToBeUsedAsReadStreamOn:.
-	
-	This answers just ONE WAY of defining a temp filename"
-	
-	^ self name , '-p', OSSVMProcess vmProcess pid asString, '-', UUID new printString, '.deleteme'
-	
 ]
 
 { #category : #'env building' }
