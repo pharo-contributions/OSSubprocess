@@ -59,7 +59,7 @@ OSSVMProcess class >> new [
 
 { #category : #'system startup' }
 OSSVMProcess class >> shutDown: quitting [
-	self vmProcess shutDown: quitting
+	self vmProcess ifNotNil: [:a | a shutDown: quitting]
 ]
 
 { #category : #'system startup' }
