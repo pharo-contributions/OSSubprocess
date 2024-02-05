@@ -2,27 +2,29 @@
 It is similar to MultiByteFileStream, but works on in memory stream.
 "
 Class {
-	#name : #OldMultiByteBinaryOrTextStream,
-	#superclass : #ReadWriteStream,
+	#name : 'OldMultiByteBinaryOrTextStream',
+	#superclass : 'ReadWriteStream',
 	#instVars : [
 		'isBinary',
 		'converter'
 	],
-	#category : 'OldFileStream-Base'
+	#category : 'OldFileStream-Base',
+	#package : 'OldFileStream',
+	#tag : 'Base'
 }
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 OldMultiByteBinaryOrTextStream class >> defaultConverter [
 	^ Latin1TextConverter new.
 
 ]
 
-{ #category : #deprecation }
+{ #category : 'deprecation' }
 OldMultiByteBinaryOrTextStream class >> isDeprecated [
 	^true
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldMultiByteBinaryOrTextStream class >> on: aCollection encoding: encodingName [ 
 	| aTextConverter |
 	encodingName 
@@ -32,7 +34,7 @@ OldMultiByteBinaryOrTextStream class >> on: aCollection encoding: encodingName [
 		converter: aTextConverter
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldMultiByteBinaryOrTextStream class >> with: aCollection encoding: encodingName [ 
 	| aTextConverter |
 	encodingName 
@@ -42,20 +44,20 @@ OldMultiByteBinaryOrTextStream class >> with: aCollection encoding: encodingName
 		converter: aTextConverter
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 OldMultiByteBinaryOrTextStream >> asBinaryOrTextStream [
 
 	^ self
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldMultiByteBinaryOrTextStream >> ascii [
 	isBinary := false
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicNext [
 	| nextChar |
 
@@ -66,75 +68,75 @@ OldMultiByteBinaryOrTextStream >> basicNext [
 				ifNotNil: [nextChar asCharacter]].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicNext: anInteger [
 
 	^ super next: anInteger.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicNext: n into: aString [
 
 	^ self next: n into: aString.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicNext: anInteger putAll: aCollection startingAt: startIndex [
 	
 	^super next: anInteger putAll: aCollection startingAt: startIndex
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicNextInto: aString [
 
 	^ self nextInto: aString.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicNextPut: char [
 
 	^ super nextPut: char.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicNextPutAll: aString [
 
 	^ super nextPutAll: aString.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicPeek [
 
 	^ super peek
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicPosition [
 
 	^ self position.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteBinaryOrTextStream >> basicPosition: pos [
 
 	^ self position: pos.
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldMultiByteBinaryOrTextStream >> binary [
 	isBinary := true
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> contents [
 
 	| ret state |
@@ -145,7 +147,7 @@ OldMultiByteBinaryOrTextStream >> contents [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> converter [
 
 	converter ifNil: [converter := self class defaultConverter].
@@ -153,19 +155,19 @@ OldMultiByteBinaryOrTextStream >> converter [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> converter: aConverter [
 
 	converter := aConverter.
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldMultiByteBinaryOrTextStream >> isBinary [
 	^ isBinary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> next [
 
 	| n |
@@ -176,7 +178,7 @@ OldMultiByteBinaryOrTextStream >> next [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> next: anInteger [ 
 
 	| multiString |
@@ -195,7 +197,7 @@ OldMultiByteBinaryOrTextStream >> next: anInteger [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> next: anInteger putAll: aCollection startingAt: startIndex [
 
 
@@ -204,7 +206,7 @@ OldMultiByteBinaryOrTextStream >> next: anInteger putAll: aCollection startingAt
         ^self converter next: anInteger putAll: aCollection startingAt: startIndex toStream: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> nextDelimited: terminator [
 
 	| out ch pos |
@@ -229,7 +231,7 @@ OldMultiByteBinaryOrTextStream >> nextDelimited: terminator [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> nextMatchAll: aColl [
 
     | save |
@@ -244,26 +246,26 @@ OldMultiByteBinaryOrTextStream >> nextMatchAll: aColl [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> nextPut: aCharacter [
 	^ aCharacter isInteger 
 		ifTrue: [ super nextPut: aCharacter asCharacter ]
 		ifFalse: [ self converter nextPut: aCharacter toStream: self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> nextPutAll: aCollection [
 	^ self isBinary
 		ifTrue: [ super nextPutAll: aCollection ]
 		ifFalse: [ aCollection do: [ :each | self nextPut: each ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> padToEndWith: aChar [
 	"We don't have pages, so we are at the end, and don't need to pad."
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> peek [
 	"Answer what would be returned if the message next were sent to the receiver. If the receiver is at the end, answer nil.  "
 
@@ -277,7 +279,7 @@ OldMultiByteBinaryOrTextStream >> peek [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> peekFor: item [ 
 
 	| next state |
@@ -290,7 +292,7 @@ OldMultiByteBinaryOrTextStream >> peekFor: item [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OldMultiByteBinaryOrTextStream >> reset [
 
 	super reset.
@@ -302,7 +304,7 @@ OldMultiByteBinaryOrTextStream >> reset [
 	self converter. "ensure that we have a converter."
 ]
 
-{ #category : #'file in/out' }
+{ #category : 'file in/out' }
 OldMultiByteBinaryOrTextStream >> setConverterForCode [
 
 	| current |
@@ -319,7 +321,7 @@ OldMultiByteBinaryOrTextStream >> setConverterForCode [
 
 ]
 
-{ #category : #'file in/out' }
+{ #category : 'file in/out' }
 OldMultiByteBinaryOrTextStream >> setEncoderForSourceCodeNamed: streamName [
 
 	| l |
@@ -335,7 +337,7 @@ OldMultiByteBinaryOrTextStream >> setEncoderForSourceCodeNamed: streamName [
 
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldMultiByteBinaryOrTextStream >> skipSeparators [
 
 	[self atEnd] whileFalse: [
@@ -345,7 +347,7 @@ OldMultiByteBinaryOrTextStream >> skipSeparators [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> skipSeparatorsAndPeekNext [
 
 	"A special function to make nextChunk fast"
@@ -360,13 +362,13 @@ OldMultiByteBinaryOrTextStream >> skipSeparatorsAndPeekNext [
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldMultiByteBinaryOrTextStream >> text [
 	isBinary := false
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> upTo: delim [ 
 
 	| out ch |
@@ -382,7 +384,7 @@ OldMultiByteBinaryOrTextStream >> upTo: delim [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteBinaryOrTextStream >> upToEnd [
 
 	| newStream element newCollection |

@@ -1,6 +1,6 @@
-Extension { #name : #PositionableStream }
+Extension { #name : 'PositionableStream' }
 
-{ #category : #'*OldFileStream' }
+{ #category : '*OldFileStream' }
 PositionableStream >> asBinaryOrTextStream [
 	"Convert to a stream that can switch between bytes and characters"
 

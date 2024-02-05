@@ -188,8 +188,8 @@ To use the file system for most applications, you typically create a FileStream.
 *** On DOS, files cannot be shortened!  ***  To overwrite a file with a shorter one, first delete the old file (FileDirectory deleteFilePath: 'Hard Disk:aFolder:dataFolder:foo') or (aFileDirectory deleteFileNamed: 'foo').  Then write your new shorter version.
 "
 Class {
-	#name : #OldFileStream,
-	#superclass : #ReadWriteStream,
+	#name : 'OldFileStream',
+	#superclass : 'ReadWriteStream',
 	#classVars : [
 		'Stderr',
 		'Stdin',
@@ -197,10 +197,12 @@ Class {
 		'Stdout',
 		'TheStdioHandles'
 	],
-	#category : 'OldFileStream-Base'
+	#category : 'OldFileStream-Base',
+	#package : 'OldFileStream',
+	#tag : 'Base'
 }
 
-{ #category : #'file reader services' }
+{ #category : 'file reader services' }
 OldFileStream class >> changesFileSuffixes [
 
 	^#('changes')
@@ -208,14 +210,14 @@ OldFileStream class >> changesFileSuffixes [
 
 ]
 
-{ #category : #'concrete classes' }
+{ #category : 'concrete classes' }
 OldFileStream class >> concreteStream [
 	"Who should we really direct class queries to?  "
 	^ OldMultiByteFileStream.
 
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 OldFileStream class >> convertCRtoLF: fileName [
 	"Convert the given file to LF line endings. Put the result in a file with the extention '.lf'"
 
@@ -237,7 +239,7 @@ OldFileStream class >> convertCRtoLF: fileName [
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> detectFile: aBlock do: anotherBlock [
 
 	^aBlock value
@@ -245,7 +247,7 @@ OldFileStream class >> detectFile: aBlock do: anotherBlock [
       	ifNotNil: [:file| [anotherBlock value: file] ensure: [file close]]
 ]
 
-{ #category : #'file reader services' }
+{ #category : 'file reader services' }
 OldFileStream class >> fileIn: fullName [
 	"File in the entire contents of the file specified by the name provided"
 
@@ -260,19 +262,19 @@ OldFileStream class >> fileIn: fullName [
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> fileNamed: fileName [ 
 	^ self concreteStream fileNamed: (self fullName: fileName)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> fileNamed: fileName do: aBlock [
 	"Returns the result of aBlock."
 	
 	^ self detectFile: [ self fileNamed: fileName ] do: aBlock
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> flushAndVoidStdioFiles [
 
 	StdioFiles ifNotNil: [
@@ -287,7 +289,7 @@ OldFileStream class >> flushAndVoidStdioFiles [
 	self voidStdioFiles
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> forceNewFileNamed: fileName [
  	"Create a new file with the given name, and answer a stream opened for writing on that file. If the file already exists, delete it without asking before creating the new file."
 
@@ -298,86 +300,86 @@ OldFileStream class >> forceNewFileNamed: fileName [
 	^self concreteStream forceNewFileNamed: fileName
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> forceNewFileNamed: fileName do: aBlock [
 	"Returns the result of aBlock."
 	
 	^ self detectFile: [ self forceNewFileNamed: fileName ] do: aBlock
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> fullName: fileName [
 	^ fileName asFileReference fullName 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 OldFileStream class >> initialize [
 	TheStdioHandles := Array new: 3.
 	SessionManager default registerSystemClassNamed: self name
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> isAFileNamed: fName [
 	"return whether a file exists with the given name"
 	^self concreteStream isAFileNamed: (self fullName: fName)
 ]
 
-{ #category : #'file reader services' }
+{ #category : 'file reader services' }
 OldFileStream class >> isChangesFileSuffix: suffix [
 
 	^ self changesFileSuffixes includes: suffix
 
 ]
 
-{ #category : #deprecation }
+{ #category : 'deprecation' }
 OldFileStream class >> isDeprecated [
 	^true
 ]
 
-{ #category : #'file reader services' }
+{ #category : 'file reader services' }
 OldFileStream class >> isSourceFileSuffix: suffix [
 
 	^ self sourceFileSuffixes includes: suffix
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> new [
 	^ self basicNew
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> newFileNamed: fileName [ 
 	^ self concreteStream newFileNamed: (self fullName: fileName)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> newFileNamed: fileName do: aBlock [
 	"Returns the result of aBlock."
 	
 	^ self detectFile: [ self newFileNamed: fileName ] do: aBlock
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> newForStdio [
 	"This is a hook for subclasses to initialize themselves properly."
 
 	^self new
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> oldFileNamed: fileName [ 
 	^ self concreteStream oldFileNamed: (self fullName: fileName)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> oldFileNamed: fileName do: aBlock [
 	"Returns the result of aBlock."
 	
 	^ self detectFile: [ self oldFileNamed: fileName ] do: aBlock
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> oldFileOrNoneNamed: fileName [
 	"If the file exists, answer a read-only FileStream on it. If it doesn't, answer nil."
 
@@ -389,19 +391,19 @@ OldFileStream class >> oldFileOrNoneNamed: fileName [
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> onHandle: aFileSystemHandle [
 	^ self concreteStream new
 		open: aFileSystemHandle fullName
 		forWrite: aFileSystemHandle isWritable
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> readOnlyFileNamed: fileName [ 
 	^ self concreteStream readOnlyFileNamed: (self fullName: fileName)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldFileStream class >> readOnlyFileNamed: fileName do: aBlock [
 	"Open the existing file with the given name for read-only access and pass it as argument to aBlock.
 	Returns the result of aBlock."
@@ -409,7 +411,7 @@ OldFileStream class >> readOnlyFileNamed: fileName do: aBlock [
 	^ self detectFile: [ self readOnlyFileNamed: fileName ] do: aBlock
 ]
 
-{ #category : #'file reader services' }
+{ #category : 'file reader services' }
 OldFileStream class >> removeLineFeeds: fullName [
 	| fileContents |
 	fileContents := ((OldFileStream readOnlyFileNamed: fullName) wantsLineEndConversion: true) contentsOfEntireFile.
@@ -418,18 +420,18 @@ OldFileStream class >> removeLineFeeds: fullName [
 		close.
 ]
 
-{ #category : #'dnd requests' }
+{ #category : 'dnd requests' }
 OldFileStream class >> requestDropStream: dropIndex [
 	"Request a read-only stream for some file that was dropped onto the application"
 	^self concreteStream new requestDropStream: dropIndex.
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 OldFileStream class >> shutDown: isImageQuitting [
 	isImageQuitting ifTrue: [ self flushAndVoidStdioFiles ]
 ]
 
-{ #category : #'file reader services' }
+{ #category : 'file reader services' }
 OldFileStream class >> sourceFileSuffixes [
 
 	^#('st' 'cs')
@@ -437,7 +439,7 @@ OldFileStream class >> sourceFileSuffixes [
 
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> standardIOStreamNamed: moniker forWrite: forWrite [
 	"Create if necessary and store default stdin, stdout and other files based on the their names"
 	
@@ -467,7 +469,7 @@ OldFileStream class >> standardIOStreamNamed: moniker forWrite: forWrite [
 
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 OldFileStream class >> startUp: isImageStarting [
 	isImageStarting
 		ifFalse: [ ^ self ].
@@ -479,13 +481,13 @@ OldFileStream class >> startUp: isImageStarting [
 				ifFalse: [ TheStdioHandles := Array new: 3 ] ]
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> stderr [
 
 	^Stderr ifNil: [ Stderr := self standardIOStreamNamed: #stderr forWrite: true ]
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> stdin [
 
 	^Stdin ifNil: [
@@ -495,19 +497,19 @@ OldFileStream class >> stdin [
 			yourself ].
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> stdioHandles [
 	<primitive: 'primitiveFileStdioHandles' module: 'FilePlugin' error: ec>
 	self primitiveFailed
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> stdout [
 
 	^Stdout ifNil: [ Stdout := self standardIOStreamNamed: #stdout forWrite: true ]
 ]
 
-{ #category : #stdio }
+{ #category : 'stdio' }
 OldFileStream class >> voidStdioFiles [
 		
 	Smalltalk os isWin32 ifTrue: [ 
@@ -525,7 +527,7 @@ OldFileStream class >> voidStdioFiles [
 	Stdin := Stdout := Stderr := StdioFiles := nil
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 OldFileStream class >> writeSourceCodeFrom: aStream baseName: baseName isSt: stOrCsFlag [
 
 	| extension converter fileName  |
@@ -554,14 +556,14 @@ OldFileStream class >> writeSourceCodeFrom: aStream baseName: baseName isSt: stO
 	self inform: 'Filed out to: ', String cr, fileName.
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 OldFileStream >> asBinaryOrTextStream [
 	"I can switch between binary and text data"
 
 	^ self
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldFileStream >> ascii [
 	"Set this file to ascii (text) mode."
 
@@ -569,14 +571,14 @@ OldFileStream >> ascii [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldFileStream >> atEnd [
 	"Answer true if the current position is >= the end of file position."
 
 	self subclassResponsibility
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldFileStream >> binary [
 	"Set this file to binary mode."
 
@@ -584,7 +586,7 @@ OldFileStream >> binary [
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldFileStream >> close [
 	"Close this file."
 
@@ -592,7 +594,7 @@ OldFileStream >> close [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldFileStream >> closed [
 	"Answer true if this file is closed."
 
@@ -600,7 +602,7 @@ OldFileStream >> closed [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> contents [
 	"Return the contents of the receiver. Do not close or otherwise touch the receiver. Return data in whatever mode the receiver is in (e.g., binary or text)."
 	| s savePos |
@@ -611,7 +613,7 @@ OldFileStream >> contents [
 	^s
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> contentsOfEntireFile [
 	"Read all of the contents of the receiver."
 
@@ -625,26 +627,26 @@ OldFileStream >> contentsOfEntireFile [
 	^s
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 OldFileStream >> delete [
 	
 	(File named: self name) delete
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 OldFileStream >> exists [
 	
 	^ (File named: self name) exists
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> file [
 	"Answer the file for the page the receiver is streaming over."
 
 	self subclassResponsibility
 ]
 
-{ #category : #ToDeprecate }
+{ #category : 'ToDeprecate' }
 OldFileStream >> fileIn [
 	"Guarantee that the receiver is readOnly before fileIn for efficiency and
 	to eliminate remote sharing conflicts."
@@ -653,7 +655,7 @@ OldFileStream >> fileIn [
 	CodeImporter evaluateFileStream: self.
 ]
 
-{ #category : #flushing }
+{ #category : 'flushing' }
 OldFileStream >> flush [
 	"When writing, this flushes the write buffer the stream uses to reduce
 	the number of write() system calls it makes. This should generally be
@@ -663,20 +665,20 @@ OldFileStream >> flush [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> localName [
 
 	^ self name asFileReference basename
 
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OldFileStream >> longPrintOn: aStream [
 	"Do nothing, so it will print short.  Called to print the error file.  If the error was in a file operation, we can't read the contents of that file.  Just print its name instead."
 
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OldFileStream >> longPrintOn: aStream limitedTo: sizeLimit indent: indent [
 
 	"Do nothing, so it will print short.  Called to print the error file.  If the error was in a file operation, we can't read the contents of that file.  Just print its name instead."
@@ -684,19 +686,19 @@ OldFileStream >> longPrintOn: aStream limitedTo: sizeLimit indent: indent [
 	aStream cr
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> mimeTypes [
 	^ self name asFileReference mimeTypes.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> name [
 	"Answer the name of the file for the page the receiver is streaming over."
 
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> next [
 
 	(position >= readLimit and: [self atEnd])
@@ -704,7 +706,7 @@ OldFileStream >> next [
 		ifFalse: [^collection at: (position := position + 1)]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> next: anInteger [
 
 	| newCollection howManyRead increment |
@@ -723,35 +725,35 @@ OldFileStream >> next: anInteger [
 	^newCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> nextPut: aByte [
 	"1/31/96 sw: subclassResponsibility"
 
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> nextPutAll: aCollection [
 	"1/31/96 sw: made subclass responsibility"
 
 	self subclassResponsibility
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldFileStream >> position [
 	"Answer the current character position in the file."
 
 	self subclassResponsibility
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldFileStream >> position: pos [
 	"Set the current character position in the file to pos."
 
 	self subclassResponsibility
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OldFileStream >> printOn: aStream [
 
 	super printOn: aStream.
@@ -759,7 +761,7 @@ OldFileStream >> printOn: aStream [
 	self file printOn: aStream
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldFileStream >> readOnly [
 	"Set this file's mode to read-only."
 
@@ -767,12 +769,12 @@ OldFileStream >> readOnly [
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldFileStream >> readOnlyStream [
 	^self readOnly
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldFileStream >> readWrite [
 	"Set this file's mode to read-write."
 
@@ -780,7 +782,7 @@ OldFileStream >> readWrite [
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldFileStream >> reopen [
 	"Ensure that the receiver is open, re-open it if necessary."
 	"Details: Files that were open when a snapshot occurs are no longer valid when the snapshot is resumed. This operation re-opens the file if that has happened."
@@ -789,14 +791,14 @@ OldFileStream >> reopen [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OldFileStream >> reset [
 	"Set the current character position to the beginning of the file."
 
 	self subclassResponsibility
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldFileStream >> setToEnd [
 	"Set the current character position to the end of the File. The same as
 	self position: self size."
@@ -804,14 +806,14 @@ OldFileStream >> setToEnd [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileStream >> size [
 	"Answer the size of the file in characters."
 
 	self subclassResponsibility
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldFileStream >> skip: n [
 	"Set the character position to n characters from the current position.
 	Error if not enough characters left in the file."
@@ -819,7 +821,7 @@ OldFileStream >> skip: n [
 	self subclassResponsibility
 ]
 
-{ #category : #flushing }
+{ #category : 'flushing' }
 OldFileStream >> sync [
 	"When writing, this syncs any written/flushed data still in the kernel
 	file system buffers to disk. This should generally be used after #flush,
@@ -829,7 +831,7 @@ OldFileStream >> sync [
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldFileStream >> text [
 	"Set this file to text (ascii) mode."
 
@@ -837,7 +839,7 @@ OldFileStream >> text [
 
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldFileStream >> truncate: pos [
 	"Truncate file to pos"
 

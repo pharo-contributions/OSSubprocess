@@ -2,27 +2,29 @@
 Notify when file exists
 "
 Class {
-	#name : #OldFileExistsException,
-	#superclass : #FileException,
+	#name : 'OldFileExistsException',
+	#superclass : 'FileException',
 	#instVars : [
 		'fileClass'
 	],
-	#category : 'OldFileStream-Exceptions'
+	#category : 'OldFileStream-Exceptions',
+	#package : 'OldFileStream',
+	#tag : 'Exceptions'
 }
 
-{ #category : #exceptioninstantiator }
+{ #category : 'exceptioninstantiator' }
 OldFileExistsException class >> fileName: aFileName fileClass: aClass [ 
 	^ self new
 		fileName: aFileName;
 		fileClass: aClass
 ]
 
-{ #category : #deprecation }
+{ #category : 'deprecation' }
 OldFileExistsException class >> isDeprecated [
 	^true
 ]
 
-{ #category : #exceptiondescription }
+{ #category : 'exceptiondescription' }
 OldFileExistsException >> defaultAction [
 	"The default action taken if the exception is signaled."
 
@@ -30,18 +32,18 @@ OldFileExistsException >> defaultAction [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileExistsException >> file [
 	
 	^ self fileClass fileNamed: fileName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileExistsException >> fileClass [
 	^ fileClass ifNil: [OldStandardFileStream]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldFileExistsException >> fileClass: aClass [
 	fileClass := aClass
 ]

@@ -10,18 +10,20 @@ See examples at the class side.
 --bf 2/19/1999 12:52
 "
 Class {
-	#name : #OldLimitingLineStreamWrapper,
-	#superclass : #Object,
+	#name : 'OldLimitingLineStreamWrapper',
+	#superclass : 'Object',
 	#instVars : [
 		'stream',
 		'line',
 		'limitingBlock',
 		'position'
 	],
-	#category : 'OldFileStream-Base'
+	#category : 'OldFileStream-Base',
+	#package : 'OldFileStream',
+	#tag : 'Base'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 OldLimitingLineStreamWrapper class >> example1 [
 	<sampleInstance>
 	"LimitingLineStreamWrapper example1"
@@ -37,7 +39,7 @@ OldLimitingLineStreamWrapper class >> example1 [
 			
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 OldLimitingLineStreamWrapper class >> example2 [
 	<sampleInstance>
 	"LimitingLineStreamWrapper example2"
@@ -56,7 +58,7 @@ OldLimitingLineStreamWrapper class >> example2 [
 			
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 OldLimitingLineStreamWrapper class >> exampleStream [
 	<sampleInstance>
 	^ 'From me@somewhere
@@ -75,30 +77,30 @@ okay
 ' readStream
 ]
 
-{ #category : #deprecation }
+{ #category : 'deprecation' }
 OldLimitingLineStreamWrapper class >> isDeprecated [
 	^true
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldLimitingLineStreamWrapper class >> on: aStream delimiter: aString [
 
 	^self new setStream: aStream delimiter: aString
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldLimitingLineStreamWrapper >> atEnd [
 
 	^line isNil or: [limitingBlock value: line]
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 OldLimitingLineStreamWrapper >> close [
 	^stream close
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> delimiter: aString [
 	"Set limitBlock to check for a delimiting string. Be unlimiting if nil"
 
@@ -109,14 +111,14 @@ OldLimitingLineStreamWrapper >> delimiter: aString [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> lastLineRead [
 	"Return line last read. At stream end, this is the boundary line or nil"
 
 	^ line
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> limitingBlock: aBlock [
 	"The limitingBlock is evaluated with a line to check if this line terminates the stream"
 
@@ -124,7 +126,7 @@ OldLimitingLineStreamWrapper >> limitingBlock: aBlock [
 	self updatePosition
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> linesUpToEnd [
 
 	| elements ln |
@@ -134,7 +136,7 @@ OldLimitingLineStreamWrapper >> linesUpToEnd [
 	^elements
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> next [
 	"Provide character-based access"
 
@@ -145,7 +147,7 @@ OldLimitingLineStreamWrapper >> next [
 	^ Character cr
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> nextLine [
 
 	| thisLine |
@@ -156,14 +158,14 @@ OldLimitingLineStreamWrapper >> nextLine [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> peekLine [
 
 	self atEnd ifTrue: [^nil].
 	^ line
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OldLimitingLineStreamWrapper >> printOn: aStream [
 
 	super printOn: aStream.
@@ -171,7 +173,7 @@ OldLimitingLineStreamWrapper >> printOn: aStream [
 	stream printOn: aStream
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldLimitingLineStreamWrapper >> setStream: aStream delimiter: aString [
 
 	stream := aStream.
@@ -180,7 +182,7 @@ OldLimitingLineStreamWrapper >> setStream: aStream delimiter: aString [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> skipThisLine [
 
 	line := stream nextLine.
@@ -188,7 +190,7 @@ OldLimitingLineStreamWrapper >> skipThisLine [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> upToEnd [
 
 	
@@ -197,7 +199,7 @@ OldLimitingLineStreamWrapper >> upToEnd [
 			strm nextPutAll: ln; cr]]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldLimitingLineStreamWrapper >> updatePosition [
 	"Call this before doing character-based access"
 

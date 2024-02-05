@@ -10,8 +10,8 @@ The read buffer is flushed (#flushReadBuffer) whenever a write attempt is made.
 The buffer state is valid if and only if collection is not nil and position < readLimit.
 "
 Class {
-	#name : #OldStandardFileStream,
-	#superclass : #OldFileStream,
+	#name : 'OldStandardFileStream',
+	#superclass : 'OldFileStream',
 	#instVars : [
 		'name',
 		'fileID',
@@ -21,10 +21,12 @@ Class {
 	#classVars : [
 		'Registry'
 	],
-	#category : 'OldFileStream-Base'
+	#category : 'OldFileStream-Base',
+	#package : 'OldFileStream',
+	#tag : 'Base'
 }
 
-{ #category : #'error handling' }
+{ #category : 'error handling' }
 OldStandardFileStream class >> fileDoesNotExistUserHandling: fullFileName [
 	| selection newName |
 	selection := UIManager default
@@ -41,7 +43,7 @@ OldStandardFileStream class >> fileDoesNotExistUserHandling: fullFileName [
 	^ self oldFileNamed: (self fullName: newName)
 ]
 
-{ #category : #'error handling' }
+{ #category : 'error handling' }
 OldStandardFileStream class >> fileExistsUserHandling: fullFileName [
 	| file localName choice newName newFullFileName |
 	
@@ -67,7 +69,7 @@ OldStandardFileStream class >> fileExistsUserHandling: fullFileName [
 	Abort signal: 'Please close this to abort file opening'
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OldStandardFileStream class >> fileNamed: fileName [
 	"Open a file with the given name for reading and writing. If the name has no directory part, then the file will be created in the default directory. If the file already exists, its prior contents may be modified or replaced, but the file will not be truncated on close."
 
@@ -75,7 +77,7 @@ OldStandardFileStream class >> fileNamed: fileName [
 
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OldStandardFileStream class >> forceNewFileNamed: fileName [ 
 	"Create a new file with the given name, and answer a stream opened 
 	for writing on that file. If the file already exists, delete it without 
@@ -102,7 +104,7 @@ OldStandardFileStream class >> forceNewFileNamed: fileName [
 			(FileDoesNotExistException fileName: fullName) signal].
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OldStandardFileStream class >> isAFileNamed: fileName [
 	"Answer true if a file of the given name exists."
 
@@ -114,7 +116,7 @@ OldStandardFileStream class >> isAFileNamed: fileName [
 
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OldStandardFileStream class >> newFileNamed: fileName [
  	"Create a new file with the given name, and answer a stream opened for writing on that file. If the file already exists, ask the user what to do."
 
@@ -129,7 +131,7 @@ OldStandardFileStream class >> newFileNamed: fileName [
 
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OldStandardFileStream class >> oldFileNamed: fileName [
 	"Open an existing file with the given name for reading and writing. If the name has no directory part, then the  default directory will be assumed. If the file does not exist, an exception is signaled. If the file exists, its prior contents may be modified or replaced, but the file will not be truncated on close."
 
@@ -142,7 +144,7 @@ OldStandardFileStream class >> oldFileNamed: fileName [
 			(FileDoesNotExistException fileName: fullName) signal]
 ]
 
-{ #category : #'error handling' }
+{ #category : 'error handling' }
 OldStandardFileStream class >> readOnlyFileDoesNotExistUserHandling: fullFileName [
 
 	| dir files choices selection newName fileName |
@@ -169,7 +171,7 @@ OldStandardFileStream class >> readOnlyFileDoesNotExistUserHandling: fullFileNam
 	^ self error: 'Could not open a file'
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OldStandardFileStream class >> readOnlyFileNamed: fileName [ 
 	"Open an existing file with the given name for reading."
 
@@ -182,18 +184,18 @@ OldStandardFileStream class >> readOnlyFileNamed: fileName [
 	"StandardFileStream readOnlyFileNamed: 'kjsd.txt' "
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OldStandardFileStream class >> register: anObject [
 	^self registry add: anObject
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OldStandardFileStream class >> registry [
-	^Registry ifNil: [Registry := WeakRegistry new]
+	^Registry ifNil: [Registry := FinalizationRegistry new]
 
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OldStandardFileStream class >> retryWithGC: execBlock until: testBlock forFileNamed: fullName [
 	"Re-implemented to only force GC if a file with the given name exists"
 	| blockValue foundIt |
@@ -210,25 +212,25 @@ OldStandardFileStream class >> retryWithGC: execBlock until: testBlock forFileNa
 	^execBlock value.
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OldStandardFileStream class >> unregister: anObject [
 	^self registry remove: anObject ifAbsent:[]
 ]
 
-{ #category : #finalization }
+{ #category : 'finalization' }
 OldStandardFileStream >> actAsExecutor [
 	super actAsExecutor.
 	name := nil.
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldStandardFileStream >> ascii [
 	"opposite of binary"
 	buffer1 := String new: 1.
 	collection ifNotNil: [ collection := collection asString ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldStandardFileStream >> atEnd [
 	"Answer whether the receiver is at its end.  "
 	
@@ -237,7 +239,7 @@ OldStandardFileStream >> atEnd [
 	^self primAtEnd: fileID
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldStandardFileStream >> basicNext [
 	"Answer the next byte from this file, or nil if at the end of the file."
 	
@@ -255,13 +257,13 @@ OldStandardFileStream >> basicNext [
 		ifFalse: [ ^nil ]
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldStandardFileStream >> binary [
 	buffer1 := ByteArray new: 1.
 	collection ifNotNil: [ collection := collection asByteArray ]
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldStandardFileStream >> close [
 	"Close this file."
 
@@ -274,7 +276,7 @@ OldStandardFileStream >> close [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldStandardFileStream >> closed [
 	"Answer true if this file is closed."
 
@@ -282,14 +284,14 @@ OldStandardFileStream >> closed [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldStandardFileStream >> collectionSpecies [
 	"Answer the species of collection into which the receiver can stream"
 	
 	^buffer1 species
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> directory [
 	"Return the directory containing this file."
 
@@ -297,7 +299,7 @@ OldStandardFileStream >> directory [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldStandardFileStream >> disableReadBuffering [
 
 	collection ifNotNil: [
@@ -312,7 +314,7 @@ OldStandardFileStream >> disableReadBuffering [
 		
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldStandardFileStream >> enableReadBuffering [
 
 	collection ifNil: [
@@ -321,7 +323,7 @@ OldStandardFileStream >> enableReadBuffering [
 	readLimit := position := 0
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldStandardFileStream >> ensureOpen [
 	"Make sure that this file really is open."
 
@@ -331,19 +333,19 @@ OldStandardFileStream >> ensureOpen [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> file [
 	"Answer the object representing the receiver's file.  Need for compatibility with some calls -- check senders. "
 
 	^ self
 ]
 
-{ #category : #finalization }
+{ #category : 'finalization' }
 OldStandardFileStream >> finalize [
 	self primCloseNoError: fileID.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> findString: string [
 	"Fast version of #upToAll: to find a String in a file starting from the beginning.
 	Returns the position and also sets the position there.
@@ -369,7 +371,7 @@ OldStandardFileStream >> findString: string [
 	^0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> findStringFromEnd: string [
 	"Fast version to find a String in a file starting from the end.
 	Returns the position and also sets the position there.
@@ -393,7 +395,7 @@ OldStandardFileStream >> findStringFromEnd: string [
 	^0
 ]
 
-{ #category : #flushing }
+{ #category : 'flushing' }
 OldStandardFileStream >> flush [
 	"When writing, this flushes the write buffer the stream uses to reduce
 	the number of write() system calls it makes. This should generally be
@@ -402,7 +404,7 @@ OldStandardFileStream >> flush [
 	^ self primFlush: fileID
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldStandardFileStream >> flushReadBuffer [
 
 	collection ifNotNil: [
@@ -413,7 +415,7 @@ OldStandardFileStream >> flushReadBuffer [
 			self primSetPosition: fileID to: currentPosition ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> fullName [
 	"Answer this file's full path name."
 
@@ -421,7 +423,7 @@ OldStandardFileStream >> fullName [
 
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 OldStandardFileStream >> insertLineFeeds [
 	"(FileStream oldFileNamed: 'BBfix2.st') insertLineFeeds"
 	| s crLf f |
@@ -433,31 +435,31 @@ OldStandardFileStream >> insertLineFeeds [
 	f close
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldStandardFileStream >> isBinary [
 	^ buffer1 class == ByteArray
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldStandardFileStream >> isDirectory [
 	"Answer whether the receiver represents a directory.  For the post-transition case, uncertain what to do."
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldStandardFileStream >> isReadOnly [
 
 	^ rwmode not
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> localName [
 	^ name ifNotNil: [
 		(name findTokens: FileSystem disk delimiter asString) last]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> name [
 	"Answer this file's full path name."
 
@@ -465,20 +467,20 @@ OldStandardFileStream >> name [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> next [
 	"Answer the next byte from this file, or nil if at the end of the file."
 
 	^ self basicNext
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> next: n [
 	"Return a string with the next n characters of the filestream in it."
 	^ self nextInto: (self collectionSpecies new: n)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> next: n into: aString startingAt: startIndex [
 	"Read n bytes into the given string.
 	Return aString or a partial copy if less than
@@ -491,7 +493,7 @@ OldStandardFileStream >> next: n into: aString startingAt: startIndex [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> next: anInteger putAll: aString startingAt: startIndex [
 	"Store the next anInteger elements from the given collection."
 	rwmode ifFalse: [^ self error: 'Cannot write a read-only file'].
@@ -501,7 +503,7 @@ OldStandardFileStream >> next: anInteger putAll: aString startingAt: startIndex 
 	^aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> nextPut: char [
 	"Write the given character to this file."
 
@@ -514,7 +516,7 @@ OldStandardFileStream >> nextPut: char [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> nextPutAll: stringOrByteArray [
 	"Write all the characters of the given string to this file."
 
@@ -526,14 +528,14 @@ OldStandardFileStream >> nextPutAll: stringOrByteArray [
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldStandardFileStream >> open [
 	"For compatibility with a few existing things."
 
 	^ self reopen
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldStandardFileStream >> open: fileName forWrite: writeMode [ 
 	"Open the file with the given name. If writeMode is true, allow writing, otherwise open the file in read-only mode."
 	| f |
@@ -553,7 +555,7 @@ OldStandardFileStream >> open: fileName forWrite: writeMode [
 	
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldStandardFileStream >> openOnHandle: aFileID name: streamName forWrite: writeMode [
 	"Initialize the file with the given handle. If writeMode is true then
 	 allow writing, otherwise put the file in read-only mode.
@@ -567,14 +569,14 @@ OldStandardFileStream >> openOnHandle: aFileID name: streamName forWrite: writeM
 	self enableReadBuffering
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldStandardFileStream >> openReadOnly [
 	"Open the receiver as a read-only file."
 
 	^ self open: name forWrite: false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> padToEndWith: aChar [
 	"On the Mac, files do not truncate.  One can delete the old file and write a new one, but sometime deletion fails (file still open? file stale?).  This is a sad compromise.  Just let the file be the same length but pad it with a harmless character."
 
@@ -587,7 +589,7 @@ OldStandardFileStream >> padToEndWith: aChar [
 							withAll: pad).
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> peek [
 	"Answer what would be returned if the message next were sent to the receiver. If the receiver is at the end, answer nil.  "
 	| next |
@@ -597,7 +599,7 @@ OldStandardFileStream >> peek [
 	^ next
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> peekFor: item [ 
 	"Answer false and do not advance if the next element is not equal to item, or if this stream is at the end.  If the next element is equal to item, then advance over it and return true"
 	| next |
@@ -607,7 +609,7 @@ OldStandardFileStream >> peekFor: item [
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> peekLast [
 	"Return that item just put at the end of the stream"
 
@@ -617,7 +619,7 @@ OldStandardFileStream >> peekLast [
 
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldStandardFileStream >> position [
 	"Return the receiver's current file position."
 
@@ -627,7 +629,7 @@ OldStandardFileStream >> position [
 	^self primGetPosition: fileID
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldStandardFileStream >> position: pos [
 	"Set the receiver's position as indicated."
 
@@ -650,7 +652,7 @@ OldStandardFileStream >> position: pos [
 	^self primSetPosition: fileID to: pos
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primAtEnd: id [
 	"Answer true if the file position is at the end of the file."
 
@@ -659,7 +661,7 @@ OldStandardFileStream >> primAtEnd: id [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primClose: id [
 	"Close this file."
 
@@ -668,7 +670,7 @@ OldStandardFileStream >> primClose: id [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primCloseNoError: id [
 	"Close this file. Don't raise an error if the primitive fails."
 
@@ -676,7 +678,7 @@ OldStandardFileStream >> primCloseNoError: id [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldStandardFileStream >> primDropRequestFileHandle: dropIndex [
 	"Primitive. Return the (read-only) file handle for some file that was just dropped onto the application.
 	Fail if dropIndex is out of range or the primitive is not supported."
@@ -684,7 +686,7 @@ OldStandardFileStream >> primDropRequestFileHandle: dropIndex [
 	^nil
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldStandardFileStream >> primDropRequestFileName: dropIndex [
 	"Primitive. Return the file name for some file that was just dropped onto the application.
 	Fail if dropIndex is out of range or the primitive is not supported."
@@ -692,7 +694,7 @@ OldStandardFileStream >> primDropRequestFileName: dropIndex [
 	^nil
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primFlush: id [
 	"On Unix, the FilePlugin uses stdio FILE* structs which maintain their
 	own internal buffer to minimize write() syscalls. This flushes that buffer.
@@ -705,7 +707,7 @@ OldStandardFileStream >> primFlush: id [
 	self primitiveFailed
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primGetPosition: id [
 	"Get this files current position."
 
@@ -714,7 +716,7 @@ OldStandardFileStream >> primGetPosition: id [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primOpen: fileName writable: writableFlag [
 	"Open a file of the given name, and return the file ID obtained.
 	If writableFlag is true, then
@@ -729,7 +731,7 @@ OldStandardFileStream >> primOpen: fileName writable: writableFlag [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primRead: id into: byteArray startingAt: startIndex count: count [
 	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. Answer the number of bytes actually read."
 
@@ -739,7 +741,7 @@ OldStandardFileStream >> primRead: id into: byteArray startingAt: startIndex cou
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primSetPosition: id to: anInteger [
 	"Set this file to the given position."
 
@@ -748,7 +750,7 @@ OldStandardFileStream >> primSetPosition: id to: anInteger [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primSize: id [
 	"Answer the size of this file."
 
@@ -757,7 +759,7 @@ OldStandardFileStream >> primSize: id [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primSizeNoError: id [
 	"Answer the size of this file. Answer nil if the primitive fails; this indicates that the file handle has become stale."
 
@@ -766,7 +768,7 @@ OldStandardFileStream >> primSizeNoError: id [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primSync: id [
 	"On Unix, this syncs any written or flushed data still in the kernel file
 	system buffers to disk. On Windows this and primFlush: do the same thing"
@@ -777,7 +779,7 @@ OldStandardFileStream >> primSync: id [
 	self primitiveFailed
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primTruncate: id to: anInteger [
 	"Truncate this file to the given position."
 
@@ -786,7 +788,7 @@ OldStandardFileStream >> primTruncate: id to: anInteger [
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OldStandardFileStream >> primWrite: id from: stringOrByteArray startingAt: startIndex count: count [
 	"Write count bytes onto this file from the given string or byte array starting at the given index. Answer the number of bytes written."
 
@@ -797,14 +799,14 @@ OldStandardFileStream >> primWrite: id from: stringOrByteArray startingAt: start
 			ifFalse: [ 'File ', name, ' write failed' ])
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OldStandardFileStream >> printOn: aStream [
 	"Put a printed version of the receiver onto aStream."
 
 	aStream nextPutAll: self class name; nextPutAll: ': '; print: name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> readInto: byteArray startingAt: startIndex count: count [
 	"Read up to n bytes into the given byteArray.
 	Return the number of bytes actually read."
@@ -840,7 +842,7 @@ OldStandardFileStream >> readInto: byteArray startingAt: startIndex count: count
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldStandardFileStream >> readOnly [
 	"Make this file read-only."
 
@@ -848,14 +850,14 @@ OldStandardFileStream >> readOnly [
 
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 OldStandardFileStream >> readOnlyCopy [
 
 	^ self class readOnlyFileNamed: self name.
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldStandardFileStream >> readWrite [
 	"Make this file writable."
 
@@ -863,12 +865,12 @@ OldStandardFileStream >> readWrite [
 
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OldStandardFileStream >> register [
 	^self class register: self
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldStandardFileStream >> reopen [
 	"Close and reopen this file. The file position is reset to zero."
 	"Details: Files that were open when a snapshot occurs are no longer valid when the snapshot is resumed. This operation re-opens the file if that has happened."
@@ -882,7 +884,7 @@ OldStandardFileStream >> reopen [
 
 ]
 
-{ #category : #'dnd requests' }
+{ #category : 'dnd requests' }
 OldStandardFileStream >> requestDropStream: dropIndex [
 	"Return a read-only stream for some file the user has just dropped onto the application."
 
@@ -898,27 +900,27 @@ OldStandardFileStream >> requestDropStream: dropIndex [
 	self enableReadBuffering
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OldStandardFileStream >> reset [
 	self ensureOpen.
 	self position: 0.
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldStandardFileStream >> setToEnd [
 	"Set the position of the receiver to the end of file."
 
 	self position: self size
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> size [
 	"Answer the size of the file in characters."
 
 	^ self primSize: fileID
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldStandardFileStream >> skip: n [
 	"Set the character position to n characters from the current position.
 	Error if not enough characters left in the file."
@@ -933,7 +935,7 @@ OldStandardFileStream >> skip: n [
 	self position: self position + n
 ]
 
-{ #category : #flushing }
+{ #category : 'flushing' }
 OldStandardFileStream >> sync [
 	"When writing, this syncs any written/flushed data still in the kernel
 	file system buffers to disk. This should generally be used after #flush,
@@ -942,14 +944,14 @@ OldStandardFileStream >> sync [
 	^ self primSync: fileID
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldStandardFileStream >> truncate [
 	"Truncate to zero"
 
 	^ self truncate: 0
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldStandardFileStream >> truncate: pos [
 	"Truncate to this position"
 
@@ -957,12 +959,12 @@ OldStandardFileStream >> truncate: pos [
 	^self primTruncate: fileID to: pos
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OldStandardFileStream >> unregister [
 	^self class unregister: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> upTo: delim [ 
 	"Fast version to speed up nextChunk"
 	| pos buffer count |
@@ -984,7 +986,7 @@ OldStandardFileStream >> upTo: delim [
 	^ buffer , (self upTo: delim)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> upToAnyOf: delimiters do: aBlock [
 	"Fast version to speed up nextChunk"
 	| pos buffer count result |
@@ -1009,7 +1011,7 @@ OldStandardFileStream >> upToAnyOf: delimiters do: aBlock [
 	^ buffer , (self upToAnyOf: delimiters do: aBlock)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldStandardFileStream >> upToEnd [
 	"Answer a subcollection from the current access position through the last element of the receiver."
 

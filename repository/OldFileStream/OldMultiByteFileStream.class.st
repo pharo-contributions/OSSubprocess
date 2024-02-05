@@ -10,8 +10,8 @@ The central class to access the external file.  The interface of this object is 
   * #lineEndConvention: and #wantsLineEndConversion: (and #binary) can cause some puzzling situation because the inst var lineEndConvention and wantsLineEndConversion are mutated.  If you have any suggestions to clean up the protocol, please let me know.
 "
 Class {
-	#name : #OldMultiByteFileStream,
-	#superclass : #OldStandardFileStream,
+	#name : 'OldMultiByteFileStream',
+	#superclass : 'OldStandardFileStream',
 	#instVars : [
 		'converter',
 		'lineEndConvention',
@@ -25,10 +25,12 @@ Class {
 		'LineEndStrings',
 		'LookAheadCount'
 	],
-	#category : 'OldFileStream-Base'
+	#category : 'OldFileStream-Base',
+	#package : 'OldFileStream',
+	#tag : 'Base'
 }
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 OldMultiByteFileStream class >> defaultToCR [
 
 	"MultiByteFileStream defaultToCR"
@@ -36,14 +38,14 @@ OldMultiByteFileStream class >> defaultToCR [
 
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 OldMultiByteFileStream class >> defaultToCRLF [
 
 	"MultiByteFileStream defaultToCRLF"
 	LineEndDefault := #crlf.
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 OldMultiByteFileStream class >> defaultToLF [
 
 	"MultiByteFileStream defaultToLF"
@@ -51,7 +53,7 @@ OldMultiByteFileStream class >> defaultToLF [
 
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 OldMultiByteFileStream class >> guessDefaultLineEndConvention [
 	"Lets try to guess the line end convention from what we know about the
 	path name delimiter from FileDirectory."
@@ -71,7 +73,7 @@ OldMultiByteFileStream class >> guessDefaultLineEndConvention [
 	^ self defaultToCR
 ]
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 OldMultiByteFileStream class >> initialize [
 	Cr := Character cr.
 	Lf := Character lf.
@@ -87,14 +89,14 @@ OldMultiByteFileStream class >> initialize [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream class >> lineEndDefault [
 	"Answer the default line-ending convention that will be used by default, which was determined at start-up by looking at platform attributes."
 	^ LineEndDefault
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OldMultiByteFileStream class >> newFrom: aFileStream [
 
 	| rw n |
@@ -105,26 +107,26 @@ OldMultiByteFileStream class >> newFrom: aFileStream [
 
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 OldMultiByteFileStream class >> startUp [
 	self guessDefaultLineEndConvention.
 
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 OldMultiByteFileStream class >> startUp: resuming [
 	self guessDefaultLineEndConvention.
 
 ]
 
-{ #category : #remnant }
+{ #category : 'remnant' }
 OldMultiByteFileStream >> accepts: aSymbol [
 
  	^ converter accepts: aSymbol.
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldMultiByteFileStream >> ascii [
 
 	super ascii.
@@ -132,14 +134,14 @@ OldMultiByteFileStream >> ascii [
 
 ]
 
-{ #category : #'private - crlf' }
+{ #category : 'private - crlf' }
 OldMultiByteFileStream >> bareNext [
 
 	 ^ self converter nextFromStream: self.
 
 ]
 
-{ #category : #'file in/out' }
+{ #category : 'file in/out' }
 OldMultiByteFileStream >> basicChunk [
 	"If our buffer in collection contains an chunk with no embedded !'s, nor
 	any non-ascii characters, return that.
@@ -157,112 +159,112 @@ OldMultiByteFileStream >> basicChunk [
 				goodString]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicNext: anInteger [
 
 	^ super next: anInteger.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicNext: n into: aString [
 
 	^ super next: n into: aString.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicNext: anInteger putAll: aCollection startingAt: startIndex [
 
 
         ^super next: anInteger putAll: aCollection startingAt: startIndex
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicNextInto: aString [
 
 	^ super nextInto: aString.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicNextPut: char [
 
 	^ super nextPut: char.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicNextPutAll: aString [
 
 	^ super nextPutAll: aString.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicPeek [
 
 	^ super peek
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicPosition [
 
 	^ super position.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicPosition: pos [
 
 	^ super position: pos.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicReadInto: byteArray startingAt: startIndex count: count [
 
 	^ super readInto: byteArray startingAt: startIndex count: count.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicSetToEnd [
 
 	^ super setToEnd.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicSkip: n [
 
 	^ super skip: n.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicUpTo: delim [
 
 	^ super upTo: delim.
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> basicVerbatim: aString [
 
 	^ super verbatim: aString.
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldMultiByteFileStream >> binary [
 
 	super binary.
 	self lineEndConvention: nil
 ]
 
-{ #category : #'private - crlf' }
+{ #category : 'private - crlf' }
 OldMultiByteFileStream >> convertStringFromCr: aString [ 
 	| inStream outStream |
 	lineEndConvention ifNil: [^ aString].
@@ -279,7 +281,7 @@ OldMultiByteFileStream >> convertStringFromCr: aString [
 	^ outStream contents
 ]
 
-{ #category : #'private - crlf' }
+{ #category : 'private - crlf' }
 OldMultiByteFileStream >> convertStringToCr: aString [ 
 	| inStream outStream |
 	lineEndConvention ifNil: [^ aString].
@@ -298,7 +300,7 @@ OldMultiByteFileStream >> convertStringToCr: aString [
 	^ outStream contents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> converter [
 
 	converter ifNil: [self converter: TextConverter defaultSystemConverter].
@@ -306,7 +308,7 @@ OldMultiByteFileStream >> converter [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> converter: aConverter [
 
 	converter := aConverter.
@@ -314,7 +316,7 @@ OldMultiByteFileStream >> converter: aConverter [
 
 ]
 
-{ #category : #'private - crlf' }
+{ #category : 'private - crlf' }
 OldMultiByteFileStream >> detectLineEndConvention [
 	"Detect the line end convention used in this stream. The result may be either #cr, #lf or #crlf."
 	| char numRead state |
@@ -349,13 +351,13 @@ OldMultiByteFileStream >> detectLineEndConvention [
 	^ lineEndConvention
 ]
 
-{ #category : #'private - crlf' }
+{ #category : 'private - crlf' }
 OldMultiByteFileStream >> doConversion [
 
 	^wantsLineEndConversion == true and: [ lineEndConvention notNil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> fileInEncodingName: aString [
 
 	self converter: (TextConverter newForEncoding: aString).
@@ -363,7 +365,7 @@ OldMultiByteFileStream >> fileInEncodingName: aString [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> installLineEndConventionInConverter [
 
 	converter ifNotNil: [
@@ -373,20 +375,20 @@ OldMultiByteFileStream >> installLineEndConventionInConverter [
 				ifFalse: [ nil ]) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> lineEndConvention [
 
 	^lineEndConvention
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> lineEndConvention: aSymbol [
 
 	(lineEndConvention := aSymbol) ifNotNil: [wantsLineEndConversion := true].
 	self installLineEndConventionInConverter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> next [
 
 	| char secondChar state |
@@ -406,7 +408,7 @@ OldMultiByteFileStream >> next [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> next: anInteger [ 
 
 	| multiString |
@@ -430,7 +432,7 @@ OldMultiByteFileStream >> next: anInteger [
 
 ]
 
-{ #category : #'private - crlf' }
+{ #category : 'private - crlf' }
 OldMultiByteFileStream >> next: n innerFor: aString [
 
 	| peekChar state |
@@ -448,7 +450,7 @@ OldMultiByteFileStream >> next: n innerFor: aString [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> next: anInteger putAll: aCollection startingAt: startIndex [
 
 
@@ -457,7 +459,7 @@ OldMultiByteFileStream >> next: anInteger putAll: aCollection startingAt: startI
         ^self converter next: anInteger putAll: aCollection startingAt: startIndex toStream: self
 ]
 
-{ #category : #'file in/out' }
+{ #category : 'file in/out' }
 OldMultiByteFileStream >> nextChunk [
 	"Answer the contents of the receiver, up to the next terminator
 	character. Doubled terminators indicate an embedded terminator
@@ -478,7 +480,7 @@ OldMultiByteFileStream >> nextChunk [
 								ifNotNil: [converter restoreStateOf: self with: state.]]])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> nextDelimited: terminator [
 
 	| out ch save |
@@ -504,7 +506,7 @@ OldMultiByteFileStream >> nextDelimited: terminator [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> nextMatchAll: aColl [
 
     | save |
@@ -519,7 +521,7 @@ OldMultiByteFileStream >> nextMatchAll: aColl [
 
 ]
 
-{ #category : #'file in/out' }
+{ #category : 'file in/out' }
 OldMultiByteFileStream >> nextPreamble [
 	"Assuming that preamble part does not contain ]lang[ tag"
 	self skipSeparators.
@@ -537,7 +539,7 @@ OldMultiByteFileStream >> nextPreamble [
 								ifNotNil: [converter restoreStateOf: self with: state.]]]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> nextPut: aCharacter [
 	aCharacter isInteger 
 		ifTrue: [ ^ super nextPut: aCharacter ].
@@ -551,14 +553,14 @@ OldMultiByteFileStream >> nextPut: aCharacter [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> nextPutAll: aCollection [
 	^ (self isBinary or: [ aCollection class == ByteArray ])
 		ifTrue: [ super nextPutAll: aCollection ]
 		ifFalse: [ self converter nextPutAll: aCollection toStream: self ]
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OldMultiByteFileStream >> open: fileName forWrite: writeMode [ 
 	| result |
 
@@ -574,7 +576,7 @@ OldMultiByteFileStream >> open: fileName forWrite: writeMode [
 	^result
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> peek [
 	"Answer what would be returned if the message next were sent to the receiver. If the receiver is at the end, answer nil.  "
 
@@ -588,7 +590,7 @@ OldMultiByteFileStream >> peek [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> peekFor: item [ 
 
 	| next state |
@@ -600,7 +602,7 @@ OldMultiByteFileStream >> peekFor: item [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> readInto: buffer startingAt: offset count: requestedCount [
 	"Read up to requestedCount elements into the given buffer starting at offset.
 	Return the number of elements actually read.
@@ -616,7 +618,7 @@ OldMultiByteFileStream >> readInto: buffer startingAt: offset count: requestedCo
 	^ requestedCount
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> requestDropStream: dropIndex [
 	"Needs to install proper converter"
 	
@@ -628,7 +630,7 @@ OldMultiByteFileStream >> requestDropStream: dropIndex [
 	^result
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OldMultiByteFileStream >> reset [
 
 	super reset.
@@ -638,7 +640,7 @@ OldMultiByteFileStream >> reset [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 OldMultiByteFileStream >> setConverterForCode [
 
 	| current |
@@ -657,7 +659,7 @@ OldMultiByteFileStream >> setConverterForCode [
 
 ]
 
-{ #category : #positioning }
+{ #category : 'positioning' }
 OldMultiByteFileStream >> skipSeparators [
 
 	| state character |
@@ -670,7 +672,7 @@ OldMultiByteFileStream >> skipSeparators [
 		converter restoreStateOf: self with: state ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> skipSeparatorsAndPeekNext [
 	"Same as #skipSeparators, but returns the next character after the separators if such exists."
 
@@ -686,7 +688,7 @@ OldMultiByteFileStream >> skipSeparatorsAndPeekNext [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> upTo: delimiter [
 
 	^self collectionSpecies new: 1000 streamContents: [ :stream |
@@ -696,7 +698,7 @@ OldMultiByteFileStream >> upTo: delimiter [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> upToAnyOf: delimiters do: aBlock [
 
 	^self collectionSpecies new: 1000 streamContents: [ :stream |
@@ -705,7 +707,7 @@ OldMultiByteFileStream >> upToAnyOf: delimiters do: aBlock [
 			whileFalse: [ stream nextPut: ch ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> upToEnd [
 
 	^self collectionSpecies
@@ -717,7 +719,7 @@ OldMultiByteFileStream >> upToEnd [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldMultiByteFileStream >> upToPosition: anInteger [
 	"Answer a subcollection containing items starting from the current position and ending including the given position. Usefully different to #next: in that positions measure *bytes* from the file, where #next: wants to measure *characters*."
 	^self collectionSpecies new: 1000 streamContents: [ :stream |
@@ -726,14 +728,14 @@ OldMultiByteFileStream >> upToPosition: anInteger [
 			whileFalse: [ stream nextPut: ch ] ]
 ]
 
-{ #category : #'private - crlf' }
+{ #category : 'private - crlf' }
 OldMultiByteFileStream >> wantsLineEndConversion [
 
 	^wantsLineEndConversion == true
 
 ]
 
-{ #category : #remnant }
+{ #category : 'remnant' }
 OldMultiByteFileStream >> wantsLineEndConversion: aBoolean [
 	
 	wantsLineEndConversion :=  aBoolean.

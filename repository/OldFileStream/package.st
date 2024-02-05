@@ -1,1 +1,1 @@
-Package { #name : #OldFileStream }
+Package { #name : 'OldFileStream' }

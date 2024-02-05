@@ -9,36 +9,38 @@ A simulation of a FileStream, but living totally in memory.  Hold the contents o
 Need to be able to switch between binary and text, as a FileStream does, without recopying the whole collection.  Convert to binary upon input and output.  Always keep as text internally.
 "
 Class {
-	#name : #OldRWBinaryOrTextStream,
-	#superclass : #ReadWriteStream,
+	#name : 'OldRWBinaryOrTextStream',
+	#superclass : 'ReadWriteStream',
 	#instVars : [
 		'isBinary'
 	],
-	#category : 'OldFileStream-Base'
+	#category : 'OldFileStream-Base',
+	#package : 'OldFileStream',
+	#tag : 'Base'
 }
 
-{ #category : #deprecation }
+{ #category : 'deprecation' }
 OldRWBinaryOrTextStream class >> isDeprecated [
 	^true
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 OldRWBinaryOrTextStream >> asBinaryOrTextStream [
 
 	^ self
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldRWBinaryOrTextStream >> ascii [
 	isBinary := false
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldRWBinaryOrTextStream >> binary [
 	isBinary := true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> contents [
 	"Answer with a copy of my collection from 1 to readLimit."
 
@@ -53,12 +55,12 @@ OldRWBinaryOrTextStream >> contents [
 		startingAt: 1.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OldRWBinaryOrTextStream >> isBinary [
 	^ isBinary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> next [
 
 	| byte |
@@ -69,7 +71,7 @@ OldRWBinaryOrTextStream >> next [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> next: anInteger [ 
 	"Answer the next anInteger elements of my collection. Must override to get class right."
 
@@ -78,7 +80,7 @@ OldRWBinaryOrTextStream >> next: anInteger [
 	^ self nextInto: newArray
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> next: n into: aCollection startingAt: startIndex [
 	"Read n objects into the given collection. 
 	Return aCollection or a partial copy if less than n elements have been read."
@@ -96,7 +98,7 @@ OldRWBinaryOrTextStream >> next: n into: aCollection startingAt: startIndex [
 		ifFalse:[^aCollection copyFrom: 1 to: startIndex+max-1]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> next: anInteger putAll: aCollection startingAt: startIndex [
 	"Optimized for ByteArrays"
 	aCollection class == ByteArray 
@@ -104,12 +106,12 @@ OldRWBinaryOrTextStream >> next: anInteger putAll: aCollection startingAt: start
 	^super next: anInteger putAll: aCollection startingAt: startIndex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> nextPut: charOrByte [
 	^ super nextPut: charOrByte asCharacter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> nextPutAll: aCollection [
 	"Optimized for ByteArrays"
 	^ aCollection class == ByteArray 
@@ -117,19 +119,19 @@ OldRWBinaryOrTextStream >> nextPutAll: aCollection [
 		ifFalse: [ super nextPutAll: aCollection ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 OldRWBinaryOrTextStream >> on: aCollection [
 
 	super on: aCollection.
 	readLimit := 0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> padToEndWith: aChar [
 	"We don't have pages, so we are at the end, and don't need to pad."
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> readInto: aCollection startingAt: startIndex count: n [
 	"Read n objects into the given collection. 
 	Return number of elements that have been read."
@@ -145,7 +147,7 @@ OldRWBinaryOrTextStream >> readInto: aCollection startingAt: startIndex count: n
 	^ max
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OldRWBinaryOrTextStream >> reset [
 	"Set the receiver's position to the beginning of the sequence of objects."
 
@@ -157,12 +159,12 @@ OldRWBinaryOrTextStream >> reset [
 
 ]
 
-{ #category : #modes }
+{ #category : 'modes' }
 OldRWBinaryOrTextStream >> text [
 	isBinary := false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> upTo: anObject [ 
 	"Answer a subcollection from the current access position to the 
 	occurrence (if any, but not inclusive) of anObject in the receiver. If 
@@ -175,7 +177,7 @@ OldRWBinaryOrTextStream >> upTo: anObject [
 	^newStream contents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OldRWBinaryOrTextStream >> upToEnd [
 	"Must override to get class right."
 	| newArray |
