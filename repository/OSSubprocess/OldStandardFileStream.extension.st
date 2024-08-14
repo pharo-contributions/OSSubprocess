@@ -1,6 +1,6 @@
-Extension { #name : #OldStandardFileStream }
+Extension { #name : 'OldStandardFileStream' }
 
-{ #category : #'*OSSubprocess' }
+{ #category : '*OSSubprocess' }
 OldStandardFileStream >> atEndOfFile [
 	"Answer whether the receiver is at its end based on the result of the last read operation. This uses feof() to test the underlying file stream status, and can be used as an alternative to #atEnd, which does not properly report end of file status for an OSPipe.
 	
@@ -11,12 +11,12 @@ OldStandardFileStream >> atEndOfFile [
 
 ]
 
-{ #category : #'*OSSubprocess' }
+{ #category : '*OSSubprocess' }
 OldStandardFileStream >> basicFileID [
 	^ fileID
 ]
 
-{ #category : #'*OSSubprocess' }
+{ #category : '*OSSubprocess' }
 OldStandardFileStream >> getFilePointerAsCFile [
 
 	| pointerSize secondFieldStart secondFieldEnd |
@@ -34,17 +34,17 @@ OldStandardFileStream >> getFilePointerAsCFile [
 
 ]
 
-{ #category : #'*OSSubprocess' }
+{ #category : '*OSSubprocess' }
 OldStandardFileStream >> ossIsPipe [
 	^ false
 ]
 
-{ #category : #'*OSSubprocess' }
+{ #category : '*OSSubprocess' }
 OldStandardFileStream >> systemAccessor [
 	^ OSSVMProcess vmProcess systemAccessor
 ]
 
-{ #category : #'*OSSubprocess' }
+{ #category : '*OSSubprocess' }
 OldStandardFileStream >> upToEndOfFile [
 	"Answer a subcollection from the current access position through the last element of the receiver.  Use #atEndOfFile to determine end of file status with feof(), required for reliable end of file test on OS pipes or in files that could have been written by another (child) process different than the VM process."
 	

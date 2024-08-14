@@ -9,8 +9,8 @@ This class takes care of running what we call the ""child watcher"" which is bas
  
 "
 Class {
-	#name : #OSSVMProcess,
-	#superclass : #Object,
+	#name : 'OSSVMProcess',
+	#superclass : 'Object',
 	#instVars : [
 		'accessProtect',
 		'childProcessList',
@@ -30,17 +30,18 @@ Class {
 		'LibCErrnoSharedPool',
 		'LibCWaitSharedPool'
 	],
-	#category : #OSSubprocess
+	#category : 'OSSubprocess',
+	#package : 'OSSubprocess'
 }
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSVMProcess class >> initialize [
 
 	self initializeVMProcessInstance.
 	SessionManager default registerToolClassNamed: self name
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSVMProcess class >> initializeVMProcessInstance [
 
 	VMProcess ifNotNil: [
@@ -50,25 +51,25 @@ OSSVMProcess class >> initializeVMProcessInstance [
 		VMProcess := self basicNew initialize ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OSSVMProcess class >> new [
 
 	self error: 'Only one instance of OSSVMProcess or any of its subclasses should exist in the image. Use #vmProcess to obtain the singleton instance.'.
 
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 OSSVMProcess class >> shutDown: quitting [
 	self vmProcess ifNotNil: [:a | a shutDown: quitting]
 ]
 
-{ #category : #'system startup' }
+{ #category : 'system startup' }
 OSSVMProcess class >> startUp: resuming [
 
 	resuming ifTrue: [ self initializeVMProcessInstance ]
 ]
 
-{ #category : #'OS Process' }
+{ #category : 'OS Process' }
 OSSVMProcess class >> tryToDisableOSProcessSigchldHandler [
 	
 	self flag: #fixIt. "hack!!!!"
@@ -81,7 +82,7 @@ OSSVMProcess class >> tryToDisableOSProcessSigchldHandler [
 	].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSVMProcess class >> vmProcess [
 	"Answer a single instance representing the OS process in 
 	which this Smalltalk VM and image is executing."
@@ -89,7 +90,7 @@ OSSVMProcess class >> vmProcess [
 	^ VMProcess
 ]
 
-{ #category : #'childs management' }
+{ #category : 'childs management' }
 OSSVMProcess >> activeChildren [
 	"Answer child processes which are currently believed to be running."
 
@@ -97,13 +98,13 @@ OSSVMProcess >> activeChildren [
 
 ]
 
-{ #category : #'childs management' }
+{ #category : 'childs management' }
 OSSVMProcess >> allMyChildren [
 
 	^ childProcessList
 ]
 
-{ #category : #'child watching' }
+{ #category : 'child watching' }
 OSSVMProcess >> checkFinishedChildren [
 	"Does a waitpid() with the flag WNOHANG which makes the system call to answer immediatly rather than waiting until child has exited. 
 	Answers nil if child has not yet exited or the exit status if it has.
@@ -137,20 +138,20 @@ OSSVMProcess >> checkFinishedChildren [
 				ensure: [ statusPointer free ] ]
 ]
 
-{ #category : #'childs management' }
+{ #category : 'childs management' }
 OSSVMProcess >> childPids [
 
 	^ childProcessList collect: [ :process | process pid ]
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSVMProcess >> earlyFinishedProcesses [
 	
 	^ earlyFinishedProcesses ifNil: [ earlyFinishedProcesses := Dictionary new ]
 ]
 
-{ #category : #'childs management' }
+{ #category : 'childs management' }
 OSSVMProcess >> exitedChildren [
 	"Answer child processes which have exited and are no longer running."
 
@@ -158,12 +159,12 @@ OSSVMProcess >> exitedChildren [
 
 ]
 
-{ #category : #'library path' }
+{ #category : 'library path' }
 OSSVMProcess >> ffiLibraryName [ 
 	^ LibC
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 OSSVMProcess >> finalizePreviousSession [
 	"This method is likely called at image startup and it's job is to finalize
 	stuff related to the previous run and let everything clean so that 
@@ -183,7 +184,7 @@ OSSVMProcess >> finalizePreviousSession [
 	self activeChildren do: [ :each | each stopWaiting ]
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSVMProcess >> initialize [
 	"Set my instance variables to reflect the state of the OS process in which 
 	this Smalltalk virtual machine is. executing."
@@ -200,7 +201,7 @@ OSSVMProcess >> initialize [
 	self initializeChildWatcher.
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSVMProcess >> initializeAllMyChildren [
 	"Use a Dictionary if process identifiers are unique. On Windows, the
 	process ID is not unique, so use an OrderedCollection instead."
@@ -209,34 +210,38 @@ OSSVMProcess >> initializeAllMyChildren [
 
 ]
 
-{ #category : #'child watching' }
+{ #category : 'child watching' }
 OSSVMProcess >> initializeChildWatcher [
 	"This is a process which waits for the death of a child processes. Use SIGCHLD events rather than a Delay to poll."
 
 	| processSynchronizationDelay |
 	processSynchronizationDelay := Delay forMilliseconds: 30.
-	childWatcher	 ifNil: [
-		childWatcher := [[
-				"OSProcess authors suspected that there were various ways in which OS signals
-				could be missed under conditions of heavy load. For that reason, we use
-				#waitTimeoutMSecs: with the semaphore, so that if a signal is missed,
-				we time out and rescan occasionally anyway (#updateActiveChildrenAndNotifyDead
-				sends queryExitStatus which sends waitpid() )
-				"
-				self sigChldSemaphore waitTimeoutMSecs: 1000.
-				processSynchronizationDelay wait. "Avoids lost signals in heavy process switching"
-				self checkFinishedChildren.
-				] repeat] newProcess priority: Processor highIOPriority.
+	childWatcher ifNil: [
+		childWatcher := [ [
+			"OSProcess authors suspected that there were various ways in which OS signals
+			could be missed under conditions of heavy load. For that reason, we use
+			#waitTimeoutMSecs: with the semaphore, so that if a signal is missed,
+			we time out and rescan occasionally anyway (#updateActiveChildrenAndNotifyDead
+			sends queryExitStatus which sends waitpid() )"
+			
+			SystemVersion current major < 12 ifTrue: [
+				self sigChldSemaphore waitTimeoutMSecs: 1000
+			] ifFalse: [
+				self sigChldSemaphore waitTimeoutMilliseconds: 1000
+			].
+
+			processSynchronizationDelay wait. "Avoids lost signals in heavy process switching"
+		 	self checkFinishedChildren ] repeat
+		] newProcess priority: Processor highIOPriority.
 
 		childWatcher resume.
 		"name selected to look reasonable in the process browser"
-		childWatcher name: ((ReadStream on: childWatcher hash asString) next: 5)
-				, ': the OSSubprocess child watcher'
-	]
-
+		childWatcher name:
+			((ReadStream on: childWatcher hash asString) next: 5)
+			, ': the OSSubprocess child watcher' ]
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSVMProcess >> initializeSessionID [
 	| oldFile | 
 	self flag: #fixMe. 
@@ -247,14 +252,14 @@ OSSVMProcess >> initializeSessionID [
 	oldFile close.
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSVMProcess >> initializeSignalHandlers [
 	"#sigChldSemaphore will lazily create and register the semaphore if needed"
 	self sigChldSemaphore.
 	
 ]
 
-{ #category : #cwd }
+{ #category : 'cwd' }
 OSSVMProcess >> lockCwdWithValue: cwdNewValue encoding: encoding during: aBlock [
 	"This method is a complete hack in order to support a #cmd: option in OSSUnixSubprocess. 
 	OSSUnixSubprocess relies in posix_spawn() family of functions to spwan processes in the OS,
@@ -294,18 +299,18 @@ OSSVMProcess >> lockCwdWithValue: cwdNewValue encoding: encoding during: aBlock 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSVMProcess >> pid [
 	^ pid
 ]
 
-{ #category : #'child watching' }
+{ #category : 'child watching' }
 OSSVMProcess >> primitiveWaitpid: aProcessId statusPointer: statusPointer options: optionBits [
 	
 	^ self ffiCall: #( int waitpid(int aProcessId, void* statusPointer, int optionBits) )
 ]
 
-{ #category : #'childs management' }
+{ #category : 'childs management' }
 OSSVMProcess >> pruneExitedChildrenAfter: size [
 	"Limit the size of the child process registry. Select the last entries, and unregister
 	them if they are no longer active."
@@ -316,7 +321,7 @@ OSSVMProcess >> pruneExitedChildrenAfter: size [
 
 ]
 
-{ #category : #'childs management' }
+{ #category : 'childs management' }
 OSSVMProcess >> registerChildProcess: anOSProcess [
 	"Unregister anOSProcess, and trim the child process registry to prevent excessive
 	accumulation of exited children.
@@ -336,7 +341,7 @@ OSSVMProcess >> registerChildProcess: anOSProcess [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSVMProcess >> sessionID [
 	"The sessionID is something internal to the VM and it's used
 	as part of the fileID structure (sqFile) of StandardFileStream. 
@@ -344,7 +349,7 @@ OSSVMProcess >> sessionID [
 	^ sessionID
 ]
 
-{ #category : #'system startup & shutdown' }
+{ #category : 'system startup & shutdown' }
 OSSVMProcess >> shutDown: quitting [
 	"If we have a process that do not stop automatically (like a tail -f) and it runs
 	with #fork  (at Smalltalk level)	then that process will be continue running 
@@ -361,7 +366,7 @@ OSSVMProcess >> shutDown: quitting [
 	quitting ifTrue: [ self activeChildren do: [ :each | each shutDown: quitting ] ].
 ]
 
-{ #category : #'child watching' }
+{ #category : 'child watching' }
 OSSVMProcess >> sigChldSemaphore [
 	"Answer the value of sigChldSemaphore.
 	If nil, then register and create a semaphore to be signaled upon SIGCHLD.
@@ -371,12 +376,12 @@ OSSVMProcess >> sigChldSemaphore [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSVMProcess >> systemAccessor [
 	^ systemAccessor 
 ]
 
-{ #category : #'childs management' }
+{ #category : 'childs management' }
 OSSVMProcess >> unregisterChildProcess: anOSProcess [
 
 	"Unregister anOSProcess from the list of children"
@@ -386,7 +391,7 @@ OSSVMProcess >> unregisterChildProcess: anOSProcess [
 
 ]
 
-{ #category : #'child watching' }
+{ #category : 'child watching' }
 OSSVMProcess >> updateChildProcessWithId: aChildPid withStatus: status [
 	
 	| childProcess |

@@ -1,1 +1,1 @@
-Package { #name : #OSSubprocess }
+Package { #name : 'OSSubprocess' }

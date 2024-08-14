@@ -8,18 +8,19 @@ Thanks to the Stream-API, it almos allows a code user, to either use Pipes or re
 OSSPipe uses a single-character buffer to implement #peek without losing data from the external OS pipe.
 "
 Class {
-	#name : #OSSPipe,
-	#superclass : #Stream,
+	#name : 'OSSPipe',
+	#superclass : 'Stream',
 	#instVars : [
 		'readBlocking',
 		'writer',
 		'reader',
 		'nextChar'
 	],
-	#category : 'OSSubprocess'
+	#category : 'OSSubprocess',
+	#package : 'OSSubprocess'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OSSPipe class >> newWith: fileIDsArray readBlocking: readBlocking [
 	"fileIDsArray is an array of two elements where the first represents a sqFile struct of the reader of the pipe and the second represents the sqFile of the writer of the pipe. 
 	If readBlocking is true, then the pipe will lock the reading waiting until there is data. If false, then the streams will not lock and answer immediatly instead.  
@@ -31,7 +32,7 @@ OSSPipe class >> newWith: fileIDsArray readBlocking: readBlocking [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSPipe >> atEnd [
 	"Answer whether the receiver can access any more objects."
 
@@ -39,7 +40,7 @@ OSSPipe >> atEnd [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSPipe >> atEndOfFile [
 	"Answer whether the receiver is at its end based on the result of
 	the last read operation. This uses feof() to test the underlying file
@@ -50,7 +51,7 @@ OSSPipe >> atEndOfFile [
 
 ]
 
-{ #category : #closing }
+{ #category : 'closing' }
 OSSPipe >> close [
 	"Closes both streams"
 	
@@ -59,27 +60,27 @@ OSSPipe >> close [
 
 ]
 
-{ #category : #closing }
+{ #category : 'closing' }
 OSSPipe >> closeReader [
 
 	reader ifNotNil: [reader close]
 
 ]
 
-{ #category : #closing }
+{ #category : 'closing' }
 OSSPipe >> closeWriter [
 
 	writer ifNotNil: [writer close]
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSPipe >> closed [
 
 	^ reader closed
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSPipe >> contents [
 	"Answer contents of the pipe, and return the contents to the pipe so it can still be read."
 
@@ -96,19 +97,19 @@ OSSPipe >> contents [
 	^ string
 ]
 
-{ #category : #'character writing' }
+{ #category : 'character writing' }
 OSSPipe >> cr [
 	"Append a return character to the receiver."
 
 	self writer cr
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> flush [
 	^writer flush
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSPipe >> initializeWith: fileIDsArray readBlocking: aBoolean [
 	super initialize.
 	readBlocking := aBoolean.
@@ -116,7 +117,7 @@ OSSPipe >> initializeWith: fileIDsArray readBlocking: aBoolean [
 	self openWriteStreamFor: fileIDsArray second withName: 'pipeWriter'.
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> next [
 	"Answer the next object accessible by the receiver."
 
@@ -133,7 +134,7 @@ OSSPipe >> next [
 
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> next: anInteger [ 
 	"Answer the next anInteger elements of my collection."
 
@@ -149,7 +150,7 @@ OSSPipe >> next: anInteger [
 
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> nextPut: anObject [ 
 	"Insert the argument, anObject, as the next object accessible by the 
 	receiver. Answer anObject."
@@ -157,7 +158,7 @@ OSSPipe >> nextPut: anObject [
 	^ writer nextPut: anObject
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> nextPutAll: aCollection [ 
 	"Append the elements of aCollection to the sequence of objects accessible 
 	by the receiver. Answer aCollection."
@@ -165,7 +166,7 @@ OSSPipe >> nextPutAll: aCollection [
 	^ writer nextPutAll: aCollection
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSPipe >> openReadStreamFor: aFileID withName: aReadStreamName [
 	"Creates a read OSSAttachableFileStream for the read end of the pipe. 
 	If the readBlock is false, then make the stream to be non blocking. "
@@ -174,21 +175,21 @@ OSSPipe >> openReadStreamFor: aFileID withName: aReadStreamName [
 	^ reader
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSPipe >> openWriteStreamFor: aFileID withName: aWriteStreamName [
 	"Creates a write OSSAttachableFileStream for the write end of the pipe.  "
 	writer := OSSAttachableFileStream name: aWriteStreamName attachTo: aFileID writable: true.
 	^ writer
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSPipe >> ossIsPipe [
 
 	^ true
 
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> peek [
 
 	^ nextChar isNil
@@ -197,7 +198,7 @@ OSSPipe >> peek [
 		ifFalse: [nextChar]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OSSPipe >> printOn: aStream [
 	"The implementation of Stream>>printOn: has bad side effects when used
 	for OSPipe. This implementation is copied from Object."
@@ -209,25 +210,25 @@ OSSPipe >> printOn: aStream [
 		nextPutAll: title
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSPipe >> reader [
 	"Answer a stream on the read end of the pipe."
 
 	^ reader
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSPipe >> reader: aReadStream [
 
 	reader := aReadStream
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSPipe >> systemAccessor [
 	^ OSSVMProcess vmProcess systemAccessor
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> upToEnd [
 	"Answer the remaining elements in the string."
 
@@ -239,7 +240,7 @@ OSSPipe >> upToEnd [
 
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSPipe >> upToEndOfFile [
 	"Answer the remaining elements in the pipe. Use #atEndOfFile to
 	determine end of file status with feof(), required for reliable end of
@@ -257,14 +258,14 @@ OSSPipe >> upToEndOfFile [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSPipe >> writer [
 	"Answer a stream on the write end of the pipe."
 
 	^ writer
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSPipe >> writer: aWriteStream [
 
 	writer := aWriteStream

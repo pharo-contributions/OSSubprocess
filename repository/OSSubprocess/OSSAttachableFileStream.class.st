@@ -4,15 +4,16 @@ OSSAttachableFileStream represents a  stream on an input or output channel provi
 The most common use is to represent either the read or write end of a Pipe from the  Operatying System . This way, it provides a Stream API for both, reading and writing. An OSSPipe  contains a 'reader' and a 'writer' which will be two different instances of this class.
 "
 Class {
-	#name : #OSSAttachableFileStream,
-	#superclass : #OldStandardFileStream,
+	#name : 'OSSAttachableFileStream',
+	#superclass : 'OldStandardFileStream',
 	#instVars : [
 		'autoClose'
 	],
-	#category : 'OSSubprocess'
+	#category : 'OSSubprocess',
+	#package : 'OSSubprocess'
 }
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OSSAttachableFileStream class >> fileNamed: fileName [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -21,7 +22,7 @@ OSSAttachableFileStream class >> fileNamed: fileName [
 
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OSSAttachableFileStream class >> isAFileNamed: fileName [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -30,7 +31,7 @@ OSSAttachableFileStream class >> isAFileNamed: fileName [
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OSSAttachableFileStream class >> name: aSymbolOrString attachTo: aFileID writable: readWriteFlag [ 
 	"Create a new instance attached to aFileID. For write streams, this represents two
 	Smalltalk streams which write to the same OS file or output stream,
@@ -44,7 +45,7 @@ OSSAttachableFileStream class >> name: aSymbolOrString attachTo: aFileID writabl
 		writable: readWriteFlag) initialize
 ]
 
-{ #category : #'TO USE LATER WITHOUT OSPROCESS' }
+{ #category : 'TO USE LATER WITHOUT OSPROCESS' }
 OSSAttachableFileStream class >> name: aSymbolOrString attachToCFile: aCFile writable: readWriteFlag [ 
 	"Create a new instance attached to aCFile. For write streams, this represents two
 	Smalltalk streams which write to the same OS file or output stream,
@@ -58,7 +59,7 @@ OSSAttachableFileStream class >> name: aSymbolOrString attachToCFile: aCFile wri
 		writable: readWriteFlag) initialize
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OSSAttachableFileStream class >> newFileNamed: fileName [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -67,7 +68,7 @@ OSSAttachableFileStream class >> newFileNamed: fileName [
 
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OSSAttachableFileStream class >> oldFileNamed: fileName [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -76,7 +77,7 @@ OSSAttachableFileStream class >> oldFileNamed: fileName [
 
 ]
 
-{ #category : #'file creation' }
+{ #category : 'file creation' }
 OSSAttachableFileStream class >> readOnlyFileNamed: fileName [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -85,7 +86,7 @@ OSSAttachableFileStream class >> readOnlyFileNamed: fileName [
 
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OSSAttachableFileStream class >> register: anObject [
 	"An attachable file stream is generally either a second reference to an
 	existing file stream, or a reference to a transient object such as a pipe
@@ -94,7 +95,7 @@ OSSAttachableFileStream class >> register: anObject [
 	^ anObject
 ]
 
-{ #category : #registry }
+{ #category : 'registry' }
 OSSAttachableFileStream class >> unregister: anObject [
 	"An attachable file stream is generally either a second reference to an
 	existing file stream, or a reference to a transient object such as a pipe
@@ -103,14 +104,14 @@ OSSAttachableFileStream class >> unregister: anObject [
 	^ anObject
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 OSSAttachableFileStream >> asAttachableFileStream [
 
 	^ self
 
 ]
 
-{ #category : #finalization }
+{ #category : 'finalization' }
 OSSAttachableFileStream >> autoClose [
 	"Private. Answer true if the file should be automatically closed when 
 	this object is finalized."
@@ -119,7 +120,7 @@ OSSAttachableFileStream >> autoClose [
 		ifNil: [autoClose := true]
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OSSAttachableFileStream >> close [
 	"Close this file."
 
@@ -132,7 +133,7 @@ OSSAttachableFileStream >> close [
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OSSAttachableFileStream >> ensureOpen [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -141,7 +142,7 @@ OSSAttachableFileStream >> ensureOpen [
 
 ]
 
-{ #category : #finalization }
+{ #category : 'finalization' }
 OSSAttachableFileStream >> finalize [
 	"If #autoClose is true, then we try to close the stream upon finalization - GC "
 	
@@ -149,14 +150,14 @@ OSSAttachableFileStream >> finalize [
 		ifTrue: [[self primCloseNoError: fileID] on: Error do: []]
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSAttachableFileStream >> flush [
 	"Flush the external OS stream (the one in the C library)."
 	
 	self systemAccessor fflush: self getFilePointerAsCFile
 ]
 
-{ #category : #finalization }
+{ #category : 'finalization' }
 OSSAttachableFileStream >> keepOpen [
 	"Do not allow the file to be closed when this object is finalized."
 
@@ -164,7 +165,7 @@ OSSAttachableFileStream >> keepOpen [
 
 ]
 
-{ #category : #attaching }
+{ #category : 'attaching' }
 OSSAttachableFileStream >> name: aSymbolOrString attachTo: aFileID writable: readWriteFlag [
 	"Attach to an existing file handle, assumed to have been previously
 	 opened by the underlying operating system.
@@ -179,7 +180,7 @@ OSSAttachableFileStream >> name: aSymbolOrString attachTo: aFileID writable: rea
 
 ]
 
-{ #category : #'TO USE LATER WITHOUT OSPROCESS' }
+{ #category : 'TO USE LATER WITHOUT OSPROCESS' }
 OSSAttachableFileStream >> name: aSymbolOrString attachToCFile: externalFilePointer writable: readWriteFlag [
 	"Attach to an existing file handle, assumed to have been previously opened by the underlying operating system.
 	We assume a 32 bits machine and here we document the SQFile used by the VM:
@@ -223,7 +224,7 @@ typedef struct {
 
 ]
 
-{ #category : #'TO USE LATER WITHOUT OSPROCESS' }
+{ #category : 'TO USE LATER WITHOUT OSPROCESS' }
 OSSAttachableFileStream >> oldname: aSymbolOrString attachTo: externalFilePointer writable: readWriteFlag [
 	"Attach to an existing file handle, assumed to have been previously opened by the underlying operating system.
 	We assume a 32 bits machine and here we document the SQFile used by the VM:
@@ -259,7 +260,7 @@ typedef struct {
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OSSAttachableFileStream >> open [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -268,7 +269,7 @@ OSSAttachableFileStream >> open [
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OSSAttachableFileStream >> open: fileName forWrite: writeMode [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -277,7 +278,7 @@ OSSAttachableFileStream >> open: fileName forWrite: writeMode [
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OSSAttachableFileStream >> openReadOnly [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -286,7 +287,7 @@ OSSAttachableFileStream >> openReadOnly [
 
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSAttachableFileStream >> position [
 	"Return the receiver's current file position. If the stream is not positionable,
 	as in the case of a Unix pipe stream, answer 0."
@@ -297,7 +298,7 @@ OSSAttachableFileStream >> position [
 
 ]
 
-{ #category : #'open/close' }
+{ #category : 'open/close' }
 OSSAttachableFileStream >> reopen [
 	"Since this is an attacheable stream it means the underlying stream in the OS
 	has already been opened"
@@ -306,7 +307,7 @@ OSSAttachableFileStream >> reopen [
 
 ]
 
-{ #category : #'non blocking' }
+{ #category : 'non blocking' }
 OSSAttachableFileStream >> setNonBlocking [
 	"Make this stream to be none blocking. In Linux it means 
 	calling fcntl() to set the file non-blocking (O_NONBLOCK)." 
@@ -314,20 +315,20 @@ OSSAttachableFileStream >> setNonBlocking [
 	self systemAccessor makeFileNoneBocking: fileID
 ]
 
-{ #category : #'TO USE LATER WITHOUT OSPROCESS' }
+{ #category : 'TO USE LATER WITHOUT OSPROCESS' }
 OSSAttachableFileStream >> setOSFilePointerFromByteArray: externalFilePointer to: aDestByteArray offset: anOffsetNumber [
 	1 to: 4 do: [ :index | aDestByteArray at: (index + anOffsetNumber) put: (externalFilePointer at: index) ]
 	
 ]
 
-{ #category : #'TO USE LATER WITHOUT OSPROCESS' }
+{ #category : 'TO USE LATER WITHOUT OSPROCESS' }
 OSSAttachableFileStream >> setSessionIDTo: fileIDByteArray [
 	| currentSession |
 	currentSession := OSSVMProcess vmProcess sessionID.
 	1 to: currentSession size do: [ :index | fileIDByteArray at: index put: (currentSession at: index) ]
 ]
 
-{ #category : #'read, write, position' }
+{ #category : 'read, write, position' }
 OSSAttachableFileStream >> upToEnd [
 	"Answer a subcollection from the current access position through the last element
 	of the receiver. This is slower than the method in StandardFileStream, but it

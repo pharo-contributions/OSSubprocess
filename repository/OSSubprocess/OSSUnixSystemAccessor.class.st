@@ -15,8 +15,8 @@ Becayse of this, the Accessor contains a map of process exit statuses.
 If the asked process is the one returned by waitpid, we return the corresponding exit status, otherwise we store that value in the map for later accesses.
 "
 Class {
-	#name : #OSSUnixSystemAccessor,
-	#superclass : #Object,
+	#name : 'OSSUnixSystemAccessor',
+	#superclass : 'Object',
 	#instVars : [
 		'finishedChildProcesses'
 	],
@@ -26,23 +26,24 @@ Class {
 	#pools : [
 		'LibCWaitSharedPool'
 	],
-	#category : 'OSSubprocess'
+	#category : 'OSSubprocess',
+	#package : 'OSSubprocess'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OSSUnixSystemAccessor class >> forVMProcess [
 	^ VMProcessSystemAcessor ifNil: [ VMProcessSystemAcessor := self basicNew initialize ]
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OSSUnixSystemAccessor class >> new [
 
 	self error: 'You cannot create instances of OSSUnixSystemAccessor. You can only access the correct instance via OSSVMProcess >> systemAccessor '.
 
 ]
 
-{ #category : #cwd }
+{ #category : 'cwd' }
 OSSUnixSystemAccessor >> chdir: aDirString encoding: encoding [
 	"Changes the current working directory of the vmProcess to aDirString"
 	| returnValue | 
@@ -52,7 +53,7 @@ OSSUnixSystemAccessor >> chdir: aDirString encoding: encoding [
 	
 ]
 
-{ #category : #files }
+{ #category : 'files' }
 OSSUnixSystemAccessor >> closeFileDescriptor: aFileDescription [
 	"It closes the stream associated to aFileDescriptor"
 	| returnValue |
@@ -62,7 +63,7 @@ OSSUnixSystemAccessor >> closeFileDescriptor: aFileDescription [
 
 ]
 
-{ #category : #files }
+{ #category : 'files' }
 OSSUnixSystemAccessor >> feof: aCFile [
 	"Answers whether a FILE* is at the end of the file or not. This is trustful for pipes too"
 	| result |
@@ -72,12 +73,12 @@ OSSUnixSystemAccessor >> feof: aCFile [
 
 ]
 
-{ #category : #'private - support primitives' }
+{ #category : 'private - support primitives' }
 OSSUnixSystemAccessor >> ffiLibraryName [ 
 	^ LibC 
 ]
 
-{ #category : #files }
+{ #category : 'files' }
 OSSUnixSystemAccessor >> fflush: aCFile [
 	"Flushes the file associated to the FILE* represented by aCFile"
 	| returnValue |
@@ -87,7 +88,7 @@ OSSUnixSystemAccessor >> fflush: aCFile [
 	
 ]
 
-{ #category : #'NOT CURRENTLY USED' }
+{ #category : 'NOT CURRENTLY USED' }
 OSSUnixSystemAccessor >> fileDescriptorOpen: aFileDescription mode: aMode [
 	| cFile |
 	cFile := self primitiveFdopen: aFileDescription mode: aMode.
@@ -96,7 +97,7 @@ OSSUnixSystemAccessor >> fileDescriptorOpen: aFileDescription mode: aMode [
 
 ]
 
-{ #category : #files }
+{ #category : 'files' }
 OSSUnixSystemAccessor >> fileno: aCFile [
 	"Answers the file descriptor associated to the FILE* represented by aCFile"
 	| returnValue |
@@ -105,7 +106,7 @@ OSSUnixSystemAccessor >> fileno: aCFile [
 	^ returnValue "file descriptor"
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> forwardSigChld [
 	"Set a signal handler for SIGCHLD. Answer a new Semaphore, or nil if unable
 	to set the handler (possibly because it has already been set)."
@@ -114,7 +115,7 @@ OSSUnixSystemAccessor >> forwardSigChld [
 
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> forwardSignal: signalNumber [ 
 	"Set a signal handler in the VM which will signal a Smalltalk semaphore 
 	at semaphoreIndex whenever an external signal signalNumber is received.
@@ -133,13 +134,13 @@ OSSUnixSystemAccessor >> forwardSignal: signalNumber [
 	^ sema
 ]
 
-{ #category : #general }
+{ #category : 'general' }
 OSSUnixSystemAccessor >> getPid [
 	"Answers the PID of the vmProcess"
 	^ self primitiveGetpid
 ]
 
-{ #category : #cwd }
+{ #category : 'cwd' }
 OSSUnixSystemAccessor >> getcwd [ 
 	"Returns the current working directory of the vmProcess"
 	| buffer bytesRead |
@@ -156,14 +157,14 @@ OSSUnixSystemAccessor >> getcwd [
 		
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 OSSUnixSystemAccessor >> initialize [
 
 	super initialize.
 	finishedChildProcesses := Dictionary new
 ]
 
-{ #category : #signals }
+{ #category : 'signals' }
 OSSUnixSystemAccessor >> kill: aPid signal: aSignal [
 	"Sends aSignal to aPid"
 	| answer | 
@@ -176,13 +177,13 @@ OSSUnixSystemAccessor >> kill: aPid signal: aSignal [
 		ifFalse: [ self error: 'Unkown answer for kill()' ]
 ]
 
-{ #category : #pipes }
+{ #category : 'pipes' }
 OSSUnixSystemAccessor >> makeBlockingPipe [
 	" Create a pipes with blocking reads"
 	^ self makePipeWithReadBlocking: true
 ]
 
-{ #category : #files }
+{ #category : 'files' }
 OSSUnixSystemAccessor >> makeFileNoneBocking: aFileId [
 	"Make this stream to be none blocking. In Linux it means 
 	calling fcntl() to set the file non-blocking (O_NONBLOCK)."
@@ -190,13 +191,13 @@ OSSUnixSystemAccessor >> makeFileNoneBocking: aFileId [
 
 ]
 
-{ #category : #pipes }
+{ #category : 'pipes' }
 OSSUnixSystemAccessor >> makeNonBlockingPipe [
 	"Creates a pipe with non blocking read"
 	^ self makePipeWithReadBlocking: false
 ]
 
-{ #category : #pipes }
+{ #category : 'pipes' }
 OSSUnixSystemAccessor >> makePipeWithReadBlocking: aBoolean [
 	"Originally, we created the pipes ourselves and the answer was an array of file descriptors.
 	This was complicated because we have to then create our own sqFile structure and deal
@@ -228,7 +229,7 @@ OSSUnixSystemAccessor >> makePipeWithReadBlocking: aBoolean [
 
 ]
 
-{ #category : #errors }
+{ #category : 'errors' }
 OSSUnixSystemAccessor >> perror: aMessage [
 	"Prints the errno gloabl variable into the stderr together with aMessage string
 	and then signal an error"
@@ -236,7 +237,7 @@ OSSUnixSystemAccessor >> perror: aMessage [
 	self error: 'Error: ', aMessage,' You may want to check errors in stderr'
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> primCreatePipe [
 	"Create a pipe, and answer an array of two file handles (SQFile data structures in interp.c)
 	for the pipe reader and writer."
@@ -245,7 +246,7 @@ OSSUnixSystemAccessor >> primCreatePipe [
 	^ nil
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> primForwardSignal: signalNumber toSemaphore: semaphoreIndex [
 	"Set a signal handler in the VM which will signal a Smalltalk semaphore at
 	semaphoreIndex whenever an external signal sigNum is received. Answer the
@@ -262,7 +263,7 @@ OSSUnixSystemAccessor >> primForwardSignal: signalNumber toSemaphore: semaphoreI
 
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> primSQFileSetNonBlocking: aSQFileStruct [
 	"Pass a struct SQFile on the stack, and call fcntl() to set the file non-blocking."
 
@@ -271,7 +272,7 @@ OSSUnixSystemAccessor >> primSQFileSetNonBlocking: aSQFileStruct [
 
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> primSemaIndexFor: sigNum [
 	"Answer the registration index of the semaphore currently associated with the
 	signal handler for sigNum."
@@ -281,7 +282,7 @@ OSSUnixSystemAccessor >> primSemaIndexFor: sigNum [
 
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> primSigChldNumber [
 	"Integer value corresponding to SIGCHLD"
 
@@ -290,7 +291,7 @@ OSSUnixSystemAccessor >> primSigChldNumber [
 
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> primUnixFileNumber: aFileID [
 	"Pass a struct SQFile on the stack, and answer the corresponding Unix file number."
 
@@ -299,7 +300,7 @@ OSSUnixSystemAccessor >> primUnixFileNumber: aFileID [
 
 ]
 
-{ #category : #'cwd - primitives' }
+{ #category : 'cwd - primitives' }
 OSSUnixSystemAccessor >> primitiveChdir: aDirString encoding: encoding [
 	| encodingOption |
 	encodingOption := #optStringEncoding , encoding.
@@ -308,35 +309,35 @@ OSSUnixSystemAccessor >> primitiveChdir: aDirString encoding: encoding [
 		options: { #optStringEncodingMandatory . encodingOption }.
 ]
 
-{ #category : #'files - primitives' }
+{ #category : 'files - primitives' }
 OSSUnixSystemAccessor >> primitiveClose: aFileDescription [ 
 	
 	^ self ffiCall: #( int close(int aFileDescription) )
 	
 ]
 
-{ #category : #'NOT CURRENTLY USED' }
+{ #category : 'NOT CURRENTLY USED' }
 OSSUnixSystemAccessor >> primitiveFdopen: aFileDescription mode: aMode [
 	
 	^ self ffiCall: #( OSSCFile fdopen(int aFileDescription, String aMode) )
 	
 ]
 
-{ #category : #'files - primitives' }
+{ #category : 'files - primitives' }
 OSSUnixSystemAccessor >> primitiveFeof: filePointer [
 
 	^ self ffiCall: #( int feof( OSSCFile filePointer) )
 
 ]
 
-{ #category : #'files - primitives' }
+{ #category : 'files - primitives' }
 OSSUnixSystemAccessor >> primitiveFflush: file [
 
 	^ self ffiCall: #( int fflush( OSSCFile file) )
 
 ]
 
-{ #category : #'NOT CURRENTLY USED' }
+{ #category : 'NOT CURRENTLY USED' }
 OSSUnixSystemAccessor >> primitiveFgetsInto: bufferPointer size: size file: file [ 
 	"Not directly used for the moment but could be useful to test the reading without the
 	SCAttachableFileStream using a code like this:
@@ -355,21 +356,21 @@ OSSUnixSystemAccessor >> primitiveFgetsInto: bufferPointer size: size file: file
 
 ]
 
-{ #category : #'files - primitives' }
+{ #category : 'files - primitives' }
 OSSUnixSystemAccessor >> primitiveFileno: file [
 
 	^ self ffiCall: #( int fileno( OSSCFile file) )
 
 ]
 
-{ #category : #'cwd - primitives' }
+{ #category : 'cwd - primitives' }
 OSSUnixSystemAccessor >> primitiveGetcwd: buffer size: size [
 	
 	^ self ffiCall: #( String getcwd(char *buffer, int size) )
 	
 ]
 
-{ #category : #'NOT CURRENTLY USED' }
+{ #category : 'NOT CURRENTLY USED' }
 OSSUnixSystemAccessor >> primitiveGetdtablesize [
 	
 	^ self ffiCall: #( int getdtablesize(void) )
@@ -377,13 +378,13 @@ OSSUnixSystemAccessor >> primitiveGetdtablesize [
 
 ]
 
-{ #category : #'NOT CURRENTLY USED' }
+{ #category : 'NOT CURRENTLY USED' }
 OSSUnixSystemAccessor >> primitiveGetenv: variableName [
 	
 	^ self ffiCall: #( char * getenv(char* variableName) )
 ]
 
-{ #category : #general }
+{ #category : 'general' }
 OSSUnixSystemAccessor >> primitiveGetpid [
 
 	^ self ffiCall: #( int getpid(void) )
@@ -391,34 +392,34 @@ OSSUnixSystemAccessor >> primitiveGetpid [
 
 ]
 
-{ #category : #'signals - primitives' }
+{ #category : 'signals - primitives' }
 OSSUnixSystemAccessor >> primitiveKill: aPid signal: aSignal [
 
 	^ self ffiCall: #( int kill(int aPid, int aSignal) )
 	
 ]
 
-{ #category : #'errors - primitives' }
+{ #category : 'errors - primitives' }
 OSSUnixSystemAccessor >> primitivePerror: anErrorString [
 
 	^ self ffiCall: #( void perror(String anErrorString) )
 
 ]
 
-{ #category : #'NOT CURRENTLY USED' }
+{ #category : 'NOT CURRENTLY USED' }
 OSSUnixSystemAccessor >> primitivePipe: pipePointer [
 	
 	^ self ffiCall: #( int pipe(void* pipePointer) )
 ]
 
-{ #category : #'errors - primitives' }
+{ #category : 'errors - primitives' }
 OSSUnixSystemAccessor >> primitiveStrerror: errorNumber [
 	
 	^ self ffiCall: #( String strerror( int errorNumber) )
 
 ]
 
-{ #category : #'NOT CURRENTLY USED' }
+{ #category : 'NOT CURRENTLY USED' }
 OSSUnixSystemAccessor >> primitiveSysconf: aNumber [
 	
 	^ self ffiCall: #( long sysconf(int aNumber) )
@@ -426,13 +427,13 @@ OSSUnixSystemAccessor >> primitiveSysconf: aNumber [
 
 ]
 
-{ #category : #'system - primitives' }
+{ #category : 'system - primitives' }
 OSSUnixSystemAccessor >> primitiveSystem: commandString [
 	 ^ self ffiCall: #(int system(char* commandString) ) 
 		
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> restoreSigChld [
 	"Unset a SIGCHLD signal handler and unregister the Smalltalk semaphore.
 	Answer the unregistered Semaphore, or nil if unable to restore the signal
@@ -442,7 +443,7 @@ OSSUnixSystemAccessor >> restoreSigChld [
 
 ]
 
-{ #category : #'USING FROM OSPROCESS' }
+{ #category : 'USING FROM OSPROCESS' }
 OSSUnixSystemAccessor >> restoreSignal: signalNumber [ 
 	"Unset a signal handler and unregister the Smalltalk semaphore. Answer
 	the unregistered Semaphore, or nil if unable to restore the signal (possibly
@@ -459,13 +460,13 @@ OSSUnixSystemAccessor >> restoreSignal: signalNumber [
 
 ]
 
-{ #category : #sizeof }
+{ #category : 'sizeof' }
 OSSUnixSystemAccessor >> sizeOfInt [
 	
 	^ FFIExternalType sizeOf: #long
 ]
 
-{ #category : #sizeof }
+{ #category : 'sizeof' }
 OSSUnixSystemAccessor >> sizeOfPointer [
 	
 	^ FFIExternalType pointerSize
@@ -474,7 +475,7 @@ OSSUnixSystemAccessor >> sizeOfPointer [
 
 ]
 
-{ #category : #errors }
+{ #category : 'errors' }
 OSSUnixSystemAccessor >> strerror: aReturnValue message: aMessage [
 	"Get the string description of the error numnber aReturnValue and signal 
 	and error with such a description together with aMessage string"
@@ -483,7 +484,7 @@ OSSUnixSystemAccessor >> strerror: aReturnValue message: aMessage [
 	self error: 'Error: ', aMessage, ', code: ', aReturnValue asString, ', description: ', internalError
 ]
 
-{ #category : #system }
+{ #category : 'system' }
 OSSUnixSystemAccessor >> system: aCommandString [
 	"Executes aCommandString in the OS via the system() call. Only used for testing."
 	| returnValue |

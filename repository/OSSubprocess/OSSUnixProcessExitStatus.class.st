@@ -13,22 +13,23 @@ Following a normal process exit, the status may be decoded to provide a small po
 
 "
 Class {
-	#name : #OSSUnixProcessExitStatus,
-	#superclass : #Object,
+	#name : 'OSSUnixProcessExitStatus',
+	#superclass : 'Object',
 	#instVars : [
 		'intValue'
 	],
-	#category : 'OSSubprocess'
+	#category : 'OSSubprocess',
+	#package : 'OSSubprocess'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 OSSUnixProcessExitStatus class >> for: integerValue [
 
 	^self new for: integerValue
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixProcessExitStatus >> exitStatus [
 	
 	self isExited ifTrue: [^self statusIfExited].
@@ -38,12 +39,12 @@ OSSUnixProcessExitStatus >> exitStatus [
 	^intValue
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 OSSUnixProcessExitStatus >> for: anInteger [
 	intValue := anInteger
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSUnixProcessExitStatus >> isExited [
 	"
 	/* Nonzero if STATUS indicates normal termination.  */
@@ -54,7 +55,7 @@ OSSUnixProcessExitStatus >> isExited [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSUnixProcessExitStatus >> isSignaled [
 	"
 	/* Nonzero if STATUS indicates termination by a signal.  */
@@ -66,7 +67,7 @@ OSSUnixProcessExitStatus >> isSignaled [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSUnixProcessExitStatus >> isStopped [
 	"
 	/* Nonzero if STATUS indicates the child is stopped.  */
@@ -77,19 +78,19 @@ OSSUnixProcessExitStatus >> isStopped [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSUnixProcessExitStatus >> isSuccess [
 	^ self exitStatus = 0
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 OSSUnixProcessExitStatus >> notFinished [
 	
 	^ intValue isNil
 
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OSSUnixProcessExitStatus >> printOn: aStream [
 
 	self notFinished
@@ -105,7 +106,7 @@ OSSUnixProcessExitStatus >> printOn: aStream [
 				nextPutAll: self statusIfStopped].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixProcessExitStatus >> statusIfExited [
 	"
 	/* If WIFEXITED(STATUS), the low-order 8 bits of the status.  */
@@ -114,7 +115,7 @@ OSSUnixProcessExitStatus >> statusIfExited [
 	^(intValue bitAnd: 16rFF00) >> 8
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixProcessExitStatus >> statusIfSignaled [
 	"
 	/* If WIFSIGNALED(STATUS), the terminating signal.  */
@@ -123,7 +124,7 @@ OSSUnixProcessExitStatus >> statusIfSignaled [
 	^intValue bitAnd: 16r7F
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixProcessExitStatus >> statusIfStopped [
 	"
 	/* If WIFSTOPPED(STATUS), the signal that stopped the child.  */
@@ -132,13 +133,13 @@ OSSUnixProcessExitStatus >> statusIfStopped [
 	^self statusIfExited
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixProcessExitStatus >> statusNotFinished [
 
 	^ 'Not finished'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixProcessExitStatus >> value [
 	^intValue
 ]

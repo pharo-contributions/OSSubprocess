@@ -37,8 +37,8 @@ OSSUnixSubprocess new
 
 "
 Class {
-	#name : #OSSUnixSubprocess,
-	#superclass : #Object,
+	#name : 'OSSUnixSubprocess',
+	#superclass : 'Object',
 	#instVars : [
 		'command',
 		'arguments',
@@ -65,20 +65,11 @@ Class {
 	#pools : [
 		'LibCSignalSharedPool'
 	],
-	#category : #OSSubprocess
+	#category : 'OSSubprocess',
+	#package : 'OSSubprocess'
 }
 
-{ #category : #'temp files' }
-OSSUnixSubprocess class >> createTempFilename [
-	"Read comment of createTempFileToBeUsedAsReadStreamOn:.
-	
-	This answers just ONE WAY of defining a temp filename"
-	
-	^ self name , '-p', OSSVMProcess vmProcess pid asString, '-', UUID new printString, '.deleteme'
-	
-]
-
-{ #category : #'temp files' }
+{ #category : 'temp files' }
 OSSUnixSubprocess class >> createTempFileToBeUsedAsReadStreamOn: aDirectoryPath [
 	"Important: for some reason, if we use MultiByteFileStream instances, we have some test failures.
 	So for the moment, until we fix or understand this, always use StandardFileStream instances.
@@ -94,13 +85,23 @@ OSSUnixSubprocess class >> createTempFileToBeUsedAsReadStreamOn: aDirectoryPath 
 	^ OldStandardFileStream forceNewFileNamed: (aDirectoryPath asFileReference / self createTempFilename) fullName
 ]
 
-{ #category : #'temp files' }
+{ #category : 'temp files' }
 OSSUnixSubprocess class >> createTempFileToBeUsedAsWriteStreamOn: aDirectoryPath [
 	"See comment of #createTempFileToBeUsedAsReadStreamOn:."
 	^  OldStandardFileStream forceNewFileNamed: (aDirectoryPath asFileReference / self createTempFilename) fullName
 ]
 
-{ #category : #'env building' }
+{ #category : 'temp files' }
+OSSUnixSubprocess class >> createTempFilename [
+	"Read comment of createTempFileToBeUsedAsReadStreamOn:.
+	
+	This answers just ONE WAY of defining a temp filename"
+	
+	^ self name , '-p', OSSVMProcess vmProcess pid asString, '-', UUID new printString, '.deleteme'
+	
+]
+
+{ #category : 'env building' }
 OSSUnixSubprocess >> addAllEnvVariablesFromParentWithoutOverride [
 	"The user may have done an explicit set of a variable via #environmentAt:put: in which case
 	we do not want to override it with the inherit one.
@@ -111,7 +112,7 @@ OSSUnixSubprocess >> addAllEnvVariablesFromParentWithoutOverride [
 	
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> allocatePosixSpawnFilesActionStructure [
 	"IMPORTANT:  It seems posix_spawn_file_actions_init() sometimes allocates AND initializes, and sometimes only initializes.
 	For OSX I found it it also allocates memory, so only allocating for the pointer is enough.
@@ -134,7 +135,7 @@ OSSUnixSubprocess >> allocatePosixSpawnFilesActionStructure [
 	OSPlatform current isUnix ifTrue: [ posixSpawnFileActionsT := ExternalAddress allocate: (self systemAccessor sizeOfPointer + (self systemAccessor sizeOfInt * 2) + (16 * self systemAccessor sizeOfInt)). ].
 ]
 
-{ #category : #'argv building' }
+{ #category : 'argv building' }
 OSSUnixSubprocess >> argVArguments [
 	"Answers the whole list of argV including the command as the first argument and a
 	null terminated."
@@ -145,12 +146,12 @@ OSSUnixSubprocess >> argVArguments [
 		yourself
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 OSSUnixSubprocess >> arguments: anObject [
 	arguments := anObject collect: [ :each | (each encodeWith: encoding) asString ]
 ]
 
-{ #category : #'argv building' }
+{ #category : 'argv building' }
 OSSUnixSubprocess >> buildPrimitiveArgVArgument [
 	"Takes care of allocating and building the array of arguments as expected
 	by the posix_spawn() function. 
@@ -162,7 +163,7 @@ OSSUnixSubprocess >> buildPrimitiveArgVArgument [
 	 ^ bufferPointer
 ]
 
-{ #category : #'env building' }
+{ #category : 'env building' }
 OSSUnixSubprocess >> buildPrimitiveEnvArgument [
 	"Builds the whole env argument as expected by posix_spawn(), taking into account the variables
 	defined by the API #environmentAt:put:"
@@ -176,7 +177,7 @@ OSSUnixSubprocess >> buildPrimitiveEnvArgument [
 	^ envPointer
 ]
 
-{ #category : #cleaning }
+{ #category : 'cleaning' }
 OSSUnixSubprocess >> cleanAndFixCopiedStreams [
 	"If the stream is a pipe, we must close the end that we do not use at VM level (parent).
 	If we are using regular files, we must reopen them otherwise we won't be able to read what the
@@ -187,7 +188,7 @@ OSSUnixSubprocess >> cleanAndFixCopiedStreams [
 	 
 ]
 
-{ #category : #cleaning }
+{ #category : 'cleaning' }
 OSSUnixSubprocess >> cleanResources [
 	"Clear all resources. This step is mandatory and happens immeditaly after the process has 
 	started. And this must be called even if there is an error, since we must free pointers,
@@ -197,7 +198,7 @@ OSSUnixSubprocess >> cleanResources [
 	self freePointers.
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> closeAllButStandardFileStreams [
 	"Here I should loop and close all but fd 0 1 2"
 
@@ -206,7 +207,7 @@ OSSUnixSubprocess >> closeAllButStandardFileStreams [
 	self flag: #toDo
 ]
 
-{ #category : #cleaning }
+{ #category : 'cleaning' }
 OSSUnixSubprocess >> closeAndCleanStreams [
 	"This method closes all the streams that have been opened and mapped to standard steams.
 	They could be either pipes or regular temp files. In the case of files, we also remove those temp files"
@@ -214,7 +215,7 @@ OSSUnixSubprocess >> closeAndCleanStreams [
 	self deleteTempFilesFromStandardStreams.
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> closeAndDup2FilesActions [
 	"First, it initializes the structure for managing the file actions allowed by posix_spwan(). 
 	Then defines and sets all actions we want. That is, closing or opening file descriptors,
@@ -225,25 +226,25 @@ OSSUnixSubprocess >> closeAndDup2FilesActions [
 	
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> closeStderrStream [
 	" Close stderrStream if needed"
 	stderrStream ifNotNil: [ stderrStream close ]
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> closeStdinStream [
 	" Close stdinStream if needed"
 	stdinStream ifNotNil: [ stdinStream close ]
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> closeStdoutStream [
 	" Close stdoutStream if needed"
 	stdoutStream ifNotNil: [ stdoutStream close ]
 ]
 
-{ #category : #cleaning }
+{ #category : 'cleaning' }
 OSSUnixSubprocess >> closeStreams [
 	"Closes all the streams that have been opened and mapped to standard steams."
 	self closeStdinStream.
@@ -252,7 +253,7 @@ OSSUnixSubprocess >> closeStreams [
 	
 ]
 
-{ #category : #'argv building' }
+{ #category : 'argv building' }
 OSSUnixSubprocess >> collectArgumentPointersInto: aPointer [
 	"Allocates each string argument with a null terminated char and add them into aPointer"
 	
@@ -268,7 +269,7 @@ OSSUnixSubprocess >> collectArgumentPointersInto: aPointer [
 	aPointer platformUnsignedLongAt: ((self argVArguments size - 1) * self systemAccessor sizeOfPointer) + 1 put: 0.
 ]
 
-{ #category : #'env building' }
+{ #category : 'env building' }
 OSSUnixSubprocess >> collectEnvVariablesPointersInto: aPointer [
 	"Creates the pair of KEY=VALUE string, allocating the memory and adding a null terminated char to each of the env.
 	Each processed pair of KEY=VALUE is added to aPointer. "
@@ -287,24 +288,24 @@ OSSUnixSubprocess >> collectEnvVariablesPointersInto: aPointer [
 
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 OSSUnixSubprocess >> command: aString [
 	command := (aString encodeWith: encoding) asString
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> createADefaultReadStream [
 	"Creates a default read stream, most likely for stdin"
 	^ defaultReadStreamCreationBlock value
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> createADefaultWriteStream [
 	"Creates a default write stream, most likely for stdout or stderr"
 	^ defaultWriteStreamCreationBlock value
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 OSSUnixSubprocess >> createMissingStandardStreams: aBoolean [
 	"If we don't create streams for the standard streams of the child process,
 	then the child will be used the inherit standard files from the parent. 
@@ -320,30 +321,30 @@ OSSUnixSubprocess >> createMissingStandardStreams: aBoolean [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixSubprocess >> defaultEncoding [ 
 	^ OSEnvironment current defaultEncoding 
 ]
 
-{ #category : #'env building' }
+{ #category : 'env building' }
 OSSUnixSubprocess >> defaultEnvVariablesDictionary [
 	"Get all the env vars inherit from the vmProcess as a dictionary"
 	^ Smalltalk os environment asDictionary
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 OSSUnixSubprocess >> defaultReadStreamCreationBlock: aClosure [
 	"Read the comment of #createMissingStandardStreams:"
 	defaultReadStreamCreationBlock := aClosure
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 OSSUnixSubprocess >> defaultWriteStreamCreationBlock: aClosure [
 	"Read the comment of createMissingStandardStreams:"
 	defaultWriteStreamCreationBlock := aClosure
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> defineActionsForReadStream: aReadStream dupTo: aFileDescriptor [
 	"Sets all needed actions (close() and dup2()) for a aReadStream (stdin) FOR THE CHILD.
 	"
@@ -367,7 +368,7 @@ OSSUnixSubprocess >> defineActionsForReadStream: aReadStream dupTo: aFileDescrip
 	]
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> defineActionsForStandardFileStreams [
 	"Define close() and dup2() actions for standard file streams for the child process"
 	self defineActionsForStdin.
@@ -376,7 +377,7 @@ OSSUnixSubprocess >> defineActionsForStandardFileStreams [
 		
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> defineActionsForStderr [
 	"If needed, automatically create a stream (regular files or pipes) to be used for stderr, and then perform the needed close() and dup2()
 	for the mapping in the child"
@@ -384,7 +385,7 @@ OSSUnixSubprocess >> defineActionsForStderr [
 	self defineActionsForWriteStream: stderrStream dupTo: 2
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> defineActionsForStdin [
 	"If needed, automatically create a stream (regular files or pipes) to be used for stdin, and then perform the needed close() and dup2()
 	for the mapping in the child"
@@ -392,7 +393,7 @@ OSSUnixSubprocess >> defineActionsForStdin [
 	self defineActionsForReadStream: stdinStream dupTo: 0
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> defineActionsForStdout [
 	"If needed, automatically create a stream (regular files or pipes) to be used for stdout, and then perform the needed close() and dup2()
 	for the mapping in the child"
@@ -400,7 +401,7 @@ OSSUnixSubprocess >> defineActionsForStdout [
 	self defineActionsForWriteStream: stdoutStream dupTo: 1
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> defineActionsForWriteStream: aWriteStream dupTo: aFileDescriptor [
 	"Sets all needed actions (close() and dup2()) for a aWriteStream (stdout or stderr) FOR THE CHILD
 	"
@@ -424,7 +425,7 @@ OSSUnixSubprocess >> defineActionsForWriteStream: aWriteStream dupTo: aFileDescr
 	]
 ]
 
-{ #category : #cleaning }
+{ #category : 'cleaning' }
 OSSUnixSubprocess >> deleteTempFileOf: aStream [
 	"Deletes the temp file associated to aStream"
 	aStream ifNotNil: [ 
@@ -435,7 +436,7 @@ OSSUnixSubprocess >> deleteTempFileOf: aStream [
 
 ]
 
-{ #category : #cleaning }
+{ #category : 'cleaning' }
 OSSUnixSubprocess >> deleteTempFilesFromStandardStreams [
 	"Delete all temp files that were associated to standard streams."
 	self deleteTempFileOf: stdinStream.
@@ -447,7 +448,7 @@ OSSUnixSubprocess >> deleteTempFilesFromStandardStreams [
 
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> destroyPosixSpawnFileActionsT [
 	"This is part of the needed API of posix_spawn() family of functions and dismply destroys
 	the struct initialized by #initPosixSpawnFileActionsT"
@@ -458,7 +459,7 @@ OSSUnixSubprocess >> destroyPosixSpawnFileActionsT [
 	].
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 OSSUnixSubprocess >> encoding: anEncoder [
 	"Specify the encoder to use to encode/decode Strings given to/retrieved from the process.
 	Default encoding for Unix-like systems is UTF-8".
@@ -466,12 +467,12 @@ OSSUnixSubprocess >> encoding: anEncoder [
 	encoding := anEncoder
 ]
 
-{ #category : #'env building' }
+{ #category : 'env building' }
 OSSUnixSubprocess >> envVariables [
 	^ envVariables
 ]
 
-{ #category : #'env building' }
+{ #category : 'env building' }
 OSSUnixSubprocess >> environmentAt: aVariableName put: aValue [
 	"This is the expected API to allow users to define custom variables and values."
 	(aVariableName isString and: [ aValue isString ])
@@ -479,13 +480,13 @@ OSSUnixSubprocess >> environmentAt: aVariableName put: aValue [
 	envVariables at: aVariableName put: aValue
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> exitStatus [
 	"Answers the bit field integer representing the exit status exactly as returned from #queryExitStatus (waitpid()). "
 	^ exitStatus
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> exitStatusInterpreter [
 	"#exitStatus answers the bit field integer representing the exit status exactly as returned from #queryExitStatus (waitpid()).
 	However, sometimes you want to decode the internal meaning of the integer to get more information about the status. 
@@ -494,12 +495,12 @@ OSSUnixSubprocess >> exitStatusInterpreter [
 	^ OSSUnixProcessExitStatus for: exitStatus
 ]
 
-{ #category : #'private - support primitives' }
+{ #category : 'private - support primitives' }
 OSSUnixSubprocess >> ffiLibraryName [ 
 	^ LibC
 ]
 
-{ #category : #'pointers management' }
+{ #category : 'pointers management' }
 OSSUnixSubprocess >> freePointers [
 	"Frees all registered pointers. This must be called just after process is launched whether it
 	was successful or not to avoid memory leaks... Also, all users of FFI #allocate: kind of method
@@ -509,12 +510,12 @@ OSSUnixSubprocess >> freePointers [
 	pointers := nil
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> getFdFromStream: aStream [
 	^ self systemAccessor fileno: aStream getFilePointerAsCFile
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> initPosixSpawnFileActionsT [
 	"This is part of the needed API of posix_spawn() family of functions and initializes
 	the struct posix_spawn_file_actions_t"
@@ -525,7 +526,7 @@ OSSUnixSubprocess >> initPosixSpawnFileActionsT [
 	returnValue = 0 ifFalse: [ self systemAccessor strerror: returnValue message: 'posix_spawn_file_actions_init()' ].
 ]
 
-{ #category : #'initialize - release' }
+{ #category : 'initialize - release' }
 OSSUnixSubprocess >> initialize [
 	super initialize.
 	envVariables := Dictionary new. 
@@ -541,7 +542,7 @@ OSSUnixSubprocess >> initialize [
 
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 OSSUnixSubprocess >> internalRun [
 	"This is the real method that spwans the subprocess in the OS via the posix_spawn() function. 
 	It first must deal with all the file acctions for close() and dup() in the child.
@@ -573,30 +574,30 @@ OSSUnixSubprocess >> internalRun [
 	
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> isComplete [
 	"Answers whether the process has been completed or not (to our best knowledge)"
 	^ exitStatus notNil
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> isRunning [
 	"Answers whether the process is still running or not (to our best knowledge)"
 	^ pid notNil and: [ self isComplete not ]
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> isSuccess [
 	"Answers whether the process has been completed successfuly (to our best knowledge)"
 	^ self isComplete and: [ self exitStatusInterpreter exitStatus = 0 ]
 ]
 
-{ #category : #terminating }
+{ #category : 'terminating' }
 OSSUnixSubprocess >> kill [
 	^ self sigkill
 ]
 
-{ #category : #shell }
+{ #category : 'shell' }
 OSSUnixSubprocess >> loginShellCommand: aShellCommandString [
 	"This is a simple facility method for the cases when the user wants to use a login shell as the program.
 	See comments of shellCommand: for more information."
@@ -604,18 +605,18 @@ OSSUnixSubprocess >> loginShellCommand: aShellCommandString [
 	arguments := Array with: '-l' withAll: arguments.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixSubprocess >> pid [
 
 	^ pid
 ]
 
-{ #category : #'pointers management' }
+{ #category : 'pointers management' }
 OSSUnixSubprocess >> pointers [
 	^ pointers ifNil: [ pointers := Set new ]
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> posixSpawnFileActionsAddClose: aFileDescriptor [
 	"Add a close() action for aFileDescriptor for the child process"
 	| returnValue |
@@ -626,7 +627,7 @@ OSSUnixSubprocess >> posixSpawnFileActionsAddClose: aFileDescriptor [
 
 ]
 
-{ #category : #'close and dup2' }
+{ #category : 'close and dup2' }
 OSSUnixSubprocess >> posixSpawnFileActionsAddDup2: oldFileDescription newFileDescritpion: newFileDescription [
 	"Add a dup2() action for from oldFileDescription to newFileDescription, for the child process"
 	| returnValue |
@@ -637,26 +638,26 @@ OSSUnixSubprocess >> posixSpawnFileActionsAddDup2: oldFileDescription newFileDes
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OSSUnixSubprocess >> primitivePosixSpawn: pidPointer command: commandString fileActions: fileActions attributes: attributes argPointer: argPointer envPointer: envPointer [
 
 	 ^ self ffiCall: #( int posix_spawnp (void* pidPointer, String commandString, void* fileActions, void * attributes, void* argPointer, void* envPointer) ) 
 				
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OSSUnixSubprocess >> primitivePosixSpawnFileActionsAddClose: fileActions fileDescription: fileDescriptionNumber [
 	
 	^ self ffiCall: #( int posix_spawn_file_actions_addclose ( void* fileActions, int fileDescriptionNumber) )
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OSSUnixSubprocess >> primitivePosixSpawnFileActionsAddDup2: fileActions oldFileDescription: oldFileDescription newFileDescritpion: newFileDescription [ 
 
 	 ^ self ffiCall: #( int posix_spawn_file_actions_adddup2 ( void* fileActions, int oldFileDescription, int newFileDescription ) )
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OSSUnixSubprocess >> primitivePosixSpawnFileActionsDestroy: aPosixSpawnFileActionsT [ 
 	
 	^ self ffiCall: #( int posix_spawn_file_actions_destroy(void*  aPosixSpawnFileActionsT) )
@@ -666,7 +667,7 @@ OSSUnixSubprocess >> primitivePosixSpawnFileActionsDestroy: aPosixSpawnFileActio
 
 ]
 
-{ #category : #'private - primitives' }
+{ #category : 'private - primitives' }
 OSSUnixSubprocess >> primitivePosixSpawnFileActionsInit: aPosixSpawnFileActionsT [ 
 	
 	^ self ffiCall: #( int posix_spawn_file_actions_init(void* aPosixSpawnFileActionsT) )
@@ -674,7 +675,7 @@ OSSUnixSubprocess >> primitivePosixSpawnFileActionsInit: aPosixSpawnFileActionsT
 
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 OSSUnixSubprocess >> printOn: aStream [
 
 	aStream
@@ -689,7 +690,7 @@ OSSUnixSubprocess >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> processHasExitNotification [
 	"This method is called from the OSSVMProcess when its child watcher detects that this process has
 	exited (via the receive of SIGCHLD) and so it notifies to it (via #updateActiveChildrenAndNotifyDead).
@@ -698,13 +699,13 @@ OSSUnixSubprocess >> processHasExitNotification [
 	mutexForSigchld ifNotNil: [ mutexForSigchld signal ]
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> queryExitStatus [
 
 	^ exitStatus
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> redirectStderr [
 	"Creates a default stream and set it as stderr. 
 	This method can be called directly by the user to note that he wants to map that standard stream,
@@ -712,12 +713,12 @@ OSSUnixSubprocess >> redirectStderr [
 	stderrStream := self createADefaultWriteStream 
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> redirectStderrTo: aStream [
 	stderrStream := aStream
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> redirectStdin [
 	"Creates a default stream and set it as stdin. 
 	This method can be called directly by the user to note that he wants to map that standard stream,
@@ -726,12 +727,12 @@ OSSUnixSubprocess >> redirectStdin [
 	stdinStream := self createADefaultReadStream 
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> redirectStdinTo: aStream [
 	stdinStream := aStream
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> redirectStdout [
 	"Creates a default stream and set it as stdout. 
 	This method can be called directly by the user to note that he wants to map that standard stream,
@@ -740,18 +741,18 @@ OSSUnixSubprocess >> redirectStdout [
 	stdoutStream := self createADefaultWriteStream 
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> redirectStdoutTo: aStream [
 	stdoutStream := aStream
 ]
 
-{ #category : #'pointers management' }
+{ #category : 'pointers management' }
 OSSUnixSubprocess >> registerPointer: aPointer [
 	"Register a pointer so that it is free automatically in #freePointers"
 	self pointers add: aPointer
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> retrieveWhatIsAvailableOn: aStream andAddItTo: accumulatingStream [
 	"This is an internal method which should only be used IF the user will NOT
 	retrieve contents himself from streams while the process is still running.
@@ -768,7 +769,7 @@ OSSUnixSubprocess >> retrieveWhatIsAvailableOn: aStream andAddItTo: accumulating
 		].
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 OSSUnixSubprocess >> run [
 	"Main method for spwaning the process. It starts the subprocess, it cleans the needed resources for that, and answers,
 	it does not wait for child. There are others high end API for running the process,
@@ -778,7 +779,7 @@ OSSUnixSubprocess >> run [
 	]
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 OSSUnixSubprocess >> runAndWait [
 	"IMPORTANT: read first the comment of #waitForExit.
 	
@@ -789,7 +790,7 @@ OSSUnixSubprocess >> runAndWait [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 OSSUnixSubprocess >> runAndWaitOnExitDo: anExitClosure [
 	"This is a high end API for #runAndWait. IMPORTANT: read the comment in #runAndWait to know when to use this API.
 	The facility this method adds over #runAndWait is that when the process has finished it:
@@ -808,7 +809,7 @@ OSSUnixSubprocess >> runAndWaitOnExitDo: anExitClosure [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 OSSUnixSubprocess >> runAndWaitPollingEvery: aDelay doing: aClosure onExitDo: onExitClosure [
 	"IMPORTANT: first read the comment of #waitForExitPollingEvery:doing:
 	
@@ -826,7 +827,7 @@ OSSUnixSubprocess >> runAndWaitPollingEvery: aDelay doing: aClosure onExitDo: on
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 OSSUnixSubprocess >> runAndWaitPollingEvery: aDelay retrievingStreams: retrieveStreams onExitDo: onExitClosure [
 	"IMPORTANT: first read the comment of #waitForExitPollingEvery:retrievingStreams:
 	
@@ -855,7 +856,7 @@ OSSUnixSubprocess >> runAndWaitPollingEvery: aDelay retrievingStreams: retrieveS
 	
 ]
 
-{ #category : #status }
+{ #category : 'status' }
 OSSUnixSubprocess >> setExitStatus: aStatus [
 	"This method set's the current process exit status.
 	If exitStatus was already set it will fail.
@@ -868,7 +869,7 @@ OSSUnixSubprocess >> setExitStatus: aStatus [
 		
 ]
 
-{ #category : #shell }
+{ #category : 'shell' }
 OSSUnixSubprocess >> shell: aShellPath command: aShellCommandString [
 	"Please read comment of #shellCommand:.
 	This is the same as shellCommand: but with the addition that the use can define which shell to be used via 'aBasePath' "
@@ -876,14 +877,14 @@ OSSUnixSubprocess >> shell: aShellPath command: aShellCommandString [
 	arguments := Array with: '-c' with: (aShellCommandString encodeWith: encoding) asString. 
 ]
 
-{ #category : #shell }
+{ #category : 'shell' }
 OSSUnixSubprocess >> shellCommand [
 	"We first try to use the SHELL defined in the OS by getting the env variable $SHELL. 
 	If not found, then we fallback to /bin/sh"
 	^ Smalltalk platform environment at: 'SHELL' ifAbsent: ['/bin/sh']
 ]
 
-{ #category : #shell }
+{ #category : 'shell' }
 OSSUnixSubprocess >> shellCommand: aShellCommandString [
 	"This is a simple facility method for the cases when the user wants to use shell as the program.
 	This way, the user can directly send shellCommand: 'ls -la | grep Pharo > /tmp/test.txt ' with the whole string 
@@ -894,7 +895,7 @@ OSSUnixSubprocess >> shellCommand: aShellCommandString [
 	self shell: self shellCommand command: aShellCommandString. 
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> shouldCreateStreamFor: aStream ifTrue: aBlock [
 	"Internal method. 
 	If aStream was not specified explicitly by the user, but createMissingStandardStreams is true,
@@ -903,7 +904,7 @@ OSSUnixSubprocess >> shouldCreateStreamFor: aStream ifTrue: aBlock [
 		ifTrue: [ aBlock value ]
 ]
 
-{ #category : #'system startup & shutdown' }
+{ #category : 'system startup & shutdown' }
 OSSUnixSubprocess >> shutDown: quitting [
 	" IMPORTANT: read first the comment of OSSVMProcess >> shutDown:
 	This method is called if this process is still running at the time a 'Quit image' is happening 
@@ -923,113 +924,113 @@ OSSUnixSubprocess >> shutDown: quitting [
 	] 
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigabrt [
 	"Send a SIGABRT signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGABRT
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigalrm [
 	"Send a SIGALRM signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGALRM
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigchld [
 	"Send a SIGCHLD signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGCHLD
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigcont [
 	"Send a SIGCONT signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGCONT
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sighup [
 	"Send a SIGHUP signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGHUP
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigint [
 	"Send a SIGINT signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGINT
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigkill [
 	"Send a SIGKILL signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGKILL
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigpipe [
 	"Send a SIGPIPE signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGPIPE
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigquit [
 	"Send a SIGQUIT signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGQUIT
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigstop [
 	"Send a SIGSTOP signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGSTOP
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigterm [
 	"Send a SIGTERM signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGTERM
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigusr1 [
 	"Send a SIGUSR1 signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGUSR1
 ]
 
-{ #category : #'OS signal sending' }
+{ #category : 'OS signal sending' }
 OSSUnixSubprocess >> sigusr2 [
 	"Send a SIGUSR2 signal to the external process represented by self"
 
 	^ self systemAccessor kill: self pid signal: SIGUSR2
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> stderrStream [
 	^ stderrStream
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> stdinStream [
 	^ stdinStream
 ]
 
-{ #category : #streams }
+{ #category : 'streams' }
 OSSUnixSubprocess >> stdoutStream [
 	^ stdoutStream
 ]
 
-{ #category : #waiting }
+{ #category : 'waiting' }
 OSSUnixSubprocess >> stopWaiting [
 	"This will work only for the High Methods API that rely in the waiting provided by the framework. If the user
 	user custom waiting, this won't work.
@@ -1040,18 +1041,18 @@ OSSUnixSubprocess >> stopWaiting [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 OSSUnixSubprocess >> systemAccessor [ 
 
 	^ OSSVMProcess vmProcess systemAccessor
 ]
 
-{ #category : #terminating }
+{ #category : 'terminating' }
 OSSUnixSubprocess >> terminate [
 	^ self sigterm
 ]
 
-{ #category : #'system startup & shutdown' }
+{ #category : 'system startup & shutdown' }
 OSSUnixSubprocess >> terminateOnShutdown [
 	" IMPORTANT: read first the comment of OSSVMProcess >> shutDown:
 	If terminateOnShutdown is true, then the external process will be terminated if it was still
@@ -1061,7 +1062,7 @@ OSSUnixSubprocess >> terminateOnShutdown [
 	terminateOnShutdown := true
 ]
 
-{ #category : #waiting }
+{ #category : 'waiting' }
 OSSUnixSubprocess >> waitForExit [
 	"The waiting in this case is efficient since it is NOT done with a delay polling but using the SIGCHLD handler of OSSVMProcess childWatcher. The childWatcher when received a SIGCHLD will detect the child 
 	that died and will send #processHasExitNotification to such a child. 
@@ -1087,19 +1088,19 @@ OSSUnixSubprocess >> waitForExit [
 	^ exitStatus  
 ]
 
-{ #category : #waiting }
+{ #category : 'waiting' }
 OSSUnixSubprocess >> waitForExitPolling [
 	"Read the comment of waitForExitPollingEvery:retrievingStreams:"
 	^ self waitForExitPollingEvery: (Delay forMilliseconds: 50)
 ]
 
-{ #category : #waiting }
+{ #category : 'waiting' }
 OSSUnixSubprocess >> waitForExitPollingEvery: aDelay [ 
 	"Read the comment of waitForExitPollingEvery:retrievingStreams:"
 	^ self waitForExitPollingEvery: aDelay retrievingStreams: true
 ]
 
-{ #category : #waiting }
+{ #category : 'waiting' }
 OSSUnixSubprocess >> waitForExitPollingEvery: aDelay doing: aClosure [
 	" IMPORTANT: read first the comment of #waitForExit. 
 	
@@ -1133,7 +1134,7 @@ OSSUnixSubprocess >> waitForExitPollingEvery: aDelay doing: aClosure [
 	^ exitStatus  
 ]
 
-{ #category : #waiting }
+{ #category : 'waiting' }
 OSSUnixSubprocess >> waitForExitPollingEvery: aDelay retrievingStreams: retrieveStreams [
 	" IMPORTANT: read first the comment of #waitForExit. 
 	Second, read the comment of #waitForExitPollingEvery:doing:
@@ -1157,7 +1158,7 @@ OSSUnixSubprocess >> waitForExitPollingEvery: aDelay retrievingStreams: retrieve
 	
 ]
 
-{ #category : #waiting }
+{ #category : 'waiting' }
 OSSUnixSubprocess >> waitForExitWithTimeout: aDuration [
 	"The waiting in this case is efficient since it is NOT done with a delay polling but using the SIGCHLD handler of OSSVMProcess childWatcher. The childWatcher when received a SIGCHLD will detect the child 
 	that died and will send #processHasExitNotification to such a child. 
@@ -1185,7 +1186,7 @@ OSSUnixSubprocess >> waitForExitWithTimeout: aDuration [
 	^ exitStatus  
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 OSSUnixSubprocess >> workingDirectory: aString [
 	"This is a setting that allows defining a working directory for the OS process once started."
 	"Working directory is not encoded when set because it is used as FileReference at some places.
