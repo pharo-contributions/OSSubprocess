@@ -702,7 +702,11 @@ OSSUnixSubprocess >> processHasExitNotification [
 { #category : 'status' }
 OSSUnixSubprocess >> queryExitStatus [
 
-	^ exitStatus
+	"Force a system query to the exit status using waitpid with the NOHANG option.
+	This works around a potential bug when signals are lost"
+	^ exitStatus ifNil: [
+		  exitStatus := self systemAccessor waitpidNoHang: pid.
+		  exitStatus ]
 ]
 
 { #category : 'streams' }

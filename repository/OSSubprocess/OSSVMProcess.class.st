@@ -123,7 +123,7 @@ OSSVMProcess >> checkFinishedChildren [
 		whileTrue: [ | statusPointer |
 			[ | status returnValue |
 			statusPointer := ExternalAddress allocate: systemAccessor sizeOfInt.
-			returnValue := self primitiveWaitpid: -1 statusPointer: statusPointer options: WNOHANG.
+			returnValue := systemAccessor primitiveWaitpid: -1 statusPointer: statusPointer options: WNOHANG.
 
 			"If return value is 0 then there are no more changes, we can exit"
 			returnValue = 0
