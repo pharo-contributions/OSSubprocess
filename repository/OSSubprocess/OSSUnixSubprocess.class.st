@@ -583,7 +583,10 @@ OSSUnixSubprocess >> isComplete [
 { #category : 'status' }
 OSSUnixSubprocess >> isRunning [
 	"Answers whether the process is still running or not (to our best knowledge)"
-	^ pid notNil and: [ self isComplete not ]
+
+	^ pid notNil and: [
+		self isComplete not and: [
+			OSSVMProcess vmProcess isChildRunning: pid ] ]
 ]
 
 { #category : 'status' }
