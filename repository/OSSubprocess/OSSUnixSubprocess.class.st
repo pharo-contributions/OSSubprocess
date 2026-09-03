@@ -323,7 +323,7 @@ OSSUnixSubprocess >> createMissingStandardStreams: aBoolean [
 
 { #category : 'accessing' }
 OSSUnixSubprocess >> defaultEncoding [ 
-	^ OSEnvironment current defaultEncoding 
+	^ OSPlatform current defaultEncoding 
 ]
 
 { #category : 'env building' }
