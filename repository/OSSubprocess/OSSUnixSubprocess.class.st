@@ -1181,7 +1181,9 @@ OSSUnixSubprocess >> waitForExitWithTimeout: aDuration [
 	exitStatus ifNotNil: [ ^ exitStatus ].
 
 	mutexForSigchld := Semaphore new.
-	expired := mutexForSigchld waitTimeoutMSecs: aDuration asMilliSeconds.
+	expired := SystemVersion current major < 12
+		ifTrue: [ mutexForSigchld waitTimeoutMSecs: aDuration asMilliSeconds ]
+		ifFalse: [ mutexForSigchld waitTimeoutMilliseconds: aDuration asMilliSeconds ].
 	expired ifTrue: [ OSSTimeout signal: 'Process not finished after ', aDuration asString ].
 	^ exitStatus  
 ]
