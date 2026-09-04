@@ -184,6 +184,12 @@ OSSVMProcess >> finalizePreviousSession [
 	self activeChildren do: [ :each | each stopWaiting ]
 ]
 
+{ #category : 'childs management' }
+OSSVMProcess >> includesChildPid: aPid [
+
+	^ childProcessList anySatisfy: [ :process | process pid = aPid ]
+]
+
 { #category : 'initialize - release' }
 OSSVMProcess >> initialize [
 	"Set my instance variables to reflect the state of the OS process in which 
@@ -259,6 +265,17 @@ OSSVMProcess >> initializeSignalHandlers [
 	
 ]
 
+{ #category : 'child watching' }
+OSSVMProcess >> isChildRunning: childPid [
+	"Use waitpid with WNOHANG option to know if the child process is running. 
+	See: https://man7.org/linux/man-pages/man3/wait.3p.html"
+
+	^ (self
+			primitiveWaitpid: childPid
+			statusPointer: nil
+			options: WNOHANG) = 0
+]
+
 { #category : 'cwd' }
 OSSVMProcess >> lockCwdWithValue: cwdNewValue encoding: encoding during: aBlock [
 	"This method is a complete hack in order to support a #cmd: option in OSSUnixSubprocess. 
@@ -306,7 +323,8 @@ OSSVMProcess >> pid [
 
 { #category : 'child watching' }
 OSSVMProcess >> primitiveWaitpid: aProcessId statusPointer: statusPointer options: optionBits [
-	
+	"See: https://linux.die.net/man/2/waitpid"
+
 	^ self ffiCall: #( int waitpid(int aProcessId, void* statusPointer, int optionBits) )
 ]
 
