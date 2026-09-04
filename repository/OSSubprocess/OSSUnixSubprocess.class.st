@@ -696,6 +696,7 @@ OSSUnixSubprocess >> processHasExitNotification [
 	exited (via the receive of SIGCHLD) and so it notifies to it (via #updateActiveChildrenAndNotifyDead).
 	We signal mutexForSigchld so that the #runAndWait can now finish.
 	Note that the mutexForSigchld could be nil if the waitForExit API was not used"
+	self debugLog: 'processHasExitNotification pid=', self pid printString, ' exit=', exitStatus printString.
 	mutexForSigchld ifNotNil: [ mutexForSigchld signal ]
 ]
 
@@ -1081,10 +1082,12 @@ OSSUnixSubprocess >> waitForExit [
 	Therefore, use this method (and all its senders) only when using FileStreams for the standard streams, 
 	when not defining standard streams at all, or when you know the command to be executed does not write much in stdout/stderr."
 
-	exitStatus ifNotNil: [ ^ exitStatus ].
+	self debugLog: 'waitForExit-enter pid=', self pid printString.
+	exitStatus ifNotNil: [ self debugLog: 'waitForExit-already-exited pid=', self pid printString. ^ exitStatus ].
 
 	mutexForSigchld := Semaphore new.
 	mutexForSigchld wait. 
+	self debugLog: 'waitForExit-return pid=', self pid printString.
 	^ exitStatus  
 ]
 
@@ -1114,6 +1117,7 @@ OSSUnixSubprocess >> waitForExitPollingEvery: aDelay doing: aClosure [
 	
 	"
 	shouldContinueWaiting := true.
+	self debugLog: 'waitForExitPolling-enter pid=', self pid printString.
 	[
 		"If the #shutDown: (shouldContinueWaiting was set to false) happened while this process was in the #wait 
 		 then we simply check 'shouldContinueWaiting' here before doing the #queryExitStatus"
@@ -1177,15 +1181,35 @@ OSSUnixSubprocess >> waitForExitWithTimeout: aDuration [
 	Therefore, use this method (and all its senders) only when using FileStreams for the standard streams, 
 	when not defining standard streams at all, or when you know the command to be executed does not write much in stdout/stderr."
 
-	| expired |
-	exitStatus ifNotNil: [ ^ exitStatus ].
+	| expired startTime |
+	self debugLog: 'waitForExitWithTimeout-enter pid=', self pid printString, ' dur=', aDuration asString.
+	exitStatus ifNotNil: [ self debugLog: 'waitForExitWithTimeout-already-exited pid=', self pid printString. ^ exitStatus ].
 
 	mutexForSigchld := Semaphore new.
+	startTime := Time millisecondClockValue.
 	expired := SystemVersion current major < 12
 		ifTrue: [ mutexForSigchld waitTimeoutMSecs: aDuration asMilliSeconds ]
 		ifFalse: [ mutexForSigchld waitTimeoutMilliseconds: aDuration asMilliSeconds ].
-	expired ifTrue: [ OSSTimeout signal: 'Process not finished after ', aDuration asString ].
+	self debugLog: 'waitForExitWithTimeout-wait-return pid=', self pid printString, ' elapsedMs=', (Time millisecondClockValue - startTime) printString, ' expired=', expired printString.
+	expired ifTrue: [ self debugLog: 'waitForExitWithTimeout-OSSTimeout pid=', self pid printString. OSSTimeout signal: 'Process not finished after ', aDuration asString ].
 	^ exitStatus  
+]
+
+{ #category : 'debug' }
+OSSUnixSubprocess >> debugLog: aString [
+	| ctx callers trace file f |
+	callers := OrderedCollection new.
+	ctx := thisContext sender.
+	[ ctx notNil and: [ callers size < 30 ] ] whileTrue: [
+		callers add: ctx methodClass name, '>>', ctx selector.
+		ctx := ctx sender ].
+	trace := String streamContents: [ :s |
+		callers do: [ :c | s nextPutAll: c; nextPutAll: ' <- ' ] ].
+	[ file := (Smalltalk classNamed: #File) named: '/tmp/ossub_wait.log'.
+	f := file openForAppend.
+	f nextPutAll: DateAndTime now printString, ' [', self class name, ' pid=', self pid printString, '] ', aString, ' << ', trace; cr.
+	f close ]
+		on: Error do: [ :ignored | ]
 ]
 
 { #category : 'settings' }

@@ -231,8 +231,8 @@ OSSVMProcess >> initializeChildWatcher [
 			].
 
 			processSynchronizationDelay wait. "Avoids lost signals in heavy process switching"
-		 	self checkFinishedChildren ] repeat
-		] newProcess priority: Processor highIOPriority.
+		 	self checkFinishedChildren.
+		 	self debugLogFromWatcherId: self identityHash printString, ' cycle children=', (self activeChildren size) printString ] repeat		] newProcess priority: Processor highIOPriority.
 
 		childWatcher resume.
 		"name selected to look reasonable in the process browser"
@@ -400,4 +400,14 @@ OSSVMProcess >> updateChildProcessWithId: aChildPid withStatus: status [
 		ifNone: [ ^ self earlyFinishedProcesses at: aChildPid put: status ].
 	childProcess setExitStatus: status.
 	childProcess processHasExitNotification.
+]
+
+{ #category : 'child watching' }
+OSSVMProcess >> debugLogFromWatcherId: aString [
+	[ | file f |
+	file := (Smalltalk classNamed: #File) named: '/tmp/ossub_watch.log'.
+	f := file openForAppend.
+	f nextPutAll: DateAndTime now printString, ' watcher=' , aString; cr.
+	f close ]
+		on: Error do: [ :ignored | ]
 ]

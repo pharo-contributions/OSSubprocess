@@ -34,3 +34,11 @@ jobs:
       - run: smalltalkci -s ${{ matrix.smalltalk }} ${{ matrix.smalltalk_config }}
         shell: bash
         timeout-minutes: 30
+      - name: Dump OSSubprocess wait diagnostics
+        if: failure()
+        shell: bash
+        run: |
+          echo "=== /tmp/ossub_wait.log (tail 300) ==="
+          tail -300 /tmp/ossub_wait.log 2>/dev/null || echo "no wait log"
+          echo "=== /tmp/ossub_watch.log (tail 100) ==="
+          tail -100 /tmp/ossub_watch.log 2>/dev/null || echo "no watch log"
